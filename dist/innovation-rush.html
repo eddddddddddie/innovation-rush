@@ -1,0 +1,1382 @@
+<title>Innovation Rush</title>
+<meta name="description" content="Lead open innovation at a mining company for three years. A game by Unearthed.">
+<style>
+/* Layout: a single centred column app. Title scene is an open-pit cross-section; in-game a sticky HUD tracks the 12 quarters as pit benches. */
+/* Unearthed brand: white ground, Arial only, orange headlines, grey body. Deliberately single (light) theme per brand guide. */
+:root {
+  --orange: #FF6600;
+  --amber: #FFA627;
+  --tangerine: #FC883F;
+  --peach: #F8CA8A;
+  --peach-soft: #FFF3E5;
+  --ink: #333333;
+  --grey: #656565;
+  --muted: #8A817A;
+  --line: #E8E1DA;
+  --bg: #FFFFFF;
+  --bg-alt: #F7F4F1;
+  --good: #23784A;
+  --good-soft: #E6F3EB;
+  --bad: #C0392B;
+  --bad-soft: #FBEAE8;
+  --m-eco: #FF6600;
+  --m-adopt: #333333;
+  --m-value: #FFA627;
+  --m-buyin: #9A9089;
+  --font: Arial, Helvetica, sans-serif;
+  --radius: 14px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--grey); }
+body { margin: 0; font-family: var(--font); font-size: 16px; line-height: 1.55; padding-inline: 16px; padding-block: 0 48px; }
+h1, h2, h3 { font-family: var(--font); font-weight: 700; color: var(--ink); letter-spacing: -0.02em; line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.4rem, 7vw, 4rem); color: var(--orange); letter-spacing: -0.035em; }
+h2 { font-size: clamp(1.5rem, 4vw, 2rem); color: var(--orange); }
+h3 { font-size: 1.1rem; }
+p { margin: 0; max-width: 62ch; }
+.label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+.wrap { max-width: 960px; margin: 0 auto; }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.stack-lg { display: flex; flex-direction: column; gap: 28px; }
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.center { text-align: center; align-items: center; }
+.center p { margin-inline: auto; }
+.screen { padding-block: 32px; animation: rise .35s ease both; }
+@keyframes rise { from { transform: translateY(6px); } to { transform: none; } }
+
+button { font-family: var(--font); font-size: 1rem; cursor: pointer; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 999px; padding: 14px 28px; font-weight: 700; background: var(--orange); color: #fff; min-width: 200px; transition: background .15s, transform .1s; }
+.btn:hover { background: #E85C00; }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { background: var(--line); color: var(--muted); cursor: not-allowed; }
+.btn.ghost { background: transparent; color: var(--orange); box-shadow: inset 0 0 0 2px var(--orange); }
+.btn.ghost:hover { background: var(--peach-soft); }
+:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+a { color: var(--orange); font-weight: 700; }
+
+/* Title scene */
+.brandline { display: flex; align-items: center; justify-content: space-between; padding-block: 18px; border-bottom: 1px solid var(--line); }
+.wordmark { font-weight: 700; letter-spacing: -0.02em; color: var(--ink); font-size: 1.05rem; }
+.wordmark b { color: var(--orange); }
+.scene { position: relative; width: 100%; max-width: 820px; margin: 8px auto 0; aspect-ratio: 800 / 220; }
+.scene .pit { position: absolute; inset: 0; width: 100%; height: 100%; }
+.scene .m { position: absolute; }
+.scene .m svg { width: 100%; height: auto; display: block; }
+.m-nugget { left: 22.5%; bottom: 48.5%; width: 11.25%; animation: bob 3.2s ease-in-out infinite; }
+.m-mammoth { left: 41.9%; bottom: 30.5%; width: 16.25%; animation: bob 3.8s ease-in-out .4s infinite; }
+.m-truck { left: 64.4%; bottom: 48.5%; width: 15%; animation: bob 3.5s ease-in-out .8s infinite; }
+@keyframes bob { 50% { transform: translateY(-4%); } }
+.hero-copy { padding-block: 28px 8px; }
+.hero-copy p { font-size: 1.1rem; }
+
+.field { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 420px; text-align: left; }
+.field label { font-weight: 700; color: var(--ink); }
+.field input { font: inherit; font-size: 1.1rem; padding: 14px 16px; border: 2px solid var(--line); border-radius: 12px; color: var(--ink); background: var(--bg); }
+.field input:focus { border-color: var(--orange); outline: none; }
+.hint { font-size: 0.85rem; color: var(--muted); }
+
+/* Company choice */
+.companies { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px; }
+.company { text-align: left; background: var(--bg); border: 2px solid var(--line); border-radius: var(--radius); padding: 0; overflow: hidden; display: flex; flex-direction: column; transition: border-color .15s, transform .15s; color: inherit; }
+.company:hover { border-color: var(--peach); transform: translateY(-2px); }
+.company[aria-pressed="true"] { border-color: var(--orange); box-shadow: 0 0 0 3px var(--peach-soft); }
+.company .portrait { background: var(--peach-soft); display: grid; place-items: center; padding: 18px; height: 150px; }
+.company .portrait svg { height: 112px; width: auto; }
+.company .body { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.company h3 { color: var(--ink); }
+.company .facts { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { display: inline-flex; align-items: center; gap: 4px; font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--bg-alt); color: var(--grey); }
+.chip.orange { background: var(--peach-soft); color: #B84A00; }
+.chip.good { background: var(--good-soft); color: var(--good); }
+.chip.bad { background: var(--bad-soft); color: var(--bad); }
+
+/* Welcome */
+.letter { display: grid; grid-template-columns: 140px 1fr; gap: 24px; align-items: start; }
+.letter .portrait svg { width: 140px; height: auto; }
+.letter .copy { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 0; border-top: 1px solid var(--line); }
+.rule { padding: 18px 18px 18px 0; display: flex; flex-direction: column; gap: 6px; border-bottom: 1px solid var(--line); }
+.rule .n { font-size: 2rem; font-weight: 700; color: var(--orange); line-height: 1; font-variant-numeric: tabular-nums; }
+.rule b { color: var(--ink); }
+.metric-legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 12px; }
+.metric-legend div { display: flex; flex-direction: column; gap: 2px; padding-left: 12px; border-left: 4px solid var(--c); }
+.metric-legend b { color: var(--ink); }
+
+/* HUD */
+.hud { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); margin-inline: -16px; padding: 10px 16px; }
+.hud-inner { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: auto 1fr auto; gap: 8px 20px; align-items: center; }
+.hud .who { display: flex; gap: 10px; align-items: center; min-width: 0; }
+.hud .who svg { width: 46px; height: 40px; flex: none; }
+.hud .who .name { font-weight: 700; color: var(--ink); font-size: 0.95rem; line-height: 1.2; }
+.hud .who .co { font-size: 0.8rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.benches { display: flex; align-items: flex-start; gap: 3px; justify-self: center; }
+.bench-year { display: flex; flex-direction: column; gap: 3px; align-items: center; }
+.bench-year .ql { display: flex; gap: 3px; align-items: flex-start; }
+.bench { width: 16px; height: 8px; border-radius: 2px; background: var(--bg-alt); border: 1px solid var(--line); }
+.bench.done { background: var(--peach); border-color: var(--peach); }
+.bench.now { background: var(--orange); border-color: var(--orange); }
+.bench-year .yl { font-size: 0.65rem; font-weight: 700; color: var(--muted); letter-spacing: 0.08em; }
+.budget { display: flex; flex-direction: column; gap: 4px; min-width: 150px; }
+.budget .amt { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; font-size: 0.95rem; }
+.budget .amt small { color: var(--muted); font-weight: 400; }
+.track { position: relative; height: 8px; border-radius: 999px; background: var(--bg-alt); overflow: hidden; }
+.track .fill { position: absolute; inset: 0 auto 0 0; background: var(--orange); border-radius: 999px; transition: width .4s ease; }
+.track .ghost { position: absolute; inset: 0 auto 0 0; background: repeating-linear-gradient(135deg, var(--peach) 0 4px, var(--peach-soft) 4px 8px); border-radius: 999px; transition: width .2s; }
+.minimetrics { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.mm { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.mm .top { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: var(--ink); gap: 4px; }
+.mm .top span:last-child { font-variant-numeric: tabular-nums; color: var(--grey); }
+.mm .track .fill { background: var(--c); }
+
+/* Planning */
+.plan-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: end; }
+.notice { background: var(--peach-soft); border-radius: 12px; padding: 14px 16px; color: #7A3A00; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(210px, 100%), 1fr)); gap: 12px; }
+.card { text-align: left; background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px; padding: 14px; display: flex; gap: 12px; align-items: flex-start; color: inherit; transition: border-color .15s, background .15s; }
+.card:hover:not(:disabled) { border-color: var(--tangerine); }
+.card .ic { flex: none; width: 40px; height: 40px; border-radius: 10px; background: var(--peach-soft); color: var(--orange); display: grid; place-items: center; }
+.card .ic .icon { width: 22px; height: 22px; }
+.card .txt { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.card .nm { font-weight: 700; color: var(--ink); line-height: 1.25; }
+.pips { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; color: var(--orange); }
+.pips i { font-style: normal; color: var(--line); }
+.card.funded { background: var(--peach-soft); border-color: var(--orange); }
+.card.funded .ic { background: var(--orange); color: #fff; }
+.card .pick { font-size: 0.85rem; color: #7A3A00; }
+.card.locked { background: var(--bg-alt); border-style: dashed; }
+.card.locked .ic { background: var(--line); color: var(--grey); }
+.card.locked .pick { color: var(--grey); }
+.card:disabled { cursor: default; }
+.card.dim { opacity: .5; }
+.dock { position: sticky; bottom: 0; background: var(--bg); border-top: 1px solid var(--line); margin-inline: -16px; padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px)); margin-top: 24px; }
+.dock-inner { max-width: 960px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.slots { display: flex; gap: 6px; align-items: center; }
+.slot { width: 14px; height: 14px; border-radius: 4px; border: 2px solid var(--orange); }
+.slot.on { background: var(--orange); }
+
+/* Modal */
+.overlay { position: fixed; inset: 0; background: rgba(51, 51, 51, .45); display: grid; place-items: center; padding: 16px; z-index: 20; animation: fade .15s ease; }
+@keyframes fade { from { opacity: 0; } }
+.modal { background: var(--bg); border-radius: 18px; width: 100%; max-width: 560px; max-height: calc(100% - 32px); overflow: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+.modal-head { display: flex; gap: 12px; align-items: center; }
+.modal-head .ic { width: 44px; height: 44px; border-radius: 12px; background: var(--peach-soft); color: var(--orange); display: grid; place-items: center; flex: none; }
+.modal-head .ic .icon { width: 24px; height: 24px; }
+.modal-head h2 { font-size: 1.4rem; flex: 1; }
+.x { background: var(--bg-alt); border: 0; border-radius: 999px; width: 36px; height: 36px; font-size: 1.2rem; color: var(--grey); flex: none; }
+.opts { display: flex; flex-direction: column; gap: 8px; border: 0; margin: 0; padding: 0; }
+.opt { display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: center; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; color: var(--ink); }
+.opt:hover { border-color: var(--tangerine); }
+.opt input { accent-color: var(--orange); width: 18px; height: 18px; margin: 0; }
+.opt .cost { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--grey); font-size: 0.9rem; white-space: nowrap; }
+.opt .cost.back { color: var(--good); }
+.opt.sel { border-color: var(--orange); background: var(--peach-soft); }
+.opt.no { opacity: .55; }
+.warn { color: var(--bad); font-weight: 700; font-size: 0.9rem; }
+
+/* Event + outcome */
+.panel { border: 1.5px solid var(--line); border-radius: 18px; padding: clamp(20px, 4vw, 36px); display: flex; flex-direction: column; gap: 18px; }
+.panel .lead { font-size: 1.1rem; color: var(--ink); }
+.choices { display: flex; flex-direction: column; gap: 10px; }
+.choice { text-align: left; padding: 16px 18px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--bg); color: var(--ink); font-weight: 700; line-height: 1.35; transition: border-color .15s, background .15s; }
+.choice:hover { border-color: var(--tangerine); }
+.choice[aria-pressed="true"] { border-color: var(--orange); background: var(--peach-soft); }
+.quote { border-left: 4px solid var(--orange); padding-left: 16px; color: var(--ink); font-size: 1.1rem; }
+.deltas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.delta { border-radius: 12px; background: var(--bg-alt); padding: 12px; display: flex; flex-direction: column; gap: 2px; border-top: 4px solid var(--c); min-width: 0; }
+.delta .v { font-size: 1.6rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.delta .d { font-weight: 700; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.d.up { color: var(--good); } .d.down { color: var(--bad); } .d.flat { color: var(--muted); }
+.delta .t { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+
+.chart { width: 100%; height: auto; display: block; }
+.chart text { font-family: var(--font); font-size: 11px; fill: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.85rem; color: var(--ink); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 18px; height: 3px; border-radius: 2px; background: var(--c); display: inline-block; }
+.legend i.dash { background: repeating-linear-gradient(90deg, var(--c) 0 5px, transparent 5px 8px); }
+
+/* Scorecard */
+.score-hero { display: grid; grid-template-columns: 180px 1fr; gap: 28px; align-items: center; }
+.score-hero .portrait svg { width: 180px; height: auto; }
+.big { font-size: clamp(3.5rem, 12vw, 5.5rem); font-weight: 700; color: var(--orange); line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.stats { display: flex; flex-wrap: wrap; gap: 28px; }
+.stats > div { display: flex; flex-direction: column; gap: 4px; }
+.stats .v { font-size: 1.6rem; font-weight: 700; color: var(--ink); }
+.section { border-top: 1px solid var(--line); padding-top: 28px; display: flex; flex-direction: column; gap: 16px; }
+.drivers { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 10px 32px; }
+.drv { display: grid; grid-template-columns: 1fr 44px; gap: 4px 10px; align-items: center; }
+.drv .nm { font-weight: 700; color: var(--ink); font-size: 0.92rem; }
+.drv .num { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--grey); }
+.drv .track { grid-column: 1 / -1; }
+.drv .track .fill { background: var(--c, var(--orange)); }
+.tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 12px; }
+.tip { background: var(--peach-soft); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
+.tip b { color: var(--ink); }
+.decisions { display: flex; flex-direction: column; }
+.dec { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.dec .what { color: var(--ink); font-weight: 700; }
+.dec .why { grid-column: 1 / -1; font-size: 0.92rem; }
+.dec .when { font-size: 0.8rem; color: var(--muted); font-weight: 400; }
+.cta { background: var(--orange); color: #fff; border-radius: 18px; padding: clamp(24px, 5vw, 40px); display: flex; flex-direction: column; gap: 12px; }
+.cta h2 { color: #fff; }
+.cta p { color: #fff; }
+.cta a { color: #fff; }
+
+@media (max-width: 640px) {
+  .hud-inner { grid-template-columns: 1fr auto; }
+  .benches { grid-column: 1 / -1; grid-row: 2; justify-self: start; }
+  .budget { min-width: 120px; }
+  .minimetrics { gap: 8px; }
+  .deltas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .letter, .score-hero { grid-template-columns: 1fr; }
+  .letter .portrait svg { width: 110px; }
+  .score-hero .portrait svg { width: 130px; }
+  .btn { width: 100%; }
+  .dock .btn { width: auto; min-width: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+<div id="app"></div>
+<script>
+// Innovation Rush: game data and engine. Pure logic, no DOM, so it can be balance-tested in Node.
+
+const NODES = {
+  prob: 'Problem clarity',
+  safe: 'Safety to experiment',
+  data: 'Data and site access',
+  path: 'Pilot-to-production pathway',
+  reach: 'Ecosystem reach',
+  champ: 'Site champions',
+  trust: 'Innovator trust',
+  focus: 'Portfolio focus',
+};
+
+const NODE_TIPS = {
+  prob: 'Start with well-defined operational problems. Workshop them with site teams and measure against site KPIs.',
+  safe: 'Make it safe to try and fail. Share lessons from closed pilots and never punish a well-run experiment.',
+  data: 'Give innovators real data and site access through a secure sandbox and decent connectivity.',
+  path: 'Build a path from pilot to production: light procurement, scale-up budgets and an exec owner.',
+  reach: 'Take your problems to the global ecosystem through open challenges, consortia and scouting partners.',
+  champ: 'Give site champions time and KPIs, and design trials with operators rather than around them.',
+  trust: 'Treat innovators fairly: fair IP terms, fast payment, and a reply to every submission.',
+  focus: 'Fund fewer things, with clear kill criteria. Measure value, not activity.',
+};
+
+const METRICS = [
+  { id: 'eco', name: 'Ecosystem', desc: 'Innovators, researchers and partners working on your problems', w: { reach: 0.4, trust: 0.35, prob: 0.25 } },
+  { id: 'adopt', name: 'Adoption', desc: 'Pilots that make it into production across your sites', w: { path: 0.3, champ: 0.3, safe: 0.15, data: 0.15, focus: 0.1 } },
+  { id: 'value', name: 'Value', desc: 'Measured cost, safety, productivity and emissions impact', w: { prob: 0.3, focus: 0.3, path: 0.2, data: 0.2 } },
+  { id: 'buyin', name: 'Buy-in', desc: 'How much site leaders trust and back your innovation team', w: { champ: 0.4, safe: 0.2, focus: 0.2, prob: 0.2 } },
+];
+
+const COMPANIES = [
+  {
+    id: 'junior', name: 'Lucky Strike Resources', size: 'Junior explorer', budget: 4, mascot: 'nugget', difficulty: 'Gentle',
+    blurb: 'A 40-person explorer sitting on one promising lithium deposit. Not much money, not much bureaucracy, lots of ambition.',
+    welcome: [
+      'We found lithium! Now we need to work out how to mine it smarter than the majors, on a fraction of their budget.',
+      'Our team is small and everyone knows everyone, but we have never worked with startups or run a pilot.',
+      'Show us how open innovation can help a small miner punch above its weight.',
+    ],
+    nodes: { prob: 50, safe: 60, data: 45, path: 55, reach: 38, champ: 65, trust: 50, focus: 55 },
+    drag: {},
+  },
+  {
+    id: 'mid', name: 'Copper Canyon Mining', size: 'Mid-tier producer', budget: 20, mascot: 'truck', difficulty: 'Moderate',
+    blurb: 'Two open-pit copper mines and a concentrator. Margins are tight, ore grades are falling and the board wants new ideas.',
+    welcome: [
+      'Our grades are dropping, energy costs are climbing and our haul fleet is getting old.',
+      'We have run a few pilots before. Most of them quietly died once the vendor demo was over.',
+      'We need you to turn innovation from a side hobby into something our sites actually rely on.',
+    ],
+    nodes: { prob: 48, safe: 50, data: 50, path: 46, reach: 50, champ: 50, trust: 50, focus: 48 },
+    drag: { champ: -0.4 },
+  },
+  {
+    id: 'major', name: 'Mammoth Minerals', size: 'Global major', budget: 120, mascot: 'mammoth', difficulty: 'Brutal',
+    blurb: 'Thirty sites on four continents, a famous brand and a big budget. Also seven approval committees and a long memory.',
+    welcome: [
+      'We have an innovation lab, a venture fund and a very nice video about the future of mining.',
+      'What we do not have is many new technologies running on our sites. Startups say we are slow and hard to work with.',
+      'You have the budget. Can you get this mammoth moving before the board loses patience?',
+    ],
+    nodes: { prob: 44, safe: 40, data: 50, path: 34, reach: 62, champ: 40, trust: 42, focus: 38 },
+    drag: { path: -1.1, safe: -0.6, champ: -0.3 },
+  },
+];
+
+// Each option: t = text, c = cost (% of tenure budget, negative returns budget), e = effect per quarter on hidden drivers, n = debrief note.
+const INITIATIVES = [
+  {
+    id: 'problems', name: 'Problem statements', icon: 'target',
+    desc: 'Innovators can only solve problems they understand. How will you decide what you want solved?',
+    opts: [
+      { t: 'Let innovators guess what we need', c: 0, e: { prob: -1, focus: -1 }, n: 'Without clear problems you get solutions looking for a home.' },
+      { t: 'Annual wishlist from head office', c: 8, e: { prob: 1, champ: -1 }, n: 'Head office wishlists rarely match what hurts on site.' },
+      { t: 'Workshop problems with site teams', c: 15, e: { prob: 4, champ: 2, focus: 1 }, n: 'Problems defined with the people who live them give innovators a real target.' },
+      { t: 'Consultants write a 200-page technology roadmap', c: 35, e: { prob: 1, focus: -1, champ: -1 }, n: 'Expensive, and the roadmap described technologies, not problems.' },
+    ],
+  },
+  {
+    id: 'challenges', name: 'Open innovation challenges', icon: 'globe',
+    desc: 'Take your problems to the global ecosystem of startups, researchers and other industries. What format?',
+    opts: [
+      { t: 'Put an "ideas portal" on the website', c: 0, e: { reach: 1, trust: -2, focus: -1 }, n: 'Portals without problems or replies become black holes that innovators learn to avoid.' },
+      { t: 'One global challenge on a real site problem, with data', c: 18, e: { reach: 3, prob: 1, data: 1, trust: 2 }, n: 'A real problem, real data and a real prize brings serious solvers.' },
+      { t: 'Celebrity-judged innovation awards night', c: 28, e: { reach: 1, focus: -2, trust: -1 }, n: 'Great photos, no pilots.' },
+      { t: 'Quarterly challenges with paid pilots for winners', c: 35, e: { reach: 4, trust: 3, path: 2 }, n: 'A steady drumbeat of challenges with a pilot at the end builds a pipeline.' },
+    ],
+  },
+  {
+    id: 'hackathons', name: 'Hackathons', icon: 'code',
+    desc: 'Hackathons can surface new talent and fresh approaches quickly. What kind will you run?',
+    opts: [
+      { t: 'Internal-only hack day', c: 5, e: { safe: 1 }, n: 'Fun, but the same people with the same ideas.' },
+      { t: 'Open hackathon with real operational data', c: 15, e: { reach: 2, data: 2, safe: 1, prob: 1 }, n: 'Real data in front of fresh eyes reveals what is possible.' },
+      { t: 'Open hackathon with follow-on funding for top teams', c: 25, e: { reach: 3, path: 2, trust: 2, data: 1 }, n: 'Follow-on funding turns weekend prototypes into pilots.' },
+      { t: 'A huge livestreamed hackathon at a stadium', c: 38, e: { reach: 1, focus: -2 }, n: 'Lots of noise, very little follow-through.' },
+    ],
+  },
+  {
+    id: 'data', name: 'Data sharing', icon: 'database',
+    desc: 'Innovators need real data to build anything useful. How will you share it?',
+    opts: [
+      { t: 'Data stays on site servers, sign an NDA to ask', c: 0, e: { data: -2, trust: -1 }, n: 'Locked-up data means every pilot starts from zero.' },
+      { t: 'Share sanitised sample datasets', c: 8, e: { data: 1, reach: 1 }, n: 'A start, but samples rarely capture the messy reality.' },
+      { t: 'Secure data sandbox for approved innovators', c: 22, e: { data: 4, trust: 1, path: 1 }, n: 'A sandbox gives real access without real risk.' },
+      { t: 'Build an enterprise data lake first, share later', c: 45, e: { data: 1, focus: -2 }, n: 'Years of plumbing before any innovator sees a byte.' },
+    ],
+  },
+  {
+    id: 'pilotsite', name: 'Pilot sites', icon: 'flag',
+    desc: 'New technology needs somewhere to be tested in the real world. Where will pilots run?',
+    opts: [
+      { t: 'Squeeze pilots in around production', c: 0, e: { path: -1, champ: -2 }, n: 'Production always wins, so pilots stall and sites resent them.' },
+      { t: 'Dedicated pilot zone at one site', c: 22, e: { path: 3, champ: 2, safe: 1 }, n: 'A protected space to test, close to real operations.' },
+      { t: 'Rotate pilots across all sites', c: 32, e: { path: 2, champ: 3, focus: -1 }, n: 'Spreads ownership, at some cost to focus.' },
+      { t: 'Build an off-site innovation test mine', c: 50, e: { path: 2, champ: -1, reach: 1 }, n: 'Impressive, but far from the people who must adopt the result.' },
+    ],
+  },
+  {
+    id: 'procurement', name: 'Procurement for startups', icon: 'contract',
+    desc: 'Startups have months of runway, not years. How will you buy from them?',
+    opts: [
+      { t: 'Same onboarding as a major contractor', c: 0, e: { path: -3, trust: -2 }, n: 'A nine-month onboarding kills startups before the pilot starts.' },
+      { t: 'Faster payment terms only', c: 5, e: { trust: 2 }, n: 'Helps cash flow, but onboarding is still a wall.' },
+      { t: 'Lightweight pilot contract and 30-day onboarding', c: 14, e: { path: 4, trust: 3 }, n: 'Cheap and powerful: removes the biggest barrier to working together.' },
+      { t: 'A separate innovation procurement team', c: 30, e: { path: 2, trust: 1 }, n: 'Helps, but another team adds another queue.' },
+    ],
+  },
+  {
+    id: 'ip', name: 'IP and commercial terms', icon: 'key',
+    desc: 'Who owns what when an innovator solves your problem?',
+    opts: [
+      { t: 'We own all IP developed in our pilots', c: 0, e: { trust: -4, reach: -2 }, n: 'The best innovators simply stop showing up.' },
+      { t: 'Negotiate case by case', c: 8, e: { trust: 1, path: -1 }, n: 'Fair, but every deal takes months of legal back and forth.' },
+      { t: 'Standard fair terms: innovator keeps IP, we get a licence', c: 10, e: { trust: 4, reach: 1, path: 1 }, n: 'Clear, fair terms build trust and speed everything up.' },
+      { t: 'Swap equity for IP', c: 30, e: { reach: 1, focus: -1 }, n: 'Turns pilots into investment decisions, which slows everything.' },
+    ],
+  },
+  {
+    id: 'champions', name: 'Site champions', icon: 'helmet',
+    desc: 'Someone on site has to own each new technology. How will you build that ownership?',
+    opts: [
+      { t: 'Innovation is head office\'s job', c: 0, e: { champ: -3 }, n: 'Sites treat head office projects as someone else\'s problem.' },
+      { t: 'Nominate a champion per site, no time allocated', c: 5, e: { champ: 1 }, n: 'A title without time is a title without impact.' },
+      { t: '20% time for site champions, with KPIs', c: 24, e: { champ: 4, safe: 1 }, n: 'Real time and real goals make champions effective.' },
+      { t: 'Rotate operators into the innovation team', c: 34, e: { champ: 3, safe: 2, prob: 1 }, n: 'Operators bring credibility and real problems back and forth.' },
+    ],
+  },
+  {
+    id: 'venture', name: 'Corporate venture fund', icon: 'coins',
+    desc: 'Some miners invest directly in startups. Should you?',
+    opts: [
+      { t: 'No venture investing', c: 0, e: {}, n: 'No harm done, no help either.' },
+      { t: 'Co-invest alongside specialist VCs', c: 22, e: { reach: 2, trust: 1, path: 1 }, n: 'Specialists bring deal flow and discipline.' },
+      { t: 'Buy promising startups outright', c: 40, e: { trust: -2, path: 1, reach: -1 }, n: 'Founders leave, the culture clashes and others get nervous.' },
+      { t: 'Launch a $100M flagship fund with fanfare', c: 50, e: { reach: 3, focus: -2 }, n: 'Big headlines, and a lot of money chasing deals.' },
+    ],
+  },
+  {
+    id: 'scouting', name: 'Technology scouting', icon: 'search',
+    desc: 'How will you find the technologies and people that can solve your problems?',
+    opts: [
+      { t: 'Wait for vendors to pitch us', c: 0, e: { reach: -1, focus: -1 }, n: 'You see whoever has the best sales team, not the best solution.' },
+      { t: 'Attend mining conferences', c: 8, e: { reach: 1 }, n: 'Useful, but you meet the same people every year.' },
+      { t: 'Partner with an open innovation ecosystem', c: 18, e: { reach: 4, trust: 1, prob: 1 }, n: 'An existing global network gets you to the right innovators fast.' },
+      { t: 'Scouts in every global tech hub', c: 40, e: { reach: 3, focus: -1 }, n: 'Wide reach, high cost and lots of noise to sort through.' },
+    ],
+  },
+  {
+    id: 'stagegate', name: 'Stage-gate process', icon: 'gate',
+    desc: 'How will you decide what to fund, continue and kill?',
+    opts: [
+      { t: 'No process: fund whatever the CEO likes', c: 0, e: { focus: -3, safe: -1 }, n: 'Pet projects crowd out real problems.' },
+      { t: 'Annual portfolio review only', c: 5, e: { focus: 1 }, n: 'Better than nothing, but a year is a long time for a startup.' },
+      { t: 'Lightweight three-gate process with clear kill criteria', c: 14, e: { focus: 4, path: 2, safe: 1 }, n: 'Fast decisions and clear criteria. Killing pilots early is a feature.' },
+      { t: 'Seven-gate process with committee sign-off', c: 12, e: { focus: 1, path: -3, safe: -2 }, n: 'Rigorous on paper, glacial in practice.' },
+    ],
+  },
+  {
+    id: 'consortia', name: 'Industry collaboration', icon: 'link',
+    desc: 'Many mining problems are shared across the industry. Will you work with your peers?',
+    opts: [
+      { t: 'Go it alone and keep everything secret', c: 0, e: { reach: -2, trust: -1 }, n: 'You pay for every problem alone.' },
+      { t: 'Join an industry consortium', c: 14, e: { reach: 2, prob: 1 }, n: 'Shared learning at a shared cost.' },
+      { t: 'Co-fund pre-competitive challenges with peers', c: 24, e: { reach: 3, trust: 2, data: 1, prob: 1 }, n: 'Bigger prizes, bigger datasets and a bigger market for innovators.' },
+      { t: 'Launch your own branded consortium', c: 40, e: { reach: 2, focus: -1 }, n: 'Peers are wary of joining a competitor\'s club.' },
+    ],
+  },
+  {
+    id: 'culture', name: 'Permission to fail', icon: 'spark',
+    desc: 'Most pilots should fail. How will you treat the people running them?',
+    opts: [
+      { t: 'Failed pilots go in performance reviews', c: 0, e: { safe: -4 }, n: 'Nobody volunteers for anything risky again.' },
+      { t: 'Celebrate innovation wins only', c: 5, e: { safe: -1 }, n: 'Quietly teaches people to hide failures.' },
+      { t: 'Share lessons from every closed pilot', c: 10, e: { safe: 3, prob: 1 }, n: 'Failures become knowledge, which makes the next pilot cheaper.' },
+      { t: 'Innovation awards, including "best failure"', c: 20, e: { safe: 4 }, n: 'Makes trying things visible and rewarded.' },
+    ],
+  },
+  {
+    id: 'team', name: 'Innovation team structure', icon: 'people',
+    desc: 'How will you organise the people who run innovation?',
+    opts: [
+      { t: 'Outsource innovation to a consultancy', c: -15, e: { champ: -2, safe: -1, trust: -1, focus: -1 }, n: 'Frees up budget, but nobody inside owns the outcome.' },
+      { t: 'One innovation manager reporting to IT', c: 0, e: { champ: -1, path: -1 }, n: 'One person cannot carry a portfolio.' },
+      { t: 'Small central team plus embedded site squads', c: 28, e: { champ: 3, path: 2, prob: 1 }, n: 'Central coordination with real presence on site.' },
+      { t: 'A gleaming innovation lab in the city', c: 36, e: { reach: 2, champ: -3, safe: 1 }, n: 'An ivory tower a thousand kilometres from the pit.' },
+    ],
+  },
+  {
+    id: 'scale', name: 'Scaling successful pilots', icon: 'stairs',
+    desc: 'A pilot works. What happens next?',
+    opts: [
+      { t: 'Hand it over to operations and hope', c: 0, e: { path: -2 }, n: 'Without support, successful pilots wither.' },
+      { t: 'Wait for three more pilots to be sure', c: 5, e: { path: -1, trust: -2 }, n: 'Welcome to pilot purgatory.' },
+      { t: 'Business case template for scale-up', c: 10, e: { path: 2, focus: 1 }, n: 'A clear route to funding helps.' },
+      { t: 'Dedicated scale-up budget for proven pilots', c: 30, e: { path: 5, champ: 1 }, n: 'Money ready for winners is the fastest route to adoption.' },
+    ],
+  },
+  {
+    id: 'measure', name: 'Measuring innovation', icon: 'gauge',
+    desc: 'What will you report to the board?',
+    opts: [
+      { t: 'Number of ideas submitted', c: 0, e: { focus: -2 }, n: 'Vanity metrics reward activity, not outcomes.' },
+      { t: 'Number of pilots launched', c: 5, e: { focus: -1, path: -1 }, n: 'Rewards starting things, not finishing them.' },
+      { t: 'Value against site KPIs: $/t, safety, emissions', c: 14, e: { focus: 3, prob: 2, champ: 1 }, n: 'Speaks the language of operations and the board.' },
+      { t: 'Annual benefits audit by a big consulting firm', c: 34, e: { focus: 1 }, n: 'Expensive and backward-looking.' },
+    ],
+  },
+  {
+    id: 'skills', name: 'Innovation skills', icon: 'book',
+    desc: 'Your leaders need new skills to run open innovation. How will you build them?',
+    opts: [
+      { t: 'No training budget', c: 0, e: { safe: -1 }, n: 'People fall back on what they know.' },
+      { t: 'Self-paced e-learning', c: 5, e: { safe: 1 }, n: 'Low cost, low completion.' },
+      { t: 'Innovation methods training for site leaders', c: 18, e: { champ: 2, prob: 2, safe: 1 }, n: 'Site leaders who can frame problems and run trials.' },
+      { t: 'Send executives on a Silicon Valley tour', c: 34, e: { reach: 1, safe: 1, champ: -1 }, n: 'Inspiring, but it does not translate to a remote mine site.' },
+    ],
+  },
+  {
+    id: 'connectivity', name: 'Site connectivity', icon: 'signal',
+    desc: 'Most new mining technology needs data from the field. How connected are your sites?',
+    opts: [
+      { t: 'Leave site networks as they are', c: 0, e: { data: -2 }, n: 'Pilots keep failing on connectivity, not technology.' },
+      { t: 'Fix connectivity at the pilot site', c: 18, e: { data: 3, path: 1 }, n: 'Targeted and effective.' },
+      { t: 'Build a custom in-house IoT platform', c: 38, e: { data: 1, path: -1, focus: -1 }, n: 'Now you are a software company maintaining a platform.' },
+      { t: 'Private LTE across all sites', c: 50, e: { data: 4, path: 2 }, n: 'Expensive, but it unlocks the field for everyone.' },
+    ],
+  },
+  {
+    id: 'community', name: 'Community and local suppliers', icon: 'home',
+    desc: 'Your communities and local suppliers have ideas and a stake in your success. How will you involve them?',
+    opts: [
+      { t: 'A glossy sustainability report', c: 8, e: { focus: -1 }, n: 'Words, not partnerships.' },
+      { t: 'Local supplier innovation program', c: 15, e: { reach: 2, trust: 2, prob: 1 }, n: 'Local businesses know your sites and stay for the long run.' },
+      { t: 'Co-design solutions with Traditional Owners and community', c: 20, e: { trust: 2, prob: 2, safe: 1, reach: 1 }, n: 'Better problems, better solutions and a stronger social licence.' },
+      { t: 'Engage only when legally required', c: 0, e: { trust: -1, reach: -1 }, n: 'You miss local knowledge and goodwill.' },
+    ],
+  },
+  {
+    id: 'sponsor', name: 'Executive sponsorship', icon: 'star',
+    desc: 'Innovation needs air cover from the top. What will you ask of the executive team?',
+    opts: [
+      { t: 'CEO mentions innovation in the annual report', c: 0, e: {}, n: 'Nice words, no change.' },
+      { t: 'Monthly innovation update to the exec', c: 5, e: { focus: 1, champ: 1 }, n: 'Visibility helps.' },
+      { t: 'COO co-owns the innovation portfolio', c: 14, e: { champ: 3, path: 3, focus: 2 }, n: 'When operations co-owns innovation, sites follow.' },
+      { t: 'An innovation board of famous outsiders', c: 25, e: { reach: 1, focus: -1 }, n: 'Interesting dinners, little operational pull.' },
+    ],
+  },
+];
+
+// Events: one-off driver changes (e), optional budget change (b, % of tenure budget) and an explanation (r).
+const EVENTS = [
+  {
+    id: 'gm', title: 'The site GM says no',
+    body: 'The general manager at your biggest site refuses to host a pilot. "We are behind on tonnes this quarter. I cannot have a startup wandering around my pit."',
+    choices: [
+      { t: 'Escalate to the CEO and force it through', e: { champ: -8, safe: -3 }, r: 'You won the argument and lost the site. Operations will remember this.' },
+      { t: 'Ask the GM which problem would make their quarter easier, and pilot that', e: { champ: 7, prob: 4 }, r: 'The GM now has a stake in the pilot. Solving their problem turned a blocker into a champion.' },
+      { t: 'Shelve the pilot indefinitely', e: { trust: -5, path: -3 }, r: 'The startup had hired two people for this pilot. Word spreads that you cancel late.' },
+    ],
+  },
+  {
+    id: 'cash', title: 'Startup runs out of runway',
+    body: 'A startup halfway through a promising trial tells you it will run out of cash in six weeks.',
+    choices: [
+      { t: 'Not our problem. Let the market decide.', e: { trust: -6, path: -4, reach: -2 }, r: 'The trial dies with the startup, and other innovators notice how you treat partners.' },
+      { t: 'Pay milestone invoices early and introduce them to investors', b: -2, e: { trust: 7, reach: 3, path: 2 }, r: 'A small cost to you, and a lifeline for them. Partners talk about how you show up.' },
+      { t: 'Acquire them at a bargain price', b: -10, e: { trust: -3, path: 2, focus: -2 }, r: 'The founders leave within a year and your team now owns a product it cannot maintain.' },
+    ],
+  },
+  {
+    id: 'crash', title: 'Copper price crash',
+    body: 'Commodity prices have dropped sharply. The CFO wants a 30% cut to the innovation budget, today.',
+    choices: [
+      { t: 'Cut everything evenly by 30%', b: -6, e: { focus: -4, safe: -2 }, r: 'Every project is now underfunded and none of them can finish.' },
+      { t: 'Kill low-value pilots and protect the ones with measured value', b: -6, e: { focus: 6, prob: 2, trust: -1 }, r: 'Painful, but the CFO saw you make hard calls based on value. Your portfolio is stronger.' },
+      { t: 'Argue innovation is too important to cut', e: { champ: -5, focus: -2 }, r: 'Site teams are cutting overtime and contractors. Your team looks out of touch.' },
+    ],
+  },
+  {
+    id: 'infosec', title: 'IT security blocks data access',
+    body: 'IT security has blocked external innovators from accessing operational data. "Too risky," says the CISO.',
+    choices: [
+      { t: 'Accept it. Data stays inside.', e: { data: -6, trust: -2 }, r: 'Innovators are now building solutions without seeing your data. Results suffer.' },
+      { t: 'Co-design a ring-fenced data environment with IT', e: { data: 6, champ: 1, trust: 1 }, r: 'IT is now a partner rather than a gatekeeper, and innovators get safe access.' },
+      { t: 'Just email the data across on the quiet', e: { data: 3, safe: -4, champ: -3 }, r: 'It worked until IT found out. Now everyone is more nervous about data, not less.' },
+    ],
+  },
+  {
+    id: 'union', title: 'Automation worries',
+    body: 'Operators are worried that the autonomous drill trial will cost them their jobs. The union wants a meeting.',
+    choices: [
+      { t: 'Push ahead. It is a business decision.', e: { champ: -7, safe: -4 }, r: 'The trial continues, but operators will not help it succeed.' },
+      { t: 'Bring operators into trial design and plan retraining together', e: { champ: 7, safe: 3, prob: 2 }, r: 'Operators spotted three problems the vendor missed. They now want the trial to work.' },
+      { t: 'Quietly pause all automation pilots', e: { path: -4, focus: -2 }, r: 'The concerns were not addressed, only postponed.' },
+    ],
+  },
+  {
+    id: 'rival', title: 'A rival announces autonomous haulage',
+    body: 'A competitor announces a fleet of autonomous haul trucks. The board asks: "Where is ours?"',
+    choices: [
+      { t: 'Announce a bigger, splashier program next week', e: { focus: -6, reach: 1 }, r: 'You now have a press release to deliver on and no plan for it.' },
+      { t: 'Walk the board through your portfolio and the problems it solves', e: { focus: 5, prob: 2 }, r: 'The board leaves understanding why your priorities fit your mines, not theirs.' },
+      { t: 'Sign up with the same vendor immediately', e: { path: 1, focus: -3, prob: -2 }, r: 'Their problem is not your problem. Your haul roads are very different.' },
+    ],
+  },
+  {
+    id: 'stall', title: 'Success, then silence',
+    body: 'A predictive maintenance pilot cut unplanned downtime by 18%. But there is no budget line to roll it out.',
+    choices: [
+      { t: 'Wait for next year\'s budget cycle', e: { path: -4, trust: -3 }, r: 'Twelve months is a long time for a startup with a payroll to meet.' },
+      { t: 'Get the COO to fund the roll-out from the operating budget', e: { path: 7, champ: 3 }, r: 'Operations is now paying for it, which means operations is now owning it.' },
+      { t: 'Run another pilot at a different site to be sure', e: { path: -3, trust: -2, focus: -2 }, r: 'Welcome to pilot purgatory. The startup wonders what proof would ever be enough.' },
+    ],
+  },
+  {
+    id: 'theatre', title: 'Innovation theatre',
+    body: 'Marketing wants a photo of the CEO wearing VR goggles in front of a robot dog for the annual report.',
+    choices: [
+      { t: 'Great press. Book the robot dog.', e: { reach: 2, focus: -4, champ: -3 }, r: 'Site teams roll their eyes. The robot dog has never been near a mine.' },
+      { t: 'Offer a real story from a site using new technology', e: { focus: 3, champ: 4 }, r: 'The site team is proud to be featured, and other sites want in.' },
+      { t: 'Do both. Why not?', e: { reach: 1, focus: -2 }, r: 'The robot dog got the cover. The real story got page 47.' },
+    ],
+  },
+  {
+    id: 'nearmiss', title: 'Near miss during a drone trial',
+    body: 'A drone survey trial has a near miss with a light vehicle. Nobody was hurt.',
+    choices: [
+      { t: 'Ban all drone trials company-wide', e: { safe: -6, path: -3 }, r: 'Every drone program stops, including the ones with good safety records.' },
+      { t: 'Run a joint investigation with the startup and share the lessons', e: { safe: 5, trust: 3, champ: 2 }, r: 'The fix was a simple exclusion zone. Sites trust the process more than before.' },
+      { t: 'Blame the startup and terminate the contract', e: { trust: -7, safe: -3 }, r: 'The root cause was a site procedure, so it can happen again. Startups take note.' },
+    ],
+  },
+  {
+    id: 'esg', title: 'Investors want decarbonisation',
+    body: 'Major investors are pushing for real progress on reducing diesel use across your fleet.',
+    choices: [
+      { t: 'Buy carbon offsets and move on', e: { focus: -2, prob: -1 }, r: 'Investors ask the same question next year, with less patience.' },
+      { t: 'Run an open challenge on diesel displacement, with real site data', e: { reach: 4, prob: 4, data: 2 }, r: 'Battery, trolley-assist and hydrogen teams from four countries now know your problem.' },
+      { t: 'Commission a net zero strategy deck', e: { focus: -1 }, r: 'It has 84 slides and no pilots.' },
+    ],
+  },
+  {
+    id: 'flood', title: 'Too many ideas',
+    body: 'Your ideas portal received 2,000 submissions. Your team of four is overwhelmed.',
+    choices: [
+      { t: 'Reply to none of them', e: { trust: -6, reach: -3 }, r: 'Two thousand innovators now think you are a black hole.' },
+      { t: 'Triage against your problem statements and reply to everyone within two weeks', e: { trust: 5, prob: 2, focus: 2 }, r: 'Most got a polite no. Twelve got a meeting. Everyone knows where they stand.' },
+      { t: 'Hire temps to read every one in detail', b: -5, e: { trust: 1, focus: -2 }, r: 'Expensive, slow, and the temps did not know what problems you were trying to solve.' },
+    ],
+  },
+  {
+    id: 'nih', title: '"We could build that ourselves"',
+    body: 'Your engineering team says the startup\'s sensor is simple. "Give us six months and we will build our own."',
+    choices: [
+      { t: 'Let engineering build it in-house', e: { path: -3, trust: -3, focus: -2, champ: 2 }, r: 'Eighteen months later the in-house version is still in testing.' },
+      { t: 'Make the engineers the technical owners of the startup partnership', e: { champ: 5, path: 3, trust: 2 }, r: 'The engineers improved the product and now champion it at other sites.' },
+      { t: 'Overrule engineering', e: { champ: -5, safe: -2 }, r: 'The startup is in, but the engineers will not help it succeed.' },
+    ],
+  },
+  {
+    id: 'lockin', title: 'An offer that sounds too good',
+    body: 'A large equipment maker offers free sensors across your fleet if you use their closed data platform exclusively.',
+    choices: [
+      { t: 'Sign the exclusive deal', b: 5, e: { reach: -5, data: -4 }, r: 'You saved money, but now no other innovator can access your fleet data.' },
+      { t: 'Insist on open data standards', e: { data: 4, reach: 2 }, r: 'They agreed. Your data is now usable by any innovator you choose.' },
+      { t: 'Sign for one site as a trial', e: { data: -1, reach: -1 }, r: 'One site is now locked in. Watch that contract renewal.' },
+    ],
+  },
+  {
+    id: 'uni', title: 'University partnership',
+    body: 'A university offers a five-year PhD research program on ore sorting.',
+    choices: [
+      { t: 'Sign up. Research is always good.', b: -4, e: { focus: -2, reach: 2 }, r: 'Interesting papers will arrive around the time your mine plan changes.' },
+      { t: 'Scope it to one site problem with a 12-month deliverable', b: -2, e: { prob: 3, reach: 3, focus: 1 }, r: 'Researchers love a real problem, and you get results this year.' },
+      { t: 'Decline. No time for academics.', e: { reach: -3 }, r: 'Some of the best ideas in mining start in universities. You will not see them.' },
+    ],
+  },
+  {
+    id: 'ceo', title: 'New CEO, hard question',
+    body: 'A new CEO starts and asks you one thing: "What has innovation actually delivered?"',
+    choices: [
+      { t: 'Show the number of ideas, events and startups engaged', e: { focus: -3, champ: -2 }, r: 'The CEO nods politely and asks the CFO about your budget.' },
+      { t: 'Show value delivered in site KPI terms', e: { focus: 4, champ: 3 }, r: 'Dollars per tonne and hours of downtime saved. The CEO asks how to do more.' },
+      { t: 'Promise a moonshot by next year', e: { focus: -5, safe: -2 }, r: 'You now have a deadline for something nobody knows how to do.' },
+    ],
+  },
+  {
+    id: 'poached', title: 'Your best people are poached',
+    body: 'A tech company has offered your two best innovation leads double their salaries.',
+    choices: [
+      { t: 'Counter-offer with a big pay rise', b: -5, e: { safe: 1 }, r: 'They stay for now. Everyone else on the team has heard about the raise.' },
+      { t: 'Spread their knowledge across site champions before they go', e: { champ: 3, safe: 2, prob: 1 }, r: 'The knowledge stays even if the people do not.' },
+      { t: 'Freeze hiring and carry on', e: { safe: -3, path: -2 }, r: 'The remaining team is stretched and two pilots stall.' },
+    ],
+  },
+  {
+    id: 'outage', title: 'Connectivity outage',
+    body: 'A network outage at a remote site stops a remote operations pilot mid-trial.',
+    choices: [
+      { t: 'Blame the startup for not planning for it', e: { trust: -5 }, r: 'The network was your responsibility. The startup knows it.' },
+      { t: 'Fix it with the startup and IT, and build in resilience', e: { data: 4, trust: 2 }, r: 'The site network is better for everyone now.' },
+      { t: 'Cancel the pilot', e: { path: -3, focus: -1 }, r: 'The technology worked. The network did not.' },
+    ],
+  },
+  {
+    id: 'purgatory', title: 'The pilot audit',
+    body: 'Internal audit finds 40 active pilots and none scaled in two years. The board wants an explanation.',
+    choices: [
+      { t: 'Launch 20 more pilots to improve the odds', e: { focus: -6, path: -2 }, r: 'More pilots, same problem. Audit will be back.' },
+      { t: 'Kill 30, double down on the few with measured value', e: { focus: 7, path: 3, trust: -2 }, r: 'Some startups are disappointed, but the survivors finally get the support to scale.' },
+      { t: 'Rename pilots "proofs of value"', e: { focus: -2 }, r: 'Audit was not fooled.' },
+    ],
+  },
+];
+
+const YEARS = 3;
+const QUARTERS = 4;
+const MAX_PER_YEAR = 3;
+const INIT_SCALE = 0.85;
+const FIRE_BELOW = 35;
+
+const clamp = (v, lo = 0, hi = 100) => Math.max(lo, Math.min(hi, v));
+
+function metricsFrom(nodes) {
+  const out = {};
+  for (const m of METRICS) {
+    let s = 0;
+    for (const k in m.w) s += m.w[k] * nodes[k];
+    out[m.id] = clamp(20 + 0.8 * s);
+  }
+  return out;
+}
+
+const avg = (ms) => METRICS.reduce((s, m) => s + ms[m.id], 0) / METRICS.length;
+
+function tier(score) {
+  if (score >= 90) return { id: 'elite', name: 'Elite', award: 'The Mother Lode' };
+  if (score >= 75) return { id: 'high', name: 'High', award: 'A Rich Vein' };
+  if (score >= 55) return { id: 'medium', name: 'Medium', award: 'Low-Grade Ore' };
+  return { id: 'low', name: 'Low', award: 'Straight to Tailings' };
+}
+
+function shuffle(a, rnd = Math.random) {
+  a = a.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function newGame(companyId, player, rnd = Math.random) {
+  const co = COMPANIES.find((c) => c.id === companyId);
+  const nodes = { ...co.nodes };
+  const m0 = metricsFrom(nodes);
+  return {
+    player, companyId, nodes, budget: 100,
+    funded: [], // { id, opt, year }
+    year: 1, quarter: 0, // quarter 0 = planning
+    history: [m0],
+    deck: shuffle(EVENTS.map((e) => e.id), rnd).slice(0, YEARS * QUARTERS),
+    log: [], // { year, quarter, event, choice }
+    status: 'playing',
+  };
+}
+
+const company = (s) => COMPANIES.find((c) => c.id === s.companyId);
+const initById = (id) => INITIATIVES.find((i) => i.id === id);
+const eventById = (id) => EVENTS.find((e) => e.id === id);
+const fundedThisYear = (s) => s.funded.filter((f) => f.year === s.year);
+
+function canFund(s, id, opt) {
+  if (s.funded.some((f) => f.id === id)) return false;
+  if (fundedThisYear(s).length >= MAX_PER_YEAR) return false;
+  return initById(id).opts[opt].c <= s.budget + 1e-9;
+}
+
+function fund(s, id, opt) {
+  if (!canFund(s, id, opt)) return false;
+  s.budget = clamp(s.budget - initById(id).opts[opt].c, 0, 999);
+  s.funded.push({ id, opt, year: s.year });
+  return true;
+}
+
+function unfund(s, id) {
+  const i = s.funded.findIndex((f) => f.id === id && f.year === s.year);
+  if (i < 0) return;
+  s.budget += initById(s.funded[i].id).opts[s.funded[i].opt].c;
+  s.funded.splice(i, 1);
+}
+
+function currentEvent(s) {
+  return eventById(s.deck[(s.year - 1) * QUARTERS + (s.quarter - 1)]);
+}
+
+function startYear(s) {
+  s.quarter = 1;
+}
+
+// Resolve the quarter's event choice, then let funded initiatives and company drag play out.
+function playQuarter(s, choiceIdx) {
+  const ev = currentEvent(s);
+  const ch = ev.choices[choiceIdx];
+  const before = s.history[s.history.length - 1];
+  for (const k in ch.e) s.nodes[k] = clamp(s.nodes[k] + ch.e[k]);
+  if (ch.b) s.budget = clamp(s.budget + ch.b, 0, 999);
+  for (const f of s.funded) {
+    const e = initById(f.id).opts[f.opt].e;
+    for (const k in e) s.nodes[k] = clamp(s.nodes[k] + e[k] * INIT_SCALE);
+  }
+  const drag = company(s).drag;
+  for (const k in drag) s.nodes[k] = clamp(s.nodes[k] + drag[k]);
+  const after = metricsFrom(s.nodes);
+  s.history.push(after);
+  s.log.push({ year: s.year, quarter: s.quarter, event: ev.id, choice: choiceIdx });
+  if (avg(after) < FIRE_BELOW) s.status = 'fired';
+  else if (s.quarter === QUARTERS) {
+    if (s.year === YEARS) s.status = 'done';
+    else { s.year += 1; s.quarter = 0; }
+  } else s.quarter += 1;
+  return { ev, ch, before, after };
+}
+
+// Rough quality of a choice for the debrief: driver changes weighted by how much each driver feeds the metrics.
+const NODE_WEIGHT = (() => {
+  const w = {};
+  for (const k in NODES) w[k] = 0;
+  for (const m of METRICS) for (const k in m.w) w[k] += m.w[k];
+  return w;
+})();
+
+function impact(e) {
+  let s = 0;
+  for (const k in e) s += e[k] * NODE_WEIGHT[k];
+  return s;
+}
+
+const ENGINE = {
+  NODES, NODE_TIPS, METRICS, COMPANIES, INITIATIVES, EVENTS, YEARS, QUARTERS, MAX_PER_YEAR, FIRE_BELOW,
+  metricsFrom, avg, tier, newGame, company, initById, eventById, fundedThisYear, canFund, fund, unfund,
+  currentEvent, startYear, playQuarter, impact, shuffle,
+};
+
+if (typeof module !== 'undefined') module.exports = ENGINE;
+
+</script>
+<script>
+// Mascots and icons as inline SVG strings.
+
+const ART = (() => {
+  const face = (mood, eyes, mouthY, cx) => {
+    const [l, r] = eyes;
+    if (mood === 'sad') {
+      return `<path d="M${l[0] - 5} ${l[1] - 1} q5 -4 10 0 M${r[0] - 5} ${r[1] - 1} q5 -4 10 0" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M${cx - 8} ${mouthY + 4} q8 -7 16 0" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M${r[0] + 3} ${r[1] + 6} q3 6 0 9 q-3 -3 0 -9z" fill="#7FB3E0"/>`;
+    }
+    return `<ellipse cx="${l[0]}" cy="${l[1]}" rx="3.8" ry="4.8" fill="#333"/><ellipse cx="${r[0]}" cy="${r[1]}" rx="3.8" ry="4.8" fill="#333"/>
+      <circle cx="${l[0] + 1.3}" cy="${l[1] - 1.6}" r="1.2" fill="#fff"/><circle cx="${r[0] + 1.3}" cy="${r[1] - 1.6}" r="1.2" fill="#fff"/>
+      <path d="M${cx - 9} ${mouthY} q9 8 18 0" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+  };
+
+  const hat = (x, y, w) => `<path d="M${x + 4} ${y} C${x + 4} ${y - 22} ${x + w - 4} ${y - 22} ${x + w - 4} ${y}Z" fill="#FF6600"/>
+    <rect x="${x - 4}" y="${y - 2}" width="${w + 8}" height="7" rx="3.5" fill="#FF6600"/>
+    <rect x="${x + w / 2 - 4}" y="${y - 19}" width="8" height="15" rx="3" fill="#FC883F"/>`;
+
+  const nugget = (mood = 'happy') => `<svg viewBox="0 0 120 120" aria-hidden="true">
+    <ellipse cx="60" cy="112" rx="32" ry="5" fill="#000" opacity=".08"/>
+    <path d="M28 72 C20 52 34 38 52 40 C62 32 84 34 92 48 C104 56 100 80 90 92 C80 106 44 108 34 96 C26 89 30 81 28 72Z" fill="#FFA627"/>
+    <path d="M72 46 L86 58 L76 64Z" fill="#FC883F" opacity=".7"/>
+    <path d="M36 88 L46 96 L36 96Z" fill="#FC883F" opacity=".6"/>
+    <path d="M38 56 C42 50 48 48 54 49" stroke="#F8CA8A" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <circle cx="44" cy="80" r="5" fill="#FC883F" opacity=".45"/><circle cx="80" cy="80" r="5" fill="#FC883F" opacity=".45"/>
+    ${face(mood, [[51, 70], [73, 70]], 82, 62)}
+    ${hat(36, 44, 50)}
+  </svg>`;
+
+  const truck = (mood = 'happy') => `<svg viewBox="0 0 160 120" aria-hidden="true">
+    <ellipse cx="82" cy="113" rx="66" ry="5" fill="#000" opacity=".08"/>
+    <path d="M20 40 Q38 18 56 30 Q72 14 98 40Z" fill="#C9B8A6"/>
+    <circle cx="46" cy="32" r="4" fill="#B5A28E"/><circle cx="74" cy="28" r="3" fill="#B5A28E"/>
+    <path d="M12 38 L106 38 L98 76 L22 76Z" fill="#FF6600"/>
+    <path d="M36 42 L38 72 M60 42 L60 72 M84 42 L82 72" stroke="#FC883F" stroke-width="3"/>
+    <rect x="104" y="42" width="42" height="38" rx="7" fill="#FFA627"/>
+    <rect x="110" y="48" width="30" height="20" rx="5" fill="#fff"/>
+    ${mood === 'sad'
+      ? `<path d="M114 58 q4 -3 8 0 M128 58 q4 -3 8 0" stroke="#333" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M118 76 q7 -5 14 0" stroke="#333" stroke-width="2.6" fill="none" stroke-linecap="round"/>`
+      : `<circle cx="118" cy="58" r="3.4" fill="#333"/><circle cx="132" cy="58" r="3.4" fill="#333"/><path d="M118 72 q7 6 14 0" stroke="#333" stroke-width="2.6" fill="none" stroke-linecap="round"/>`}
+    <rect x="14" y="76" width="134" height="12" rx="4" fill="#656565"/>
+    <circle cx="44" cy="94" r="18" fill="#333"/><circle cx="44" cy="94" r="7" fill="#9A9A9A"/>
+    <circle cx="124" cy="94" r="18" fill="#333"/><circle cx="124" cy="94" r="7" fill="#9A9A9A"/>
+    <rect x="140" y="64" width="9" height="6" rx="2" fill="#F8CA8A"/>
+  </svg>`;
+
+  const mammoth = (mood = 'happy') => `<svg viewBox="0 0 140 120" aria-hidden="true">
+    <ellipse cx="74" cy="113" rx="52" ry="5" fill="#000" opacity=".08"/>
+    <rect x="50" y="84" width="13" height="24" rx="5" fill="#7A7A7A"/><rect x="68" y="86" width="13" height="22" rx="5" fill="#858585"/>
+    <rect x="96" y="84" width="13" height="24" rx="5" fill="#7A7A7A"/><rect x="110" y="86" width="12" height="22" rx="5" fill="#858585"/>
+    <ellipse cx="84" cy="68" rx="44" ry="30" fill="#8C8C8C"/>
+    <path d="M60 44 q4 -6 8 0 M74 40 q4 -6 8 0 M88 40 q4 -6 8 0 M102 44 q4 -6 8 0" stroke="#6E6E6E" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M124 64 q10 2 8 14" stroke="#7A7A7A" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="44" cy="60" r="27" fill="#9B9B9B"/>
+    <ellipse cx="64" cy="60" rx="11" ry="16" fill="#7D7D7D"/>
+    <path d="M28 70 C14 80 16 100 30 102" stroke="#9B9B9B" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <path d="M34 76 C30 92 42 100 52 94" stroke="#D8CBB8" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M34 76 C30 92 42 100 52 94" stroke="#F3EBDD" stroke-width="4" fill="none" stroke-linecap="round"/>
+    ${mood === 'sad'
+      ? `<path d="M31 58 q4 -3 8 0 M46 58 q4 -3 8 0" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M52 62 q3 6 0 9 q-3 -3 0 -9z" fill="#7FB3E0"/>`
+      : `<circle cx="35" cy="58" r="3.6" fill="#333"/><circle cx="50" cy="58" r="3.6" fill="#333"/><circle cx="36.2" cy="56.6" r="1.1" fill="#fff"/><circle cx="51.2" cy="56.6" r="1.1" fill="#fff"/>`}
+    ${hat(22, 40, 44)}
+  </svg>`;
+
+  const MASCOTS = { nugget, truck, mammoth };
+
+  const P = {
+    target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/>',
+    globe: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
+    code: '<path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/>',
+    database: '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+    flag: '<path d="M5 21V4h12l-2 4 2 4H5"/>',
+    contract: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/>',
+    key: '<circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M21 12v2"/>',
+    helmet: '<path d="M4 16a8 8 0 0 1 16 0M2 16h20v2.5H2zM10 8.5V5h4v3.5"/>',
+    coins: '<ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v4c0 1.7 2.7 3 6 3"/><ellipse cx="15" cy="14" rx="6" ry="3"/><path d="M9 14v4c0 1.7 2.7 3 6 3s6-1.3 6-3v-4"/>',
+    search: '<circle cx="10" cy="10" r="6"/><path d="M15 15l6 6"/>',
+    gate: '<path d="M4 20V5M20 20V5M4 9h16M4 14h16M9 9v5M15 9v5"/>',
+    link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+    spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/>',
+    people: '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20a6 6 0 0 1 12 0M14.5 20a4.5 4.5 0 0 1 6.5-4"/>',
+    stairs: '<path d="M3 20h5v-5h5v-5h5V5h3"/>',
+    gauge: '<path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4-6"/>',
+    book: '<path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2 2 2 0 0 0 2 2h13"/>',
+    signal: '<path d="M5 20v-3M10 20v-7M15 20V9M20 20V4"/>',
+    home: '<path d="M3 11l9-7 9 7M5 10v10h14V10"/><path d="M10 20v-5h4v5"/>',
+    star: '<path d="M12 3l2.8 5.8 6.2.9-4.5 4.4 1 6.3L12 17.5 6.5 20.4l1-6.3L3 9.7l6.2-.9z"/>',
+  };
+
+  const icon = (name) => `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[name] || ''}</svg>`;
+
+  // Open-pit cross-section: benches stepping down, strata in brand oranges.
+  const pit = () => `<svg class="pit" viewBox="0 0 800 220" aria-hidden="true">
+    <path d="M0 40 H800 V220 H0Z" fill="#F8CA8A"/>
+    <path d="M0 95 C200 85 600 105 800 92 V220 H0Z" fill="#FFA627"/>
+    <path d="M0 150 C220 140 560 160 800 146 V220 H0Z" fill="#FC883F"/>
+    <path d="M0 196 C240 188 540 204 800 192 V220 H0Z" fill="#FF6600"/>
+    <path d="M0 40 H60 V75 H170 V110 H280 V150 H520 V110 H630 V75 H740 V40 H800 V0 H0Z" fill="#fff"/>
+    <path d="M0 40 H60 V75 H170 V110 H280 V150 H520 V110 H630 V75 H740 V40 H800" stroke="#333" stroke-width="2" fill="none"/>
+  </svg>`;
+
+  return { MASCOTS, icon, pit };
+})();
+
+</script>
+<script>
+// Innovation Rush: screens and interaction. Renders the whole app from state on every change.
+(() => {
+  const E = ENGINE, A = ART;
+  const app = document.getElementById('app');
+  const BEST_KEY = 'innovation-rush-best';
+  const MCOL = { eco: 'var(--m-eco)', adopt: 'var(--m-adopt)', value: 'var(--m-value)', buyin: 'var(--m-buyin)' };
+  const MHEX = { eco: '#FF6600', adopt: '#333333', value: '#FFA627', buyin: '#9A9089' };
+
+  let S = null; // engine game state
+  let V = { view: 'title', name: '', companyId: null, modal: null, pending: null, order: null, outcome: null };
+
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const coById = (id) => E.COMPANIES.find((c) => c.id === id);
+  const co = () => coById(S ? S.companyId : V.companyId);
+  const mascot = (id, mood) => A.MASCOTS[coById(id).mascot](mood);
+  const latest = () => S.history[S.history.length - 1];
+  const money = (pct) => {
+    const m = (Math.abs(pct) / 100) * co().budget;
+    if (m >= 1) return `$${m >= 10 ? Math.round(m) : m.toFixed(1).replace(/\.0$/, '')}M`;
+    return `$${Math.round(m * 1000)}K`;
+  };
+  const pips = (init) => {
+    const max = Math.max(...init.opts.map((o) => o.c));
+    const n = max <= 10 ? 1 : max <= 25 ? 2 : max <= 40 ? 3 : 4;
+    return `<span class="pips" aria-label="Cost level ${n} of 4">${'$'.repeat(n)}<i>${'$'.repeat(4 - n)}</i></span>`;
+  };
+  const sign = (d) => {
+    const r = Math.round(d);
+    if (r === 0) return `<span class="d flat">no change</span>`;
+    return `<span class="d ${r > 0 ? 'up' : 'down'}">${r > 0 ? '+' : '−'}${Math.abs(r)}</span>`;
+  };
+
+  const store = {
+    get() { try { return JSON.parse(localStorage.getItem(BEST_KEY)) || {}; } catch { return {}; } },
+    set(companyId, score) {
+      try {
+        const b = store.get();
+        if (!(b[companyId] >= score)) { b[companyId] = score; localStorage.setItem(BEST_KEY, JSON.stringify(b)); }
+      } catch { /* storage unavailable */ }
+    },
+  };
+
+  // ---------- shared pieces ----------
+
+  const brandline = () => `<header class="brandline"><span class="wordmark"><b>Innovation</b> Rush</span><span class="label">A game by Unearthed</span></header>`;
+
+  function hud() {
+    const c = co();
+    const played = S.log.length;
+    const years = [1, 2, 3].map((y) => {
+      const qs = [1, 2, 3, 4].map((q) => {
+        const i = (y - 1) * 4 + (q - 1);
+        const cls = i < played ? 'done' : i === played && S.quarter > 0 && V.view === 'event' ? 'now' : '';
+        return `<span class="bench ${cls}" style="margin-top:${(q - 1) * 3}px"></span>`;
+      }).join('');
+      return `<div class="bench-year"><div class="ql">${qs}</div><span class="yl">Y${y}</span></div>`;
+    }).join('');
+    let fill = S.budget, ghost = S.budget;
+    if (V.modal && V.pending != null) {
+      const init = E.initById(V.modal);
+      const cur = S.funded.find((f) => f.id === V.modal && f.year === S.year);
+      const after = S.budget + (cur ? init.opts[cur.opt].c : 0) - init.opts[V.pending].c;
+      fill = Math.min(after, S.budget); ghost = Math.max(after, S.budget);
+    }
+    const m = latest();
+    const where = S.quarter === 0 ? `Year ${S.year}, planning` : `Year ${S.year}, quarter ${S.quarter}`;
+    return `<div class="hud"><div class="hud-inner">
+      <div class="who">${mascot(S.companyId)}<div style="min-width:0"><div class="name">${esc(S.player)}</div><div class="co">Chief Innovation Officer, ${c.name}</div></div></div>
+      <div class="benches" role="img" aria-label="${where}. ${played} of 12 quarters played.">${years}</div>
+      <div class="budget"><div class="amt">${money(S.budget)} <small>left of $${c.budget}M</small></div>
+        <div class="track"><div class="ghost" style="width:${Math.min(100, Math.max(0, ghost))}%"></div><div class="fill" style="width:${Math.min(100, Math.max(0, fill))}%"></div></div></div>
+      <div class="minimetrics">${E.METRICS.map((mt) => `<div class="mm" style="--c:${MCOL[mt.id]}"><div class="top"><span>${mt.name}</span><span>${Math.round(m[mt.id])}</span></div><div class="track"><div class="fill" style="width:${m[mt.id]}%"></div></div></div>`).join('')}</div>
+    </div></div>`;
+  }
+
+  function chart(hist) {
+    const W = 600, H = 250, L = 34, R = W - 12, T = 14, B = H - 30;
+    const x = (i) => L + ((R - L) * i) / 12;
+    const y = (v) => B - ((B - T) * v) / 100;
+    let g = '';
+    for (const v of [0, 25, 50, 75, 100]) g += `<line x1="${L}" x2="${R}" y1="${y(v)}" y2="${y(v)}" stroke="#EFE9E3"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
+    for (const q of [4, 8]) g += `<line x1="${x(q)}" x2="${x(q)}" y1="${T}" y2="${B}" stroke="#E8E1DA"/>`;
+    for (let q = 0; q <= 12; q++) g += `<line x1="${x(q)}" x2="${x(q)}" y1="${B}" y2="${B + 4}" stroke="#C9C0B8"/>`;
+    [['Year 1', 2], ['Year 2', 6], ['Year 3', 10]].forEach(([t, q]) => { g += `<text x="${x(q)}" y="${B + 20}" text-anchor="middle">${t}</text>`; });
+    g += `<line x1="${L}" x2="${R}" y1="${y(90)}" y2="${y(90)}" stroke="#FF6600" stroke-dasharray="5 4" opacity=".7"/><text x="${R - 4}" y="${y(90) - 6}" text-anchor="end" style="fill:#B84A00">Win: average 90+</text>`;
+    g += `<line x1="${L}" x2="${R}" y1="${y(E.FIRE_BELOW)}" y2="${y(E.FIRE_BELOW)}" stroke="#C0392B" stroke-dasharray="5 4" opacity=".6"/><text x="${R - 4}" y="${y(E.FIRE_BELOW) + 15}" text-anchor="end" style="fill:#C0392B">Fired: average below ${E.FIRE_BELOW}</text>`;
+    for (const mt of E.METRICS) {
+      const pts = hist.map((h, i) => `${x(i).toFixed(1)},${y(h[mt.id]).toFixed(1)}`).join(' ');
+      const dash = mt.id === 'buyin' ? ' stroke-dasharray="6 4"' : '';
+      g += `<polyline points="${pts}" fill="none" stroke="${MHEX[mt.id]}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"${dash}/>`;
+      hist.forEach((h, i) => {
+        const last = i === hist.length - 1;
+        g += `<circle cx="${x(i).toFixed(1)}" cy="${y(h[mt.id]).toFixed(1)}" r="${last ? 4.5 : 2.6}" fill="${last ? MHEX[mt.id] : '#fff'}" stroke="${MHEX[mt.id]}" stroke-width="2"/>`;
+      });
+    }
+    const lastM = hist[hist.length - 1];
+    const label = E.METRICS.map((mt) => `${mt.name} ${Math.round(lastM[mt.id])}`).join(', ');
+    return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Metrics by quarter. Latest: ${label}.">${g}</svg>
+      <div class="legend">${E.METRICS.map((mt) => `<span><i class="${mt.id === 'buyin' ? 'dash' : ''}" style="--c:${MHEX[mt.id]}"></i>${mt.name}</span>`).join('')}</div>`;
+  }
+
+  // ---------- screens ----------
+
+  const views = {
+    title() {
+      const best = store.get();
+      const bestAny = Math.max(0, ...Object.values(best));
+      return `<div class="wrap">${brandline()}
+        <section class="screen stack-lg center">
+          <div class="hero-copy stack center">
+            <span class="label">For mining innovation leaders</span>
+            <h1>Innovation Rush</h1>
+            <p>You are the new Chief Innovation Officer at a mining company. You have three years and one budget to turn open innovation into technology your sites actually use.</p>
+          </div>
+          <div class="scene">${A.pit()}
+            <div class="m m-nugget">${A.MASCOTS.nugget()}</div>
+            <div class="m m-mammoth">${A.MASCOTS.mammoth()}</div>
+            <div class="m m-truck">${A.MASCOTS.truck()}</div>
+          </div>
+          <button class="btn" data-a="start">Let's dig in</button>
+          ${bestAny ? `<p class="hint">Your best score so far: ${Math.round(bestAny)}%</p>` : `<p class="hint">About 10 minutes. Based on what works in real mining open innovation programs.</p>`}
+        </section></div>`;
+    },
+
+    name() {
+      return `<div class="wrap">${brandline()}
+        <section class="screen stack-lg center">
+          <h2>First, what should we call you?</h2>
+          <form class="field" id="nameform" novalidate>
+            <label for="player">Your name</label>
+            <input id="player" maxlength="24" autocomplete="nickname" value="${esc(V.name)}" placeholder="e.g. Alex">
+            <span class="hint">Only used on your scorecard.</span>
+          </form>
+          <button class="btn" id="name-next" data-a="name" ${V.name.trim() ? '' : 'disabled'}>Next</button>
+        </section></div>`;
+    },
+
+    company() {
+      const best = store.get();
+      return `<div class="wrap">${brandline()}
+        <section class="screen stack-lg">
+          <div class="stack"><span class="label">Three job offers</span><h2>Which mining company will you join?</h2>
+          <p>Your track record has three companies competing for you. Bigger companies have bigger budgets, and bigger problems.</p></div>
+          <div class="companies">${E.COMPANIES.map((c) => `
+            <button class="company" data-a="company" data-id="${c.id}" aria-pressed="${V.companyId === c.id}">
+              <div class="portrait">${A.MASCOTS[c.mascot]()}</div>
+              <div class="body">
+                <h3>${c.name}</h3>
+                <div class="facts"><span class="chip">${c.size}</span><span class="chip orange">$${c.budget}M budget</span><span class="chip ${c.difficulty === 'Brutal' ? 'bad' : c.difficulty === 'Gentle' ? 'good' : ''}">${c.difficulty}</span></div>
+                <p>${c.blurb}</p>
+                ${best[c.id] ? `<span class="hint">Your best here: ${Math.round(best[c.id])}%</span>` : ''}
+              </div>
+            </button>`).join('')}
+          </div>
+          <div class="row" style="justify-content:center"><button class="btn" data-a="accept" ${V.companyId ? '' : 'disabled'}>${V.companyId ? `Join ${coById(V.companyId).name}` : 'Pick a company'}</button></div>
+        </section></div>`;
+    },
+
+    welcome() {
+      const c = co();
+      return `<div class="wrap">${brandline()}
+        <section class="screen stack-lg">
+          <div class="letter">
+            <div class="portrait">${mascot(c.id)}</div>
+            <div class="copy">
+              <span class="label">A message from the board</span>
+              <h2>Welcome to ${c.name}, ${esc(S.player)}!</h2>
+              ${c.welcome.map((p) => `<p>${p}</p>`).join('')}
+            </div>
+          </div>
+          <div class="stack">
+            <h3>How it works</h3>
+            <div class="rules">
+              <div class="rule"><span class="n">3</span><b>Years in the job</b><span>Each year has four quarters.</span></div>
+              <div class="rule"><span class="n">3</span><b>Initiatives a year, at most</b><span>Fund them at the start of each year. They keep working until you leave.</span></div>
+              <div class="rule"><span class="n">$${c.budget}M</span><b>For your whole tenure</b><span>Spend it all in Year 1 and you will have nothing left for Years 2 and 3.</span></div>
+              <div class="rule"><span class="n">12</span><b>Things will happen</b><span>One event each quarter. How you respond matters.</span></div>
+            </div>
+          </div>
+          <div class="stack">
+            <h3>Your four metrics</h3>
+            <div class="metric-legend">${E.METRICS.map((m) => `<div style="--c:${MHEX[m.id]}"><b>${m.name}</b><span>${m.desc}</span></div>`).join('')}</div>
+            <p>Average <b>90 or more</b> across all four when your three years are up to win. If the average drops below <b>${E.FIRE_BELOW}</b> at any point, the board will ask for your hard hat back.</p>
+          </div>
+          <div><button class="btn" data-a="plan">Plan Year 1</button></div>
+        </section></div>`;
+    },
+
+    plan() {
+      const y = S.year;
+      const mine = E.fundedThisYear(S);
+      const full = mine.length >= E.MAX_PER_YEAR;
+      const notice = y === 1
+        ? `Your $${co().budget}M budget has to last all three years. Initiatives start paying off in the first quarter after you fund them and keep working until your tenure ends, so early bets have longer to pay back.`
+        : `Year ${y - 1} is done. You have ${money(S.budget)} left to cover ${y === 3 ? 'your final year' : 'the next two years'}. Initiatives you already funded keep running.`;
+      const cards = E.INITIATIVES.map((init) => {
+        const f = S.funded.find((x) => x.id === init.id);
+        if (f && f.year < y) {
+          return `<button class="card locked" disabled><span class="ic">${A.icon(init.icon)}</span><span class="txt"><span class="nm">${init.name}</span><span class="pick">${init.opts[f.opt].t}</span><span class="label">Running since Year ${f.year}</span></span></button>`;
+        }
+        if (f) {
+          return `<button class="card funded" data-a="card" data-id="${init.id}"><span class="ic">${A.icon(init.icon)}</span><span class="txt"><span class="nm">${init.name}</span><span class="pick">${init.opts[f.opt].t}</span><span class="label" style="color:#B84A00">Funded for Year ${y}. Tap to change</span></span></button>`;
+        }
+        return `<button class="card ${full ? 'dim' : ''}" data-a="card" data-id="${init.id}" ${full ? 'disabled' : ''}><span class="ic">${A.icon(init.icon)}</span><span class="txt"><span class="nm">${init.name}</span>${pips(init)}</span></button>`;
+      }).join('');
+      const slots = [0, 1, 2].map((i) => `<span class="slot ${i < mine.length ? 'on' : ''}"></span>`).join('');
+      return `${hud()}
+        <div class="wrap screen stack-lg">
+          <div class="plan-head"><div class="stack"><span class="label">Year ${y} of 3 · Planning</span><h2>Choose up to three initiatives for Year ${y}</h2></div></div>
+          <div class="notice">${notice}</div>
+          <div class="grid">${cards}</div>
+        </div>
+        <div class="dock"><div class="dock-inner">
+          <div class="row"><div class="slots" aria-hidden="true">${slots}</div><span>${mine.length} of 3 picked${full ? '. That is your limit for this year.' : ''}</span></div>
+          <button class="btn" data-a="startYear">Start Year ${y}</button>
+        </div></div>
+        ${V.modal ? modal() : ''}`;
+    },
+
+    event() {
+      const ev = E.currentEvent(S);
+      return `${hud()}
+        <div class="wrap screen stack-lg">
+          <div class="panel">
+            <span class="label">Year ${S.year} · Quarter ${S.quarter} · Something happened</span>
+            <h2>${ev.title}</h2>
+            <p class="lead">${ev.body}</p>
+            <div class="choices" role="group" aria-label="Your response">
+              ${V.order.map((i) => `<button class="choice" id="choice-${i}" data-a="choose" data-i="${i}" aria-pressed="${V.pending === i}">${ev.choices[i].t}</button>`).join('')}
+            </div>
+            <div><button class="btn" data-a="lock" ${V.pending == null ? 'disabled' : ''}>Lock it in</button></div>
+          </div>
+        </div>`;
+    },
+
+    outcome() {
+      const o = V.outcome;
+      const ev = E.eventById(o.ev);
+      const ch = ev.choices[o.choice];
+      const running = S.funded.length;
+      const next = S.status === 'fired' ? 'Face the board' : S.status === 'done' ? 'See your scorecard' : S.quarter === 0 ? `Plan Year ${S.year}` : 'Next quarter';
+      return `${hud()}
+        <div class="wrap screen stack-lg">
+          <div class="panel">
+            <span class="label">Year ${o.year} · Quarter ${o.quarter} · What happened</span>
+            <h2>${ev.title}</h2>
+            <p><b style="color:var(--ink)">You chose:</b> ${ch.t}</p>
+            <p class="quote">${ch.r}</p>
+            ${ch.b ? `<p><span class="chip ${ch.b < 0 ? 'bad' : 'good'}">Budget ${ch.b < 0 ? '−' : '+'}${money(ch.b)}</span></p>` : ''}
+            <div class="deltas">${E.METRICS.map((m) => `<div class="delta" style="--c:${MHEX[m.id]}"><span class="t">${m.name}</span><span class="v">${Math.round(o.after[m.id])}</span>${sign(o.after[m.id] - o.before[m.id])}</div>`).join('')}</div>
+            <p class="hint">${running ? `These changes include the ${running} initiative${running > 1 ? 's' : ''} you have running.` : 'You have no initiatives running, so only your decision moved the metrics this quarter.'}</p>
+          </div>
+          <div class="stack"><h3>Your metrics so far</h3>${chart(S.history)}</div>
+          <div><button class="btn" data-a="next">${next}</button></div>
+        </div>`;
+    },
+
+    end() {
+      const fired = S.status === 'fired';
+      const last = latest();
+      const score = E.avg(last);
+      const t = E.tier(score);
+      const best = store.get()[S.companyId] || 0;
+      const verdicts = {
+        elite: 'Your sites are adopting new technology, innovators want to work with you and the board can see the value. That is open innovation working.',
+        high: 'Solid work. Your pipeline is flowing and some technology is sticking on site. A few weak spots kept you from the top.',
+        medium: 'Some wins, but too much of your work stayed in pilots and slide decks. The drivers below show what held you back.',
+        low: 'The board is not convinced. Innovation stayed a side show. The drivers below show where it went wrong.',
+      };
+      const headlines = { elite: 'You struck the mother lode.', high: 'You struck a rich vein.', medium: 'You found low-grade ore.', low: 'Your tenure went straight to tailings.' };
+      const lastLog = S.log[S.log.length - 1];
+      const nodes = Object.keys(E.NODES).map((k) => ({ k, v: S.nodes[k] })).sort((a, b) => b.v - a.v);
+      const weakest = nodes.slice(-2).reverse();
+      const verdict = (chosenImpact, impacts) => {
+        const max = Math.max(...impacts);
+        if (chosenImpact >= max - 1e-9) return '<span class="chip good">Strong call</span>';
+        if (chosenImpact > 0) return '<span class="chip orange">Partial credit</span>';
+        return '<span class="chip bad">Backfired</span>';
+      };
+      const bestOf = (items) => items.reduce((b, it) => (E.impact(it.e) > E.impact(b.e) ? it : b));
+      const inits = S.funded.slice().sort((a, b) => a.year - b.year).map((f) => {
+        const init = E.initById(f.id);
+        const opt = init.opts[f.opt];
+        const b = bestOf(init.opts);
+        return `<div class="dec"><span class="what">${init.name}: ${opt.t} <span class="when">Year ${f.year}</span></span>${verdict(E.impact(opt.e), init.opts.map((o) => E.impact(o.e)))}
+          <span class="why">${opt.n}${b !== opt ? ` Stronger choice: <b>${b.t}</b>.` : ''}</span></div>`;
+      }).join('') || '<p>You did not fund any initiatives. Events alone cannot move a company.</p>';
+      const events = S.log.map((l) => {
+        const ev = E.eventById(l.event);
+        const ch = ev.choices[l.choice];
+        const b = bestOf(ev.choices);
+        return `<div class="dec"><span class="what">${ev.title}: ${ch.t} <span class="when">Y${l.year} Q${l.quarter}</span></span>${verdict(E.impact(ch.e), ev.choices.map((c) => E.impact(c.e)))}
+          <span class="why">${ch.r}${b !== ch ? ` Stronger choice: <b>${b.t}</b>.` : ''}</span></div>`;
+      }).join('');
+      return `<div class="wrap">${brandline()}
+        <section class="screen stack-lg">
+          <div class="score-hero">
+            <div class="portrait">${mascot(S.companyId, fired || t.id === 'low' ? 'sad' : 'happy')}</div>
+            <div class="stack">
+              <span class="label">${fired ? `Board meeting · Year ${lastLog.year}, quarter ${lastLog.quarter}` : `${esc(S.player)} · Chief Innovation Officer scorecard`}</span>
+              <h2>${fired ? 'Please hand back your hard hat.' : headlines[t.id]}</h2>
+              <p>${fired ? 'Your metrics fell below what the board will accept and they have asked you to step aside. Luckily this was only a game. See what went wrong, then try again.' : verdicts[t.id]}</p>
+              <div class="stats">
+                <div><span class="label">${fired ? 'Average when fired' : 'Final score'}</span><span class="big">${Math.round(score)}%</span></div>
+                <div><span class="label">Performance</span><span class="v">${fired ? 'Fired' : t.name}</span></div>
+                <div><span class="label">Award</span><span class="v">${fired ? 'The Empty Core Tray' : t.award}</span></div>
+                ${best ? `<div><span class="label">Your best at ${co().name}</span><span class="v">${Math.round(best)}%</span></div>` : ''}
+              </div>
+            </div>
+          </div>
+          <div class="section"><h3>Your ${fired ? 'tenure' : 'three years'}</h3>${chart(S.history)}</div>
+          <div class="section">
+            <h3>What drove your score</h3>
+            <p>Eight hidden drivers sit behind the four metrics. Every initiative and decision moved some of them.</p>
+            <div class="drivers">${nodes.map((n) => `<div class="drv" style="--c:${n.v >= 75 ? 'var(--orange)' : n.v >= 50 ? 'var(--amber)' : 'var(--m-buyin)'}"><span class="nm">${E.NODES[n.k]}</span><span class="num">${Math.round(n.v)}</span><div class="track"><div class="fill" style="width:${n.v}%"></div></div></div>`).join('')}</div>
+            <div class="tips">${weakest.map((n) => `<div class="tip"><span class="label">Work on</span><b>${E.NODES[n.k]}</b><p>${E.NODE_TIPS[n.k]}</p></div>`).join('')}</div>
+          </div>
+          <div class="section"><h3>Your initiatives</h3><div class="decisions">${inits}</div></div>
+          <div class="section"><h3>Your calls</h3><div class="decisions">${events}</div></div>
+          <div class="cta">
+            <span class="label" style="color:#fff">Ready for the real thing?</span>
+            <h2>Run open innovation on your own sites.</h2>
+            <p>Unearthed connects mining companies with a global ecosystem of innovators to solve real operational problems, then helps turn the best pilots into production.</p>
+            <p><a href="https://unearthed.solutions" target="_blank" rel="noopener">unearthed.solutions</a></p>
+          </div>
+          <div class="row" style="justify-content:center"><button class="btn" data-a="again">Play again</button><button class="btn ghost" data-a="other">Try another company</button></div>
+        </section></div>`;
+    },
+  };
+
+  function modal() {
+    const init = E.initById(V.modal);
+    const cur = S.funded.find((f) => f.id === init.id && f.year === S.year);
+    const avail = S.budget + (cur ? init.opts[cur.opt].c : 0);
+    const order = init.opts.map((o, i) => ({ o, i })).sort((a, b) => a.o.c - b.o.c);
+    const sel = V.pending;
+    const tooDear = sel != null && init.opts[sel].c > avail + 1e-9;
+    const ok = sel != null && !tooDear && !(cur && cur.opt === sel);
+    return `<div class="overlay" data-a="closeBg"><div class="modal" data-a="noop" role="dialog" aria-modal="true" aria-labelledby="mtitle">
+      <div class="modal-head"><span class="ic">${A.icon(init.icon)}</span><h2 id="mtitle">${init.name}</h2><button class="x" id="modal-close" data-a="close" aria-label="Close">×</button></div>
+      <p>${init.desc}</p>
+      <fieldset class="opts"><legend class="label" style="margin-bottom:8px">Choose your approach</legend>
+        ${order.map(({ o, i }) => {
+          const afford = o.c <= avail + 1e-9;
+          const cost = o.c < 0 ? `+${money(o.c)} back` : o.c === 0 ? 'No cost' : money(o.c);
+          return `<label class="opt ${sel === i ? 'sel' : ''} ${afford ? '' : 'no'}" for="opt-${init.id}-${i}"><input type="radio" name="opt" id="opt-${init.id}-${i}" value="${i}" ${sel === i ? 'checked' : ''}><span>${o.t}</span><span class="cost ${o.c < 0 ? 'back' : ''}">${cost}</span></label>`;
+        }).join('')}
+      </fieldset>
+      ${tooDear ? `<p class="warn">Not enough budget for this option. You have ${money(avail)} to spend.</p>` : ''}
+      <div class="row" style="justify-content:flex-end">
+        ${cur ? '<button class="btn ghost" data-a="remove">Remove</button>' : ''}
+        <button class="btn" data-a="confirm" ${ok ? '' : 'disabled'}>${cur ? 'Change approach' : 'Fund this'}</button>
+      </div>
+    </div></div>`;
+  }
+
+  // ---------- rendering and actions ----------
+
+  function render(scroll) {
+    const focusId = document.activeElement && document.activeElement.id;
+    app.innerHTML = views[V.view]();
+    if (scroll) window.scrollTo(0, 0);
+    if (focusId && document.getElementById(focusId)) document.getElementById(focusId).focus({ preventScroll: true });
+    else if (V.modal) {
+      const first = app.querySelector('.modal input:checked') || app.querySelector('.modal input');
+      if (first) first.focus({ preventScroll: true });
+    }
+  }
+
+  function toEvent() {
+    V.view = 'event';
+    V.pending = null;
+    V.order = E.shuffle([0, 1, 2]);
+  }
+
+  function newRun(companyId) {
+    S = E.newGame(companyId, V.name.trim() || 'Explorer');
+    V = { ...V, companyId, modal: null, pending: null, outcome: null, view: 'welcome' };
+  }
+
+  const actions = {
+    start() { V.view = 'name'; return 'scroll'; },
+    name() { if (!V.name.trim()) return false; V.view = 'company'; return 'scroll'; },
+    company(el) { V.companyId = el.dataset.id; },
+    accept() { if (!V.companyId) return false; newRun(V.companyId); return 'scroll'; },
+    plan() { V.view = 'plan'; return 'scroll'; },
+    card(el) {
+      V.modal = el.dataset.id;
+      const cur = S.funded.find((f) => f.id === V.modal && f.year === S.year);
+      V.pending = cur ? cur.opt : null;
+    },
+    close() { V.modal = null; V.pending = null; },
+    closeBg(el, e) { if (e.target !== el) return false; V.modal = null; V.pending = null; },
+    noop() { return false; },
+    confirm() {
+      const id = V.modal;
+      const cur = S.funded.find((f) => f.id === id && f.year === S.year);
+      if (cur) E.unfund(S, id);
+      if (!E.fund(S, id, V.pending) && cur) E.fund(S, id, cur.opt);
+      V.modal = null; V.pending = null;
+    },
+    remove() { E.unfund(S, V.modal); V.modal = null; V.pending = null; },
+    startYear() { E.startYear(S); toEvent(); return 'scroll'; },
+    choose(el) { V.pending = +el.dataset.i; },
+    lock() {
+      if (V.pending == null) return false;
+      const year = S.year, quarter = S.quarter;
+      const r = E.playQuarter(S, V.pending);
+      V.outcome = { ev: r.ev.id, choice: V.pending, before: r.before, after: r.after, year, quarter };
+      V.view = 'outcome';
+      if (S.status === 'done') store.set(S.companyId, E.avg(latest()));
+      return 'scroll';
+    },
+    next() {
+      if (S.status !== 'playing') V.view = 'end';
+      else if (S.quarter === 0) V.view = 'plan';
+      else toEvent();
+      return 'scroll';
+    },
+    again() { newRun(S.companyId); return 'scroll'; },
+    other() { S = null; V.companyId = null; V.view = 'company'; return 'scroll'; },
+  };
+
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-a]');
+    if (!el || !app.contains(el) || el.disabled) return;
+    const res = actions[el.dataset.a]?.(el, e);
+    if (res === false) return;
+    render(res === 'scroll');
+  });
+
+  document.addEventListener('change', (e) => {
+    if (e.target.name === 'opt') { V.pending = +e.target.value; render(); }
+  });
+
+  document.addEventListener('input', (e) => {
+    if (e.target.id === 'player') {
+      V.name = e.target.value;
+      const b = document.getElementById('name-next');
+      if (b) b.disabled = !V.name.trim();
+    }
+  });
+
+  document.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (e.target.id === 'nameform' && actions.name() !== false) render(true);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && V.modal) { V.modal = null; V.pending = null; render(); }
+  });
+
+  // Keep a game in progress across live updates of the page.
+  try { window.claude?.hot?.snapshot?.(() => ({ S, V })); } catch { /* not in a viewer */ }
+  const boot = (data) => {
+    if (data && data.V && data.V.view) { S = data.S; V = data.V; }
+    render();
+  };
+  if (window.claude?.hot?.ready) window.claude.hot.ready(boot);
+  else boot(window.claude?.hot?.data ?? {});
+})();
+
+</script>
