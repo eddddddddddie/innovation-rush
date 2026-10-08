@@ -6,7 +6,7 @@ const ART = (() => {
     if (mood === 'sad') {
       return `<path d="M${l[0] - 5} ${l[1] - 1} q5 -4 10 0 M${r[0] - 5} ${r[1] - 1} q5 -4 10 0" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
         <path d="M${cx - 8} ${mouthY + 4} q8 -7 16 0" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <path d="M${r[0] + 3} ${r[1] + 6} q3 6 0 9 q-3 -3 0 -9z" fill="#7FB3E0"/>`;
+        <path d="M${r[0] + 3} ${r[1] + 6} q3 6 0 9 q-3 -3 0 -9z" fill="#DADADA"/>`;
     }
     return `<ellipse cx="${l[0]}" cy="${l[1]}" rx="3.8" ry="4.8" fill="#333"/><ellipse cx="${r[0]}" cy="${r[1]}" rx="3.8" ry="4.8" fill="#333"/>
       <circle cx="${l[0] + 1.3}" cy="${l[1] - 1.6}" r="1.2" fill="#fff"/><circle cx="${r[0] + 1.3}" cy="${r[1] - 1.6}" r="1.2" fill="#fff"/>
@@ -22,7 +22,7 @@ const ART = (() => {
     <path d="M28 72 C20 52 34 38 52 40 C62 32 84 34 92 48 C104 56 100 80 90 92 C80 106 44 108 34 96 C26 89 30 81 28 72Z" fill="#FFA627"/>
     <path d="M72 46 L86 58 L76 64Z" fill="#FC883F" opacity=".7"/>
     <path d="M36 88 L46 96 L36 96Z" fill="#FC883F" opacity=".6"/>
-    <path d="M38 56 C42 50 48 48 54 49" stroke="#F8CA8A" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M38 56 C42 50 48 48 54 49" stroke="#fff" stroke-opacity=".7" stroke-width="5" fill="none" stroke-linecap="round"/>
     <circle cx="44" cy="80" r="5" fill="#FC883F" opacity=".45"/><circle cx="80" cy="80" r="5" fill="#FC883F" opacity=".45"/>
     ${face(mood, [[51, 70], [73, 70]], 82, 62)}
     ${hat(36, 44, 50)}
@@ -42,7 +42,7 @@ const ART = (() => {
     <rect x="14" y="76" width="134" height="12" rx="4" fill="#656565"/>
     <circle cx="44" cy="94" r="18" fill="#333"/><circle cx="44" cy="94" r="7" fill="#9A9A9A"/>
     <circle cx="124" cy="94" r="18" fill="#333"/><circle cx="124" cy="94" r="7" fill="#9A9A9A"/>
-    <rect x="140" y="64" width="9" height="6" rx="2" fill="#F8CA8A"/>
+    <rect x="140" y="64" width="9" height="6" rx="2" fill="#fff"/>
   </svg>`;
 
   const mammoth = (mood = 'happy') => `<svg viewBox="0 0 140 120" aria-hidden="true">
@@ -58,7 +58,7 @@ const ART = (() => {
     <path d="M34 76 C30 92 42 100 52 94" stroke="#D8CBB8" stroke-width="7" fill="none" stroke-linecap="round"/>
     <path d="M34 76 C30 92 42 100 52 94" stroke="#F3EBDD" stroke-width="4" fill="none" stroke-linecap="round"/>
     ${mood === 'sad'
-      ? `<path d="M31 58 q4 -3 8 0 M46 58 q4 -3 8 0" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M52 62 q3 6 0 9 q-3 -3 0 -9z" fill="#7FB3E0"/>`
+      ? `<path d="M31 58 q4 -3 8 0 M46 58 q4 -3 8 0" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M52 62 q3 6 0 9 q-3 -3 0 -9z" fill="#DADADA"/>`
       : `<circle cx="35" cy="58" r="3.6" fill="#333"/><circle cx="50" cy="58" r="3.6" fill="#333"/><circle cx="36.2" cy="56.6" r="1.1" fill="#fff"/><circle cx="51.2" cy="56.6" r="1.1" fill="#fff"/>`}
     ${hat(22, 40, 44)}
   </svg>`;
@@ -93,9 +93,8 @@ const ART = (() => {
   // Open-pit cross-section: benches stepping down, strata in brand oranges.
   const pit = () => `<svg class="pit" viewBox="0 0 800 220" aria-hidden="true">
     <path d="M0 40 H800 V220 H0Z" fill="#F8CA8A"/>
-    <path d="M0 95 C200 85 600 105 800 92 V220 H0Z" fill="#FFA627"/>
-    <path d="M0 150 C220 140 560 160 800 146 V220 H0Z" fill="#FC883F"/>
-    <path d="M0 196 C240 188 540 204 800 192 V220 H0Z" fill="#FF6600"/>
+    <path d="M0 95 C200 85 600 105 800 92 V220 H0Z" fill="#FC883F"/>
+    <path d="M0 158 C220 148 560 168 800 154 V220 H0Z" fill="#FF6600"/>
     <path d="M0 40 H60 V75 H170 V110 H280 V150 H520 V110 H630 V75 H740 V40 H800 V0 H0Z" fill="#fff"/>
     <path d="M0 40 H60 V75 H170 V110 H280 V150 H520 V110 H630 V75 H740 V40 H800" stroke="#333" stroke-width="2" fill="none"/>
   </svg>`;

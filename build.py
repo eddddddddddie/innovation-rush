@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
-"""Inline src/*.js into src/template.html.
+"""Inline src/*.js and logo images into src/template.html.
 
 Writes two copies of the game:
   dist/innovation-rush.html  page body only, for publishing as a Claude artifact (which adds its own <head>)
   docs/index.html            full standalone page, served by GitHub Pages
 """
+import base64
 from pathlib import Path
 
 root = Path(__file__).parent
-body = (root / 'src/template.html').read_text()
+src = root / 'src'
+body = (src / 'template.html').read_text()
 for marker, name in [('/*ENGINE*/', 'engine.js'), ('/*ART*/', 'art.js'), ('/*UI*/', 'ui.js')]:
-    body = body.replace(marker, (root / 'src' / name).read_text())
+    body = body.replace(marker, (src / name).read_text())
+for marker, name in [('__LOGO_WHITE__', 'unearthed-logo-white.png'), ('__LOGO__', 'unearthed-logo.png')]:
+    data = base64.b64encode((src / 'assets' / name).read_bytes()).decode()
+    body = body.replace(marker, f'data:image/png;base64,{data}')
 
 standalone = (
     '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'

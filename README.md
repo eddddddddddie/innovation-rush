@@ -14,6 +14,7 @@ Open `docs/index.html` in a browser, or visit the GitHub Pages site once it is e
 |---|---|
 | `src/engine.js` | Game content (companies, initiatives, events) and rules. Pure JS, no DOM. |
 | `src/art.js` | Mascots and icons as inline SVG |
+| `src/assets/` | Unearthed logos, inlined into the page at build time |
 | `src/ui.js` | Screens and interaction |
 | `src/template.html` | Styles and page shell |
 | `build.py` | Inlines the sources into single-file pages |

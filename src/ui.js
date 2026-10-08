@@ -4,7 +4,7 @@
   const app = document.getElementById('app');
   const BEST_KEY = 'innovation-rush-best';
   const MCOL = { eco: 'var(--m-eco)', adopt: 'var(--m-adopt)', value: 'var(--m-value)', buyin: 'var(--m-buyin)' };
-  const MHEX = { eco: '#FF6600', adopt: '#333333', value: '#FFA627', buyin: '#9A9089' };
+  const MHEX = { eco: '#FF6600', adopt: '#333333', value: '#FFA627', buyin: '#656565' };
 
   let S = null; // engine game state
   let V = { view: 'title', name: '', companyId: null, modal: null, pending: null, order: null, outcome: null };
@@ -42,7 +42,9 @@
 
   // ---------- shared pieces ----------
 
-  const brandline = () => `<header class="brandline"><span class="wordmark"><b>Innovation</b> Rush</span><span class="label">A game by Unearthed</span></header>`;
+  const LOGO = '__LOGO__';
+  const LOGO_WHITE = '__LOGO_WHITE__';
+  const brandline = () => `<header class="brandline"><a class="logo" href="https://unearthed.solutions" target="_blank" rel="noopener"><img src="${LOGO}" alt="Unearthed"></a><span class="gamename"><b>Innovation Rush</b> · A game by Unearthed</span></header>`;
 
   function hud() {
     const c = co();
@@ -106,25 +108,35 @@
       const best = store.get();
       const bestAny = Math.max(0, ...Object.values(best));
       return `<div class="wrap">${brandline()}
-        <section class="screen stack-lg center">
-          <div class="hero-copy stack center">
-            <span class="label">For mining innovation leaders</span>
-            <h1>Innovation Rush</h1>
-            <p>You are the new Chief Innovation Officer at a mining company. You have three years and one budget to turn open innovation into technology your sites actually use.</p>
+        <section class="screen stack-lg">
+          <div class="hero">
+            <div class="stack">
+              <span class="label">A game for mining innovation leaders</span>
+              <h1>Innovation Rush</h1>
+              <p class="lede">You are the new Chief Innovation Officer at a mining company. Unearth new technology, get it running on your sites and keep the board on side.</p>
+            </div>
+            <div class="side">
+              <button class="btn" data-a="start">Start your tenure</button>
+              <span class="hint">${bestAny ? `Your best score so far: ${Math.round(bestAny)}%` : 'About 10 minutes. Built on what works in real mining open innovation programs.'}</span>
+            </div>
           </div>
           <div class="scene">${A.pit()}
             <div class="m m-nugget">${A.MASCOTS.nugget()}</div>
             <div class="m m-mammoth">${A.MASCOTS.mammoth()}</div>
             <div class="m m-truck">${A.MASCOTS.truck()}</div>
           </div>
-          <button class="btn" data-a="start">Let's dig in</button>
-          ${bestAny ? `<p class="hint">Your best score so far: ${Math.round(bestAny)}%</p>` : `<p class="hint">About 10 minutes. Based on what works in real mining open innovation programs.</p>`}
+          <div class="statrow">
+            <div><span class="stat">3</span><span>years to prove your value</span></div>
+            <div><span class="stat">${E.INITIATIVES.length}</span><span>initiatives to choose from</span></div>
+            <div><span class="stat">${E.EVENTS.length}</span><span>real-world events</span></div>
+            <div><span class="stat">4</span><span>metrics the board watches</span></div>
+          </div>
         </section></div>`;
     },
 
     name() {
       return `<div class="wrap">${brandline()}
-        <section class="screen stack-lg center">
+        <section class="screen stack-lg">
           <h2>First, what should we call you?</h2>
           <form class="field" id="nameform" novalidate>
             <label for="player">Your name</label>
@@ -170,11 +182,11 @@
           </div>
           <div class="stack">
             <h3>How it works</h3>
-            <div class="rules">
-              <div class="rule"><span class="n">3</span><b>Years in the job</b><span>Each year has four quarters.</span></div>
-              <div class="rule"><span class="n">3</span><b>Initiatives a year, at most</b><span>Fund them at the start of each year. They keep working until you leave.</span></div>
-              <div class="rule"><span class="n">$${c.budget}M</span><b>For your whole tenure</b><span>Spend it all in Year 1 and you will have nothing left for Years 2 and 3.</span></div>
-              <div class="rule"><span class="n">12</span><b>Things will happen</b><span>One event each quarter. How you respond matters.</span></div>
+            <div class="steps">
+              <div class="step"><span class="n">01</span><b>Fund initiatives</b><span>At the start of each year, fund up to three. They keep working until you leave.</span></div>
+              <div class="step"><span class="n">02</span><b>Make $${c.budget}M last</b><span>One budget covers all three years. Spend it all in Year 1 and Years 2 and 3 run dry.</span></div>
+              <div class="step"><span class="n">03</span><b>Respond to events</b><span>Something happens every quarter. Your call moves the metrics.</span></div>
+              <div class="step"><span class="n">04</span><b>Average 90 to win</b><span>Below ${E.FIRE_BELOW} at any point and the board asks for your hard hat back.</span></div>
             </div>
           </div>
           <div class="stack">
@@ -318,10 +330,10 @@
           <div class="section"><h3>Your initiatives</h3><div class="decisions">${inits}</div></div>
           <div class="section"><h3>Your calls</h3><div class="decisions">${events}</div></div>
           <div class="cta">
-            <span class="label" style="color:#fff">Ready for the real thing?</span>
+            <img src="${LOGO_WHITE}" alt="Unearthed">
             <h2>Run open innovation on your own sites.</h2>
-            <p>Unearthed connects mining companies with a global ecosystem of innovators to solve real operational problems, then helps turn the best pilots into production.</p>
-            <p><a href="https://unearthed.solutions" target="_blank" rel="noopener">unearthed.solutions</a></p>
+            <p>Unearthed connects you with a global ecosystem of innovators to solve your hardest operational challenges, then helps turn the best pilots into production.</p>
+            <a class="btn outline-white" href="https://unearthed.solutions" target="_blank" rel="noopener">Talk to Unearthed</a>
           </div>
           <div class="row" style="justify-content:center"><button class="btn" data-a="again">Play again</button><button class="btn ghost" data-a="other">Try another company</button></div>
         </section></div>`;

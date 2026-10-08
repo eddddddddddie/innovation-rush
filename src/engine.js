@@ -53,7 +53,7 @@ const COMPANIES = [
     drag: { champ: -0.4 },
   },
   {
-    id: 'major', name: 'Mammoth Minerals', size: 'Global major', budget: 120, mascot: 'mammoth', difficulty: 'Brutal',
+    id: 'major', name: 'Big Rocks', size: 'Global major', budget: 120, mascot: 'mammoth', difficulty: 'Brutal',
     blurb: 'Thirty sites on four continents, a famous brand and a big budget. Also seven approval committees and a long memory.',
     welcome: [
       'We have an innovation lab, a venture fund and a very nice video about the future of mining.',
