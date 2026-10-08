@@ -116,7 +116,7 @@
               </div>
               <div class="stack">
                 <div class="cta-row"><button class="btn" data-a="start">Start your tenure</button></div>
-                <span class="hint">${bestAny ? `Your best score so far: ${Math.round(bestAny)}%` : 'Takes about 10 minutes. Built on what works in real mining open innovation programs.'}</span>
+                <span class="hint">${bestAny ? `Your best score so far: ${Math.round(bestAny)}%` : 'Takes about 10 minutes.'} Built by Unearthed from more than 200 innovation challenges run for mining and metals companies.</span>
               </div>
             </div>
             <div class="photo">
@@ -285,7 +285,54 @@
       const headlines = { elite: 'You struck the mother lode.', high: 'You struck a rich vein.', medium: 'You found low-grade ore.', low: 'Your tenure went straight to tailings.' };
       const lastLog = S.log[S.log.length - 1];
       const nodes = Object.keys(E.NODES).map((k) => ({ k, v: S.nodes[k] })).sort((a, b) => b.v - a.v);
-      const weakest = nodes.slice(-2).reverse();
+      const U = E.UNEARTHED;
+      const strong = nodes[nodes.length - 1].v >= 80;
+      const picks = [];
+      for (const n of nodes.slice().reverse()) {
+        if (picks.length === 2) break;
+        const h = U.help[n.k];
+        if (!picks.some((p) => p.h.form === h.form)) picks.push({ ...n, h });
+      }
+      const hurtMost = (k) => {
+        let worst = null;
+        for (const f of S.funded) {
+          const o = E.initById(f.id).opts[f.opt];
+          const d = (o.e[k] || 0) * (E.YEARS - f.year + 1) * 4 * 0.85;
+          if (d < 0 && (!worst || d < worst.d)) worst = { d, text: `${E.initById(f.id).name}: ${o.t}`, when: `Year ${f.year}` };
+        }
+        for (const l of S.log) {
+          const c = E.eventById(l.event).choices[l.choice];
+          const d = c.e[k] || 0;
+          if (d < 0 && (!worst || d < worst.d)) worst = { d, text: `${E.eventById(l.event).title}: ${c.t}`, when: `Y${l.year} Q${l.quarter}` };
+        }
+        return worst;
+      };
+      const usedStages = new Set(picks.flatMap((p) => p.h.stages));
+      if (strong) usedStages.add('scout');
+      const firstForm = strong ? U.forms.review : U.forms[picks[0].h.form];
+      const planIntro = fired
+        ? 'The board let you go, but these are the two areas we would fix first at a real mining company.'
+        : strong
+          ? 'You ran a strong program. This is how we help mining companies keep one ahead of the field.'
+          : `Your weakest areas were ${E.NODES[picks[0].k].toLowerCase()} and ${E.NODES[picks[1].k].toLowerCase()}. This is how we would work on them with a real mining company.`;
+      const helpCards = (strong
+        ? [{ k: null, v: null, h: { form: 'review', how: 'We review relevant developments against your priorities at an agreed interval, so you see technologies as they emerge rather than when a competitor announces them.' } },
+           { k: null, v: null, h: { form: 'challenge', how: 'When a new problem comes up, we put it to a global network of more than 10,000 innovators, including technology proven outside mining.' } }]
+        : picks).map((p) => {
+          const f = U.forms[p.h.form];
+          const hurt = p.k ? hurtMost(p.k) : null;
+          return `<div class="help">
+            <div class="help-top">${p.k ? `<span class="label">You scored ${Math.round(p.v)} on</span><h3>${E.NODES[p.k]}</h3>` : `<span class="label">To stay ahead</span><h3>${f.name}</h3>`}
+              ${hurt ? `<p class="hurt">Cost you here: <b>${hurt.text}</b> <span class="when">${hurt.when}</span></p>` : p.k ? `<p class="hurt">${E.NODE_TIPS[p.k]}</p>` : ''}</div>
+            <div class="help-body">
+              <span class="label">How Unearthed helps</span>
+              <b class="form">${f.name}</b>
+              <p>${p.h.how}</p>
+              <dl><div><dt>What it involves</dt><dd>${f.what}</dd></div><div><dt>Outcome</dt><dd>${f.outcome}</dd></div><div><dt>Typical timing</dt><dd>${f.timing}</dd></div></dl>
+            </div>
+          </div>`;
+        }).join('');
+      const uTag = (x) => (x.u ? ' <span class="chip u">Unearthed runs this</span>' : '');
       const verdict = (chosenImpact, impacts) => {
         const max = Math.max(...impacts);
         if (chosenImpact >= max - 1e-9) return '<span class="chip good">Strong call</span>';
@@ -297,14 +344,14 @@
         const init = E.initById(f.id);
         const opt = init.opts[f.opt];
         const b = bestOf(init.opts);
-        return `<div class="dec"><span class="what">${init.name}: ${opt.t} <span class="when">Year ${f.year}</span></span>${verdict(E.impact(opt.e), init.opts.map((o) => E.impact(o.e)))}
+        return `<div class="dec"><span class="what">${init.name}: ${opt.t} <span class="when">Year ${f.year}</span>${uTag(opt)}</span>${verdict(E.impact(opt.e), init.opts.map((o) => E.impact(o.e)))}
           <span class="why">${opt.n}${b !== opt ? ` Stronger choice: <b>${b.t}</b>.` : ''}</span></div>`;
       }).join('') || '<p>You did not fund any initiatives. Events alone cannot move a company.</p>';
       const events = S.log.map((l) => {
         const ev = E.eventById(l.event);
         const ch = ev.choices[l.choice];
         const b = bestOf(ev.choices);
-        return `<div class="dec"><span class="what">${ev.title}: ${ch.t} <span class="when">Y${l.year} Q${l.quarter}</span></span>${verdict(E.impact(ch.e), ev.choices.map((c) => E.impact(c.e)))}
+        return `<div class="dec"><span class="what">${ev.title}: ${ch.t} <span class="when">Y${l.year} Q${l.quarter}</span>${uTag(ch)}</span>${verdict(E.impact(ch.e), ev.choices.map((c) => E.impact(c.e)))}
           <span class="why">${ch.r}${b !== ch ? ` Stronger choice: <b>${b.t}</b>.` : ''}</span></div>`;
       }).join('');
       return `<div class="wrap">${brandline()}
@@ -328,18 +375,35 @@
             <h3>What drove your score</h3>
             <p>Eight hidden drivers sit behind the four metrics. Every initiative and decision moved some of them.</p>
             <div class="drivers">${nodes.map((n) => `<div class="drv" style="--c:${n.v >= 75 ? 'var(--orange)' : n.v >= 50 ? 'var(--amber)' : 'var(--m-buyin)'}"><span class="nm">${E.NODES[n.k]}</span><span class="num">${Math.round(n.v)}</span><div class="track"><div class="fill" style="width:${n.v}%"></div></div></div>`).join('')}</div>
-            <div class="tips">${weakest.map((n) => `<div class="tip"><span class="label">Work on</span><b>${E.NODES[n.k]}</b><p>${E.NODE_TIPS[n.k]}</p></div>`).join('')}</div>
           </div>
-          <div class="section"><h3>Your initiatives</h3><div class="decisions">${inits}</div></div>
-          <div class="section"><h3>Your calls</h3><div class="decisions">${events}</div></div>
+          <div class="section plan">
+            <div class="stack">
+              <span class="label">Where Unearthed would start with you</span>
+              <h2>${fired ? 'What we would fix first.' : strong ? 'Keep your lead.' : 'From game to real sites.'}</h2>
+              <p>${planIntro}</p>
+            </div>
+            <ol class="stages">${U.stages.map((st) => `<li class="${usedStages.has(st.id) ? 'on' : ''}"><span class="n">${st.n}</span><b>${st.name}</b><span>${st.title}</span></li>`).join('')}</ol>
+            <div class="helps">${helpCards}</div>
+            <div class="statrow">${U.stats.map((x) => `<div><span class="stat">${x.n}</span><span>${x.label}. ${x.why}</span></div>`).join('')}</div>
+          </div>
           <div class="cta">
             <div class="stack">
               <img src="${LOGO}" alt="Unearthed">
-              <h2>Run open innovation on your own sites.</h2>
-              <p>Unearthed connects you with a global ecosystem of innovators to solve your hardest operational challenges, then helps turn the best pilots into production.</p>
+              <h2>${firstForm.cta}.</h2>
+              <p>Unearthed is a specialist mining and metals technology advisory firm in Perth, Western Australia. We find, assess and pilot technology from across mining and adjacent industries, so trials progress to deployment.</p>
             </div>
-            <div class="actions"><a class="btn" href="https://unearthed.solutions" target="_blank" rel="noopener">Talk to Unearthed</a></div>
+            <div class="actions">
+              <a class="btn" href="${U.contact.web}" target="_blank" rel="noopener">Talk to Unearthed</a>
+              <div class="email"><span>Or email</span> <span id="u-email" class="addr">${U.contact.email}</span> <button class="copy" id="copy-email" data-a="copyEmail">Copy</button></div>
+            </div>
           </div>
+          <details class="more">
+            <summary>Review every decision you made (${S.funded.length + S.log.length})</summary>
+            <div class="stack-lg">
+              <div class="stack"><h3>Your initiatives</h3><div class="decisions">${inits}</div></div>
+              <div class="stack"><h3>Your calls</h3><div class="decisions">${events}</div></div>
+            </div>
+          </details>
           <div class="row"><button class="btn" data-a="again">Play again</button><button class="btn ghost" data-a="other">Try another company</button></div>
         </section></div>`;
     },
@@ -435,6 +499,13 @@
       return 'scroll';
     },
     again() { newRun(S.companyId); return 'scroll'; },
+    copyEmail(el) {
+      const addr = E.UNEARTHED.contact.email;
+      const done = () => { el.textContent = 'Copied'; };
+      const fallback = () => { const r = document.createRange(); r.selectNodeContents(document.getElementById('u-email')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); el.textContent = 'Selected'; };
+      try { navigator.clipboard.writeText(addr).then(done, fallback); } catch { fallback(); }
+      return false;
+    },
     other() { S = null; V.companyId = null; V.view = 'company'; return 'scroll'; },
   };
 

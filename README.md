@@ -4,6 +4,12 @@ A playful strategy game about leading open innovation at a mining company, by Un
 
 You are the new Chief Innovation Officer. Over three years you fund up to three initiatives a year from one tenure-long budget, and respond to one event each quarter. Four metrics (Ecosystem, Adoption, Value, Buy-in) are driven by eight hidden drivers. Average 90+ to win; drop below 35 and you are fired.
 
+## Sales content
+
+The scorecard ends with "Where Unearthed would start with you": the player's two weakest hidden drivers are mapped to Unearthed forms of work and engagement stages (`UNEARTHED.help` in `src/engine.js`), followed by headline figures and a contact panel. Options that Unearthed delivers are tagged `u: true` and labelled in the decision review.
+
+All of this text comes from the sales master copy in the capability-statement project (`sales/capability-statement-master-copy.md`). This repository is public, so only use public-safe text here: no client names, case studies, staff emails or figures the master copy marks as needing confirmation.
+
 ## Play
 
 Open `docs/index.html` in a browser, or visit the GitHub Pages site once it is enabled.

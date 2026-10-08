@@ -22,6 +22,43 @@ const NODE_TIPS = {
   focus: 'Fund fewer things, with clear kill criteria. Measure value, not activity.',
 };
 
+// Unearthed's services, from the sales master copy (capability statements, October 2026). Public-safe text only:
+// no client names, case studies or unconfirmed figures, because the game is published openly.
+const UNEARTHED = {
+  stats: [
+    { n: '200+', label: 'innovation challenges', why: 'Each a defined problem put to a global network.' },
+    { n: '10,000+', label: 'innovators in network', why: 'Deployment history and reference sites that are not public.' },
+    { n: '1,000+', label: 'startups supported', why: 'Taken through to industrial trials.' },
+    { n: '12', label: 'years operating', why: 'Claims checked against site results.' },
+  ],
+  stages: [
+    { id: 'scope', n: '01', name: 'Scope', title: 'Problem framing with your teams' },
+    { id: 'scout', n: '02', name: 'Scout', title: 'Global search, across industries' },
+    { id: 'evaluate', n: '03', name: 'Evaluate', title: 'Technical and commercial diligence' },
+    { id: 'pilot', n: '04', name: 'Pilot', title: 'Pilot designed for adoption' },
+    { id: 'scale', n: '05', name: 'Scale', title: 'Hand-off and support after the pilot' },
+  ],
+  forms: {
+    vendor: { cta: 'Start with a vendor check', name: 'Vendor checks', what: 'A short written view on a company or approach: deployment history, evidence and fit.', outcome: 'Faster decisions on what warrants your teams\' time', timing: 'Usually within days' },
+    options: { cta: 'Start with an options assessment', name: 'Options assessment', what: 'Problem definition, global search, vendor and reference-user engagement, and assessment.', outcome: 'An evidence-based shortlist and test work recommendation', timing: 'Typically 1 to 6 weeks' },
+    challenge: { cta: 'Start with an open innovation challenge', name: 'Open innovation challenge', what: 'A defined problem put to our global network, with submissions screened with your teams.', outcome: 'Options from beyond your usual suppliers', timing: 'Around 3 months' },
+    pilots: { cta: 'Start with test work', name: 'Test work and pilots', what: 'Tests scoped with vendors and laboratories, samples arranged and results tracked.', outcome: 'Answers to the questions your operation needs answered', timing: 'As options progress' },
+    review: { cta: 'Start with a periodic technology review', name: 'Periodic technology review', what: 'Relevant developments reviewed against your priorities at an agreed interval.', outcome: 'Technologies seen as they emerge', timing: 'For example quarterly' },
+  },
+  // For each hidden driver: the form of work and stage that address it, and how.
+  help: {
+    prob: { form: 'options', stages: ['scope'], how: 'We frame the problem with your site teams before anyone looks for technology, so innovators are solving something real and measurable.' },
+    reach: { form: 'challenge', stages: ['scout'], how: 'We put your problem to a global network of more than 10,000 innovators, including technology proven outside mining.' },
+    trust: { form: 'challenge', stages: ['scout'], how: 'Our commercial relationships are with industrial companies only, so technology developers share performance and cost data with us that is not published.' },
+    path: { form: 'pilots', stages: ['pilot', 'scale'], how: 'We apply technical, commercial and adoption diligence upfront and design pilots for adoption, so trials progress to deployment.' },
+    focus: { form: 'vendor', stages: ['evaluate'], how: 'Every claim is graded as independently verified, operator-reported or company-supplied, so you fund what has been proven, at the scale you need.' },
+    data: { form: 'pilots', stages: ['pilot'], how: 'We scope test work with vendors and laboratories and arrange samples, so innovators are tested against your material and conditions.' },
+    champ: { form: 'options', stages: ['scope', 'evaluate'], how: 'We work with the people who will run the technology from problem framing onwards, so sites own the choice rather than inherit it.' },
+    safe: { form: 'vendor', stages: ['evaluate'], how: 'A vendor check within days gives your teams a low-risk way to test an idea before committing anyone to a trial.' },
+  },
+  contact: { web: 'https://unearthed.solutions', email: 'industry@unearthed.solutions' },
+};
+
 const METRICS = [
   { id: 'eco', name: 'Ecosystem', desc: 'Innovators, researchers and partners working on your problems', w: { reach: 0.4, trust: 0.35, prob: 0.25 } },
   { id: 'adopt', name: 'Adoption', desc: 'Pilots that make it into production across your sites', w: { path: 0.3, champ: 0.3, safe: 0.15, data: 0.15, focus: 0.1 } },
@@ -73,7 +110,7 @@ const INITIATIVES = [
     opts: [
       { t: 'Let innovators guess what we need', c: 0, e: { prob: -1, focus: -1 }, n: 'Without clear problems you get solutions looking for a home.' },
       { t: 'Annual wishlist from head office', c: 8, e: { prob: 1, champ: -1 }, n: 'Head office wishlists rarely match what hurts on site.' },
-      { t: 'Workshop problems with site teams', c: 15, e: { prob: 4, champ: 2, focus: 1 }, n: 'Problems defined with the people who live them give innovators a real target.' },
+      { t: 'Workshop problems with site teams', u: true, c: 15, e: { prob: 4, champ: 2, focus: 1 }, n: 'Problems defined with the people who live them give innovators a real target.' },
       { t: 'Consultants write a 200-page technology roadmap', c: 35, e: { prob: 1, focus: -1, champ: -1 }, n: 'Expensive, and the roadmap described technologies, not problems.' },
     ],
   },
@@ -82,9 +119,9 @@ const INITIATIVES = [
     desc: 'Take your problems to the global ecosystem of startups, researchers and other industries. What format?',
     opts: [
       { t: 'Put an "ideas portal" on the website', c: 0, e: { reach: 1, trust: -2, focus: -1 }, n: 'Portals without problems or replies become black holes that innovators learn to avoid.' },
-      { t: 'One global challenge on a real site problem, with data', c: 18, e: { reach: 3, prob: 1, data: 1, trust: 2 }, n: 'A real problem, real data and a real prize brings serious solvers.' },
+      { t: 'One global challenge on a real site problem, with data', u: true, c: 18, e: { reach: 3, prob: 1, data: 1, trust: 2 }, n: 'A real problem, real data and a real prize brings serious solvers.' },
       { t: 'Celebrity-judged innovation awards night', c: 28, e: { reach: 1, focus: -2, trust: -1 }, n: 'Great photos, no pilots.' },
-      { t: 'Quarterly challenges with paid pilots for winners', c: 35, e: { reach: 4, trust: 3, path: 2 }, n: 'A steady drumbeat of challenges with a pilot at the end builds a pipeline.' },
+      { t: 'Quarterly challenges with paid pilots for winners', u: true, c: 35, e: { reach: 4, trust: 3, path: 2 }, n: 'A steady drumbeat of challenges with a pilot at the end builds a pipeline.' },
     ],
   },
   {
@@ -163,7 +200,7 @@ const INITIATIVES = [
     opts: [
       { t: 'Wait for vendors to pitch us', c: 0, e: { reach: -1, focus: -1 }, n: 'You see whoever has the best sales team, not the best solution.' },
       { t: 'Attend mining conferences', c: 8, e: { reach: 1 }, n: 'Useful, but you meet the same people every year.' },
-      { t: 'Partner with an open innovation ecosystem', c: 18, e: { reach: 4, trust: 1, prob: 1 }, n: 'An existing global network gets you to the right innovators fast.' },
+      { t: 'Partner with an open innovation ecosystem', u: true, c: 18, e: { reach: 4, trust: 1, prob: 1 }, n: 'An existing global network gets you to the right innovators fast.' },
       { t: 'Scouts in every global tech hub', c: 40, e: { reach: 3, focus: -1 }, n: 'Wide reach, high cost and lots of noise to sort through.' },
     ],
   },
@@ -357,7 +394,7 @@ const EVENTS = [
     body: 'Major investors are pushing for real progress on reducing diesel use across your fleet.',
     choices: [
       { t: 'Buy carbon offsets and move on', e: { focus: -2, prob: -1 }, r: 'Investors ask the same question next year, with less patience.' },
-      { t: 'Run an open challenge on diesel displacement, with real site data', e: { reach: 4, prob: 4, data: 2 }, r: 'Battery, trolley-assist and hydrogen teams from four countries now know your problem.' },
+      { t: 'Run an open challenge on diesel displacement, with real site data', u: true, e: { reach: 4, prob: 4, data: 2 }, r: 'Battery, trolley-assist and hydrogen teams from four countries now know your problem.' },
       { t: 'Commission a net zero strategy deck', e: { focus: -1 }, r: 'It has 84 slides and no pilots.' },
     ],
   },
@@ -558,7 +595,7 @@ function impact(e) {
 }
 
 const ENGINE = {
-  NODES, NODE_TIPS, METRICS, COMPANIES, INITIATIVES, EVENTS, YEARS, QUARTERS, MAX_PER_YEAR, FIRE_BELOW,
+  NODES, NODE_TIPS, UNEARTHED, METRICS, COMPANIES, INITIATIVES, EVENTS, YEARS, QUARTERS, MAX_PER_YEAR, FIRE_BELOW,
   metricsFrom, avg, tier, newGame, company, initById, eventById, fundedThisYear, canFund, fund, unfund,
   currentEvent, startYear, playQuarter, impact, shuffle,
 };
