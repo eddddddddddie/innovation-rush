@@ -92,9 +92,14 @@ const ART = (() => {
     <path d="M0 40 H800 V220 H0Z" fill="#F8CA8A"/>
     <path d="M0 95 C200 85 600 105 800 92 V220 H0Z" fill="#FC883F"/>
     <path d="M0 158 C220 148 560 168 800 154 V220 H0Z" fill="#FF6600"/>
-    <path d="M0 40 H60 V75 H170 V110 H280 V150 H520 V110 H630 V75 H740 V40 H800 V0 H0Z" fill="#F3F2F0"/>
+    <path d="M0 40 H60 V75 H170 V110 H280 V150 H520 V110 H630 V75 H740 V40 H800 V0 H0Z" fill="#F0EDE9"/>
     <path d="M0 40 H60 V75 H170 V110 H280 V150 H520 V110 H630 V75 H740 V40 H800" stroke="#333" stroke-width="2" fill="none"/>
   </svg>`;
 
-  return { MASCOTS, icon, pit };
+  // The Unearthed 'U' mark, used as a small badge wherever the game shows something Unearthed does.
+  const umark = () => `<svg class="umark" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M3 2 L8 4.2 V14 L3 17Z" fill="#F8CA8A"/><path d="M21 2 L16 4.2 V14 L21 17Z" fill="#FF6600"/>
+    <path d="M3 17 L8 14 L12 16.4 V22Z" fill="#FFA627"/><path d="M21 17 L16 14 L12 16.4 V22Z" fill="#FC883F"/></svg>`;
+
+  return { MASCOTS, icon, pit, umark };
 })();

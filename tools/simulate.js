@@ -29,7 +29,7 @@ const strategies = {
   smart: {
     // Value per cost, with a budget allowance per year so later years still have money.
     plan(s) {
-      const allowance = s.budget / (E.YEARS - s.year + 1) + (s.year === 1 ? 10 : 0);
+      const allowance = s.budget / (E.YEARS - s.year + 1) + (s.year === 1 ? E.company(s).budget * 0.1 : 0);
       let spent = 0;
       const cands = [];
       for (const init of E.INITIATIVES) init.opts.forEach((o, i) => cands.push({ id: init.id, i, v: E.impact(o.e) * (E.YEARS - s.year + 1), c: Math.max(o.c, 3) }));
@@ -37,7 +37,7 @@ const strategies = {
       for (const c of cands) {
         if (E.fundedThisYear(s).length >= 3) break;
         if (c.v <= 0) continue;
-        const cost = E.initById(c.id).opts[c.i].c;
+        const cost = E.costOf(s, c.id, c.i);
         if (spent + cost > allowance) continue;
         if (E.fund(s, c.id, c.i)) spent += cost;
       }

@@ -68,7 +68,7 @@ const METRICS = [
 
 const COMPANIES = [
   {
-    id: 'junior', name: 'Lucky Strike Resources', size: 'Junior explorer', budget: 4, mascot: 'nugget', difficulty: 'Gentle',
+    id: 'junior', name: 'Lucky Strike Resources', size: 'Junior explorer', budget: 40, mascot: 'nugget', difficulty: 'Gentle',
     blurb: 'A 40-person explorer sitting on one promising lithium deposit. Not much money, not much bureaucracy, lots of ambition.',
     welcome: [
       'We found lithium! Now we need to work out how to mine it smarter than the majors, on a fraction of their budget.',
@@ -79,7 +79,7 @@ const COMPANIES = [
     drag: {},
   },
   {
-    id: 'mid', name: 'Copper Canyon Mining', size: 'Mid-tier producer', budget: 20, mascot: 'truck', difficulty: 'Moderate',
+    id: 'mid', name: 'Copper Canyon Mining', size: 'Mid-tier producer', budget: 300, mascot: 'truck', difficulty: 'Moderate',
     blurb: 'Two open-pit copper mines and a concentrator. Margins are tight, ore grades are falling and the board wants new ideas.',
     welcome: [
       'Our grades are dropping, energy costs are climbing and our haul fleet is getting old.',
@@ -90,7 +90,7 @@ const COMPANIES = [
     drag: { champ: -0.4 },
   },
   {
-    id: 'major', name: 'Big Rocks', size: 'Global major', budget: 120, mascot: 'rock', difficulty: 'Brutal',
+    id: 'major', name: 'Big Rocks', size: 'Global major', budget: 1200, mascot: 'rock', difficulty: 'Brutal',
     blurb: 'Thirty sites on four continents, a famous brand and a big budget. Also seven approval committees and a long memory.',
     welcome: [
       'We have an innovation lab, a venture fund and a very nice video about the future of mining.',
@@ -102,7 +102,8 @@ const COMPANIES = [
   },
 ];
 
-// Each option: t = text, c = cost (% of tenure budget, negative returns budget), e = effect per quarter on hidden drivers, n = debrief note.
+// Each option: t = text, c = cost as % of the company's tenure budget (negative returns credits; converted to whole Crib Credits by costOf),
+// e = effect per quarter on hidden drivers, n = debrief note, u = something Unearthed delivers for mining companies.
 const INITIATIVES = [
   {
     id: 'problems', name: 'Problem statements', icon: 'target',
@@ -220,7 +221,7 @@ const INITIATIVES = [
     opts: [
       { t: 'Go it alone and keep everything secret', c: 0, e: { reach: -2, trust: -1 }, n: 'You pay for every problem alone.' },
       { t: 'Join an industry consortium', c: 14, e: { reach: 2, prob: 1 }, n: 'Shared learning at a shared cost.' },
-      { t: 'Co-fund pre-competitive challenges with peers', c: 24, e: { reach: 3, trust: 2, data: 1, prob: 1 }, n: 'Bigger prizes, bigger datasets and a bigger market for innovators.' },
+      { t: 'Co-fund pre-competitive challenges with peers', u: true, c: 24, e: { reach: 3, trust: 2, data: 1, prob: 1 }, n: 'Bigger prizes, bigger datasets and a bigger market for innovators.' },
       { t: 'Launch your own branded consortium', c: 40, e: { reach: 2, focus: -1 }, n: 'Peers are wary of joining a competitor\'s club.' },
     ],
   },
@@ -309,7 +310,7 @@ const INITIATIVES = [
 // Events: one-off driver changes (e), optional budget change (b, % of tenure budget) and an explanation (r).
 const EVENTS = [
   {
-    id: 'gm', title: 'The site GM says no',
+    id: 'gm', fit: 'Unearthed frames problems with site teams before any technology is chosen, so a pilot starts from the problem the site already has.', title: 'The site GM says no',
     body: 'The general manager at your biggest site refuses to host a pilot. "We are behind on tonnes this quarter. I cannot have a startup wandering around my pit."',
     choices: [
       { t: 'Escalate to the CEO and force it through', e: { champ: -8, safe: -3 }, r: 'You won the argument and lost the site. Operations will remember this.' },
@@ -318,7 +319,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'cash', title: 'Startup runs out of runway',
+    id: 'cash', fit: "An Unearthed vendor check gives a short written view of a company's deployment history, evidence and fit before you commit a trial to it.", title: 'Startup runs out of runway',
     body: 'A startup halfway through a promising trial tells you it will run out of cash in six weeks.',
     choices: [
       { t: 'Not our problem. Let the market decide.', e: { trust: -6, path: -4, reach: -2 }, r: 'The trial dies with the startup, and other innovators notice how you treat partners.' },
@@ -327,7 +328,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'crash', title: 'Copper price crash',
+    id: 'crash', fit: 'Unearthed grades every claim as verified, operator-reported or company-supplied, which makes it easier to defend what to keep when budgets are cut.', title: 'Copper price crash',
     body: 'Commodity prices have dropped sharply. The CFO wants a 30% cut to the innovation budget, today.',
     choices: [
       { t: 'Cut everything evenly by 30%', b: -6, e: { focus: -4, safe: -2 }, r: 'Every project is now underfunded and none of them can finish.' },
@@ -336,7 +337,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'infosec', title: 'IT security blocks data access',
+    id: 'infosec', fit: 'Unearthed scopes test work with vendors and laboratories and arranges samples, so access questions are settled before a trial starts.', title: 'IT security blocks data access',
     body: 'IT security has blocked external innovators from accessing operational data. "Too risky," says the CISO.',
     choices: [
       { t: 'Accept it. Data stays inside.', e: { data: -6, trust: -2 }, r: 'Innovators are now building solutions without seeing your data. Results suffer.' },
@@ -345,7 +346,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'union', title: 'Automation worries',
+    id: 'union', fit: 'Unearthed designs pilots for adoption, working with the people who will run the technology from problem framing onwards.', title: 'Automation worries',
     body: 'Operators are worried that the autonomous drill trial will cost them their jobs. The union wants a meeting.',
     choices: [
       { t: 'Push ahead. It is a business decision.', e: { champ: -7, safe: -4 }, r: 'The trial continues, but operators will not help it succeed.' },
@@ -354,7 +355,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'rival', title: 'A rival announces autonomous haulage',
+    id: 'rival', fit: 'An Unearthed periodic technology review shows you relevant developments against your priorities, before a competitor announces them.', title: 'A rival announces autonomous haulage',
     body: 'A competitor announces a fleet of autonomous haul trucks. The board asks: "Where is ours?"',
     choices: [
       { t: 'Announce a bigger, splashier program next week', e: { focus: -6, reach: 1 }, r: 'You now have a press release to deliver on and no plan for it.' },
@@ -363,7 +364,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'stall', title: 'Success, then silence',
+    id: 'stall', fit: 'Unearthed supports the hand-off after a pilot, so successful trials progress to deployment instead of stalling.', title: 'Success, then silence',
     body: 'A predictive maintenance pilot cut unplanned downtime by 18%. But there is no budget line to roll it out.',
     choices: [
       { t: 'Wait for next year\'s budget cycle', e: { path: -4, trust: -3 }, r: 'Twelve months is a long time for a startup with a payroll to meet.' },
@@ -372,7 +373,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'theatre', title: 'Innovation theatre',
+    id: 'theatre', fit: 'Unearthed grades evidence by source, so you can tell results proven on site from a demo.', title: 'Innovation theatre',
     body: 'Marketing wants a photo of the CEO wearing VR goggles in front of a robot dog for the annual report.',
     choices: [
       { t: 'Great press. Book the robot dog.', e: { reach: 2, focus: -4, champ: -3 }, r: 'Site teams roll their eyes. The robot dog has never been near a mine.' },
@@ -381,7 +382,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'nearmiss', title: 'Near miss during a drone trial',
+    id: 'nearmiss', fit: 'Unearthed scopes test work with vendors and tracks the results, so lessons from a trial are captured rather than lost.', title: 'Near miss during a drone trial',
     body: 'A drone survey trial has a near miss with a light vehicle. Nobody was hurt.',
     choices: [
       { t: 'Ban all drone trials company-wide', e: { safe: -6, path: -3 }, r: 'Every drone program stops, including the ones with good safety records.' },
@@ -390,7 +391,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'esg', title: 'Investors want decarbonisation',
+    id: 'esg', fit: 'An Unearthed open innovation challenge puts a defined problem like diesel displacement to a global network of more than 10,000 innovators.', title: 'Investors want decarbonisation',
     body: 'Major investors are pushing for real progress on reducing diesel use across your fleet.',
     choices: [
       { t: 'Buy carbon offsets and move on', e: { focus: -2, prob: -1 }, r: 'Investors ask the same question next year, with less patience.' },
@@ -399,7 +400,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'flood', title: 'Too many ideas',
+    id: 'flood', fit: 'In an Unearthed challenge, submissions are screened with your teams against one defined problem, so the volume stays manageable.', title: 'Too many ideas',
     body: 'Your ideas portal received 2,000 submissions. Your team of four is overwhelmed.',
     choices: [
       { t: 'Reply to none of them', e: { trust: -6, reach: -3 }, r: 'Two thousand innovators now think you are a black hole.' },
@@ -408,7 +409,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'nih', title: '"We could build that ourselves"',
+    id: 'nih', fit: 'Unearthed works alongside internal engineering and R&D teams, extending their search rather than duplicating it.', title: '"We could build that ourselves"',
     body: 'Your engineering team says the startup\'s sensor is simple. "Give us six months and we will build our own."',
     choices: [
       { t: 'Let engineering build it in-house', e: { path: -3, trust: -3, focus: -2, champ: 2 }, r: 'Eighteen months later the in-house version is still in testing.' },
@@ -417,7 +418,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'lockin', title: 'An offer that sounds too good',
+    id: 'lockin', fit: 'Unearthed searches globally and across industries, so you can compare options beyond a single equipment maker.', title: 'An offer that sounds too good',
     body: 'A large equipment maker offers free sensors across your fleet if you use their closed data platform exclusively.',
     choices: [
       { t: 'Sign the exclusive deal', b: 5, e: { reach: -5, data: -4 }, r: 'You saved money, but now no other innovator can access your fleet data.' },
@@ -426,7 +427,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'uni', title: 'University partnership',
+    id: 'uni', fit: 'An Unearthed options assessment starts with problem definition, so any research partner knows what result you need and by when.', title: 'University partnership',
     body: 'A university offers a five-year PhD research program on ore sorting.',
     choices: [
       { t: 'Sign up. Research is always good.', b: -4, e: { focus: -2, reach: 2 }, r: 'Interesting papers will arrive around the time your mine plan changes.' },
@@ -435,7 +436,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'ceo', title: 'New CEO, hard question',
+    id: 'ceo', fit: 'Unearthed assessments grade evidence and track results, so the value story you take to a new CEO can be checked.', title: 'New CEO, hard question',
     body: 'A new CEO starts and asks you one thing: "What has innovation actually delivered?"',
     choices: [
       { t: 'Show the number of ideas, events and startups engaged', e: { focus: -3, champ: -2 }, r: 'The CEO nods politely and asks the CFO about your budget.' },
@@ -444,7 +445,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'poached', title: 'Your best people are poached',
+    id: 'poached', fit: 'Unearthed works alongside internal teams, extending their search rather than duplicating it, so knowledge does not walk out the door with one person.', title: 'Your best people are poached',
     body: 'A tech company has offered your two best innovation leads double their salaries.',
     choices: [
       { t: 'Counter-offer with a big pay rise', b: -5, e: { safe: 1 }, r: 'They stay for now. Everyone else on the team has heard about the raise.' },
@@ -453,7 +454,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'outage', title: 'Connectivity outage',
+    id: 'outage', fit: 'Unearthed scopes test work with vendors, including the site conditions a trial depends on, before the trial starts.', title: 'Connectivity outage',
     body: 'A network outage at a remote site stops a remote operations pilot mid-trial.',
     choices: [
       { t: 'Blame the startup for not planning for it', e: { trust: -5 }, r: 'The network was your responsibility. The startup knows it.' },
@@ -462,7 +463,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'purgatory', title: 'The pilot audit',
+    id: 'purgatory', fit: 'Unearthed applies technical, commercial and adoption diligence upfront, so trials progress to deployment instead of piling up.', title: 'The pilot audit',
     body: 'Internal audit finds 40 active pilots and none scaled in two years. The board wants an explanation.',
     choices: [
       { t: 'Launch 20 more pilots to improve the odds', e: { focus: -6, path: -2 }, r: 'More pilots, same problem. Audit will be back.' },
@@ -477,6 +478,7 @@ const QUARTERS = 4;
 const MAX_PER_YEAR = 3;
 const INIT_SCALE = 0.85;
 const FIRE_BELOW = 35;
+const VENDOR_CHECKS = 3;
 
 const clamp = (v, lo = 0, hi = 100) => Math.max(lo, Math.min(hi, v));
 
@@ -513,7 +515,8 @@ function newGame(companyId, player, rnd = Math.random) {
   const nodes = { ...co.nodes };
   const m0 = metricsFrom(nodes);
   return {
-    player, companyId, nodes, budget: 100,
+    player, companyId, nodes, budget: co.budget, // Crib Credits left
+    checks: VENDOR_CHECKS, checked: [], // Unearthed vendor checks left, and the initiative or event ids they were used on
     funded: [], // { id, opt, year }
     year: 1, quarter: 0, // quarter 0 = planning
     history: [m0],
@@ -528,15 +531,19 @@ const initById = (id) => INITIATIVES.find((i) => i.id === id);
 const eventById = (id) => EVENTS.find((e) => e.id === id);
 const fundedThisYear = (s) => s.funded.filter((f) => f.year === s.year);
 
+// Option cost in whole Crib Credits for this company (negative means credits come back).
+const credits = (s, pct) => Math.round((pct * company(s).budget) / 100);
+const costOf = (s, id, opt) => credits(s, initById(id).opts[opt].c);
+
 function canFund(s, id, opt) {
   if (s.funded.some((f) => f.id === id)) return false;
   if (fundedThisYear(s).length >= MAX_PER_YEAR) return false;
-  return initById(id).opts[opt].c <= s.budget + 1e-9;
+  return costOf(s, id, opt) <= s.budget;
 }
 
 function fund(s, id, opt) {
   if (!canFund(s, id, opt)) return false;
-  s.budget = clamp(s.budget - initById(id).opts[opt].c, 0, 999);
+  s.budget = Math.max(0, s.budget - costOf(s, id, opt));
   s.funded.push({ id, opt, year: s.year });
   return true;
 }
@@ -544,8 +551,23 @@ function fund(s, id, opt) {
 function unfund(s, id) {
   const i = s.funded.findIndex((f) => f.id === id && f.year === s.year);
   if (i < 0) return;
-  s.budget += initById(s.funded[i].id).opts[s.funded[i].opt].c;
+  s.budget += costOf(s, s.funded[i].id, s.funded[i].opt);
   s.funded.splice(i, 1);
+}
+
+// Unearthed vendor check: reveals evidence grades for one initiative's options or one event's choices.
+function useCheck(s, key) {
+  if (s.checks <= 0 || s.checked.includes(key)) return false;
+  s.checks -= 1;
+  s.checked.push(key);
+  return true;
+}
+
+// A = strongest option, B = helps, C = no help or backfires. Mirrors Unearthed's evidence grading.
+function grades(items) {
+  const imp = items.map((it) => impact(it.e));
+  const max = Math.max(...imp);
+  return imp.map((v) => (v >= max - 1e-9 ? 'A' : v > 0 ? 'B' : 'C'));
 }
 
 function currentEvent(s) {
@@ -562,7 +584,7 @@ function playQuarter(s, choiceIdx) {
   const ch = ev.choices[choiceIdx];
   const before = s.history[s.history.length - 1];
   for (const k in ch.e) s.nodes[k] = clamp(s.nodes[k] + ch.e[k]);
-  if (ch.b) s.budget = clamp(s.budget + ch.b, 0, 999);
+  if (ch.b) s.budget = Math.max(0, s.budget + credits(s, ch.b));
   for (const f of s.funded) {
     const e = initById(f.id).opts[f.opt].e;
     for (const k in e) s.nodes[k] = clamp(s.nodes[k] + e[k] * INIT_SCALE);
@@ -595,9 +617,9 @@ function impact(e) {
 }
 
 const ENGINE = {
-  NODES, NODE_TIPS, UNEARTHED, METRICS, COMPANIES, INITIATIVES, EVENTS, YEARS, QUARTERS, MAX_PER_YEAR, FIRE_BELOW,
-  metricsFrom, avg, tier, newGame, company, initById, eventById, fundedThisYear, canFund, fund, unfund,
-  currentEvent, startYear, playQuarter, impact, shuffle,
+  NODES, NODE_TIPS, UNEARTHED, METRICS, COMPANIES, INITIATIVES, EVENTS, YEARS, QUARTERS, MAX_PER_YEAR, FIRE_BELOW, VENDOR_CHECKS,
+  metricsFrom, avg, tier, newGame, company, initById, eventById, fundedThisYear, credits, costOf, canFund, fund, unfund,
+  useCheck, grades, currentEvent, startYear, playQuarter, impact, shuffle,
 };
 
 if (typeof module !== 'undefined') module.exports = ENGINE;

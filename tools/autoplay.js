@@ -10,6 +10,7 @@
   const plans = { 1: [['problems', 2], ['procurement', 2], ['ip', 2]], 2: [['sponsor', 2], ['stagegate', 2], ['measure', 2]], 3: [['culture', 2], ['scouting', 2], ['champions', 1]] };
   try {
     if (stop === 'title') return done();
+    if (stop === 'howto' || stop === 'approach') { click(`[data-a=page][data-p=${stop}]`); return done(); }
     click('[data-a=start]');
     const inp = $('#player'); inp.value = 'Ed'; inp.dispatchEvent(new Event('input', { bubbles: true }));
     click('[data-a=name]');
@@ -19,11 +20,13 @@
     if (stop === 'welcome') return done();
     click('[data-a=plan]');
     for (let y = 1; y <= 3; y++) {
+      if (stop === 'modal' && y === 1) { click('[data-a=card][data-id=challenges]'); click('[data-a=useCheck]'); pickRadio(1); return done(); }
       for (const [id, nth] of plans[y]) fundCard(id, nth);
-      if (stop === 'modal' && y === 1) { click('[data-a=card][data-id=data]'); pickRadio(3); return done(); }
+      if (stop === 'ingame-howto' && y === 2) { click('.hudlinks [data-a=page][data-p=howto]'); click('[data-a=back]'); if (!$('.grid')) throw new Error('back did not return to planning'); }
       if (stop === 'plan' + y) return done();
       click('[data-a=startYear]');
       for (let q = 1; q <= 4; q++) {
+        if (q === 1) click('[data-a=useCheck]');
         click('.choice');
         if (stop === 'event') return done();
         click('[data-a=lock]');

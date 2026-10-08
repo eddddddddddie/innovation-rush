@@ -11,12 +11,12 @@
   --peach: #F8CA8A;
   --peach-soft: #FFF7EF;
   --ink: #282726;
-  --grey: #656565;
-  --muted: #8C8986;
-  --line: #E6E4E1;
+  --grey: #4F4C49;
+  --muted: #75716D;
+  --line: #DEDAD5;
   --line-strong: #CFCAC5;
   --bg: #FFFFFF;
-  --panel: #F3F2F0;
+  --panel: #F0EDE9;
   --good: #23784A;
   --bad: #C0392B;
   --m-eco: #FF6600;
@@ -40,7 +40,7 @@ b { color: var(--ink); font-weight: 600; }
 .stack { display: flex; flex-direction: column; gap: 14px; }
 .stack-lg { display: flex; flex-direction: column; gap: 40px; }
 .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-.screen { padding-block: 36px; animation: rise .35s ease both; }
+.screen { padding-block: 24px 0; animation: rise .35s ease both; }
 @keyframes rise { from { transform: translateY(6px); } to { transform: none; } }
 
 button { font-family: var(--font); font-size: 1rem; cursor: pointer; }
@@ -279,6 +279,112 @@ details.more summary::after { content: "+"; color: var(--orange); font-weight: 4
 details.more[open] summary::after { content: "−"; }
 details.more[open] summary { margin-bottom: 24px; }
 
+
+/* ---------- Sections: numbered headers, full-width grey bands ---------- */
+.sec { padding-block: 56px; display: flex; flex-direction: column; gap: 28px; scroll-margin-top: 140px; border-top: 1px solid var(--line); }
+.sec.band { background: var(--panel); box-shadow: 0 0 0 100vmax var(--panel); clip-path: inset(0 -100vmax); border-top-color: transparent; }
+.sec.band + .sec { border-top-color: transparent; }
+.sec-head { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 20px; align-items: start; }
+.sec-n { font-size: 0.85rem; font-weight: 600; color: var(--orange); padding-top: 0.55em; border-top: 2px solid var(--orange); width: max-content; min-width: 32px; }
+.sec-head h2 { max-width: 30ch; }
+.sec-head p { font-size: 1.02rem; }
+.sec > :not(.sec-head) { margin-left: 108px; }
+.sec.plan > :not(.sec-head), .sec .cta { margin-left: 0; }
+.hero, .letter, .score-hero, .pagehead { margin-bottom: 48px; }
+.pagehead { display: flex; flex-direction: column; gap: 16px; padding-top: 24px; max-width: 900px; }
+.pagehead h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
+.backbar { padding-block: 8px 0; }
+.band .card, .band .company, .band .choice, .band .help, .band .chart-card, .band .opt, .band .case, .band .form-card, .band .facts-card, .band .tablewrap, .band .delta { background: var(--bg); }
+.chart-card { border-radius: 16px; padding: 16px 20px 18px; display: flex; flex-direction: column; gap: 10px; }
+.sec:not(.band) .chart-card { border: 1px solid var(--line); }
+
+/* Header navigation */
+.topnav { display: flex; flex-wrap: wrap; gap: 4px; }
+.topnav button, .hudlinks button { font: inherit; font-size: 0.85rem; background: none; border: 1px solid transparent; border-radius: 999px; padding: 6px 12px; color: var(--grey); }
+.topnav button:hover, .hudlinks button:hover { border-color: var(--line-strong); color: var(--ink); }
+.topnav button.on { border-color: var(--orange); color: var(--ink); font-weight: 600; }
+.hudlinks { display: flex; gap: 2px; }
+.hudlinks button { padding: 3px 10px; font-size: 0.78rem; }
+
+/* Scorecard section menu */
+.secnav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 4; display: flex; gap: 6px; overflow-x: auto; padding: 12px 0; margin-bottom: 0; background: rgba(255, 255, 255, .96); backdrop-filter: blur(6px); scrollbar-width: none; }
+.secnav button { font: inherit; font-size: 0.85rem; white-space: nowrap; background: var(--bg); border: 1px solid var(--line-strong); border-radius: 999px; padding: 7px 14px; color: var(--ink); display: inline-flex; gap: 8px; }
+.secnav button span { color: var(--orange); font-weight: 600; }
+.secnav button:hover { border-color: var(--orange); }
+
+/* Crib Credits */
+.coin { display: inline-block; width: 0.8em; height: 0.8em; border-radius: 50%; border: 2px solid var(--orange); background: var(--peach); margin-right: 4px; vertical-align: -0.05em; }
+.cc { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.range { font-size: 0.8rem; color: var(--grey); }
+.opt .cost .back { color: var(--good); }
+.hud-right { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+.checks { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--grey); }
+.checks .umark { width: 16px; height: 16px; }
+.dots { display: inline-flex; gap: 3px; }
+.dots i { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--orange); }
+.dots i.on { background: var(--orange); }
+
+/* Unearthed elements */
+.umark { width: 18px; height: 18px; flex: none; }
+.ubadge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.75rem; font-weight: 600; color: #B84A00; background: var(--peach-soft); border: 1px solid var(--peach); border-radius: 999px; padding: 2px 9px 2px 5px; width: max-content; }
+.ubadge .umark { width: 14px; height: 14px; }
+.tags { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.choice { display: flex; justify-content: space-between; gap: 12px; align-items: center; flex-wrap: wrap; }
+.otext { display: flex; flex-direction: column; gap: 6px; }
+.grade { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 700; border-radius: 999px; padding: 2px 10px 2px 3px; }
+.grade > span { font-weight: 600; }
+.grade::before { content: none; }
+.grade.gA { background: #E3F1E8; color: var(--good); }
+.grade.gB { background: var(--peach-soft); color: #B84A00; }
+.grade.gC { background: #F8E3E0; color: var(--bad); }
+.grade { text-indent: 0; }
+.grade.gA, .grade.gB, .grade.gC { padding-left: 4px; }
+.vcheck { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; border: 1px dashed var(--orange); border-radius: 16px; padding: 14px 18px; background: var(--bg); }
+.vcheck > div { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 2px; }
+.vcheck p { font-size: 0.88rem; }
+.vcheck .umark { width: 28px; height: 28px; }
+.vcheck.done { border-style: solid; background: var(--peach-soft); }
+.vcheck.empty { border-color: var(--line-strong); }
+.btn.small { padding: 8px 16px; font-size: 0.88rem; }
+.fit { display: flex; gap: 14px; align-items: flex-start; background: var(--ink); color: #fff; border-radius: 16px; padding: 18px 20px; }
+.fit .umark { width: 30px; height: 30px; margin-top: 2px; }
+.fit .label { color: var(--peach); }
+.fit p { color: #F3F1EE; max-width: 72ch; }
+.ufeatures { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px; }
+.ufeatures > div { background: var(--bg); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+.ufeatures .umark { width: 26px; height: 26px; }
+
+/* Info pages */
+.split { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.facts-card, .case, .form-card { border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 10px; }
+.case { border-left: 3px solid var(--orange); max-width: 820px; }
+.forms { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 14px; }
+.form-card dl { margin: 0; display: grid; gap: 6px; }
+.form-card dl div { display: grid; grid-template-columns: 70px 1fr; gap: 8px; font-size: 0.85rem; }
+.form-card dt { color: var(--muted); }
+.form-card dd { margin: 0; color: var(--grey); }
+.ingame { border-left: 2px solid var(--orange); padding-left: 14px; }
+.steps.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.stages.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.stages.four li { background: var(--bg); color: var(--ink); }
+.band .stages li:not(.on) { background: var(--bg); }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.tbl th { text-align: left; font-weight: 600; color: var(--muted); font-size: 0.8rem; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.tbl td { padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--grey); }
+.tbl tr:last-child td { border-bottom: 0; }
+
+/* Dark contact panel for contrast at the end */
+.cta { background: var(--ink); color: #fff; }
+.cta h2 { color: #fff; }
+.cta p { color: #E2DFDB; }
+.cta img { filter: brightness(0) invert(1); }
+.cta .btn { background: transparent; color: #fff; }
+.cta .btn:hover { background: rgba(255, 255, 255, .08); }
+.cta .email { color: #C9C5C0; }
+.cta .email .addr { color: #fff; }
+.cta .copy-btn { background: transparent; color: #fff; border-color: #6E6A66; }
+
 @media (max-width: 760px) {
   body { padding-inline: 16px; }
   .hud, .dock { margin-inline: -16px; padding-inline: 16px; }
@@ -288,7 +394,16 @@ details.more[open] summary { margin-bottom: 24px; }
   .benches { grid-column: 1 / -1; grid-row: 2; justify-self: start; }
   .budget { min-width: 120px; }
   .minimetrics { gap: 10px; }
-  .deltas, .statrow, .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .deltas, .statrow, .steps, .steps.three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sec { padding-block: 40px; }
+  .sec-head { grid-template-columns: 1fr; gap: 10px; }
+  .sec > :not(.sec-head) { margin-left: 0; }
+  .split { grid-template-columns: 1fr; }
+  .stages.four { grid-template-columns: 1fr; }
+  .stages.four li { clip-path: none; border-radius: 10px; }
+  .hud-right { align-items: flex-start; }
+  .hudlinks { display: none; }
+  .brandline { flex-wrap: wrap; }
   .letter .portrait { width: 120px; }
   .score-hero .portrait { width: 150px; }
   .cta .actions { align-items: flex-start; }
@@ -372,7 +487,7 @@ const METRICS = [
 
 const COMPANIES = [
   {
-    id: 'junior', name: 'Lucky Strike Resources', size: 'Junior explorer', budget: 4, mascot: 'nugget', difficulty: 'Gentle',
+    id: 'junior', name: 'Lucky Strike Resources', size: 'Junior explorer', budget: 40, mascot: 'nugget', difficulty: 'Gentle',
     blurb: 'A 40-person explorer sitting on one promising lithium deposit. Not much money, not much bureaucracy, lots of ambition.',
     welcome: [
       'We found lithium! Now we need to work out how to mine it smarter than the majors, on a fraction of their budget.',
@@ -383,7 +498,7 @@ const COMPANIES = [
     drag: {},
   },
   {
-    id: 'mid', name: 'Copper Canyon Mining', size: 'Mid-tier producer', budget: 20, mascot: 'truck', difficulty: 'Moderate',
+    id: 'mid', name: 'Copper Canyon Mining', size: 'Mid-tier producer', budget: 300, mascot: 'truck', difficulty: 'Moderate',
     blurb: 'Two open-pit copper mines and a concentrator. Margins are tight, ore grades are falling and the board wants new ideas.',
     welcome: [
       'Our grades are dropping, energy costs are climbing and our haul fleet is getting old.',
@@ -394,7 +509,7 @@ const COMPANIES = [
     drag: { champ: -0.4 },
   },
   {
-    id: 'major', name: 'Big Rocks', size: 'Global major', budget: 120, mascot: 'rock', difficulty: 'Brutal',
+    id: 'major', name: 'Big Rocks', size: 'Global major', budget: 1200, mascot: 'rock', difficulty: 'Brutal',
     blurb: 'Thirty sites on four continents, a famous brand and a big budget. Also seven approval committees and a long memory.',
     welcome: [
       'We have an innovation lab, a venture fund and a very nice video about the future of mining.',
@@ -406,7 +521,8 @@ const COMPANIES = [
   },
 ];
 
-// Each option: t = text, c = cost (% of tenure budget, negative returns budget), e = effect per quarter on hidden drivers, n = debrief note.
+// Each option: t = text, c = cost as % of the company's tenure budget (negative returns credits; converted to whole Crib Credits by costOf),
+// e = effect per quarter on hidden drivers, n = debrief note, u = something Unearthed delivers for mining companies.
 const INITIATIVES = [
   {
     id: 'problems', name: 'Problem statements', icon: 'target',
@@ -524,7 +640,7 @@ const INITIATIVES = [
     opts: [
       { t: 'Go it alone and keep everything secret', c: 0, e: { reach: -2, trust: -1 }, n: 'You pay for every problem alone.' },
       { t: 'Join an industry consortium', c: 14, e: { reach: 2, prob: 1 }, n: 'Shared learning at a shared cost.' },
-      { t: 'Co-fund pre-competitive challenges with peers', c: 24, e: { reach: 3, trust: 2, data: 1, prob: 1 }, n: 'Bigger prizes, bigger datasets and a bigger market for innovators.' },
+      { t: 'Co-fund pre-competitive challenges with peers', u: true, c: 24, e: { reach: 3, trust: 2, data: 1, prob: 1 }, n: 'Bigger prizes, bigger datasets and a bigger market for innovators.' },
       { t: 'Launch your own branded consortium', c: 40, e: { reach: 2, focus: -1 }, n: 'Peers are wary of joining a competitor\'s club.' },
     ],
   },
@@ -613,7 +729,7 @@ const INITIATIVES = [
 // Events: one-off driver changes (e), optional budget change (b, % of tenure budget) and an explanation (r).
 const EVENTS = [
   {
-    id: 'gm', title: 'The site GM says no',
+    id: 'gm', fit: 'Unearthed frames problems with site teams before any technology is chosen, so a pilot starts from the problem the site already has.', title: 'The site GM says no',
     body: 'The general manager at your biggest site refuses to host a pilot. "We are behind on tonnes this quarter. I cannot have a startup wandering around my pit."',
     choices: [
       { t: 'Escalate to the CEO and force it through', e: { champ: -8, safe: -3 }, r: 'You won the argument and lost the site. Operations will remember this.' },
@@ -622,7 +738,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'cash', title: 'Startup runs out of runway',
+    id: 'cash', fit: "An Unearthed vendor check gives a short written view of a company's deployment history, evidence and fit before you commit a trial to it.", title: 'Startup runs out of runway',
     body: 'A startup halfway through a promising trial tells you it will run out of cash in six weeks.',
     choices: [
       { t: 'Not our problem. Let the market decide.', e: { trust: -6, path: -4, reach: -2 }, r: 'The trial dies with the startup, and other innovators notice how you treat partners.' },
@@ -631,7 +747,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'crash', title: 'Copper price crash',
+    id: 'crash', fit: 'Unearthed grades every claim as verified, operator-reported or company-supplied, which makes it easier to defend what to keep when budgets are cut.', title: 'Copper price crash',
     body: 'Commodity prices have dropped sharply. The CFO wants a 30% cut to the innovation budget, today.',
     choices: [
       { t: 'Cut everything evenly by 30%', b: -6, e: { focus: -4, safe: -2 }, r: 'Every project is now underfunded and none of them can finish.' },
@@ -640,7 +756,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'infosec', title: 'IT security blocks data access',
+    id: 'infosec', fit: 'Unearthed scopes test work with vendors and laboratories and arranges samples, so access questions are settled before a trial starts.', title: 'IT security blocks data access',
     body: 'IT security has blocked external innovators from accessing operational data. "Too risky," says the CISO.',
     choices: [
       { t: 'Accept it. Data stays inside.', e: { data: -6, trust: -2 }, r: 'Innovators are now building solutions without seeing your data. Results suffer.' },
@@ -649,7 +765,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'union', title: 'Automation worries',
+    id: 'union', fit: 'Unearthed designs pilots for adoption, working with the people who will run the technology from problem framing onwards.', title: 'Automation worries',
     body: 'Operators are worried that the autonomous drill trial will cost them their jobs. The union wants a meeting.',
     choices: [
       { t: 'Push ahead. It is a business decision.', e: { champ: -7, safe: -4 }, r: 'The trial continues, but operators will not help it succeed.' },
@@ -658,7 +774,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'rival', title: 'A rival announces autonomous haulage',
+    id: 'rival', fit: 'An Unearthed periodic technology review shows you relevant developments against your priorities, before a competitor announces them.', title: 'A rival announces autonomous haulage',
     body: 'A competitor announces a fleet of autonomous haul trucks. The board asks: "Where is ours?"',
     choices: [
       { t: 'Announce a bigger, splashier program next week', e: { focus: -6, reach: 1 }, r: 'You now have a press release to deliver on and no plan for it.' },
@@ -667,7 +783,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'stall', title: 'Success, then silence',
+    id: 'stall', fit: 'Unearthed supports the hand-off after a pilot, so successful trials progress to deployment instead of stalling.', title: 'Success, then silence',
     body: 'A predictive maintenance pilot cut unplanned downtime by 18%. But there is no budget line to roll it out.',
     choices: [
       { t: 'Wait for next year\'s budget cycle', e: { path: -4, trust: -3 }, r: 'Twelve months is a long time for a startup with a payroll to meet.' },
@@ -676,7 +792,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'theatre', title: 'Innovation theatre',
+    id: 'theatre', fit: 'Unearthed grades evidence by source, so you can tell results proven on site from a demo.', title: 'Innovation theatre',
     body: 'Marketing wants a photo of the CEO wearing VR goggles in front of a robot dog for the annual report.',
     choices: [
       { t: 'Great press. Book the robot dog.', e: { reach: 2, focus: -4, champ: -3 }, r: 'Site teams roll their eyes. The robot dog has never been near a mine.' },
@@ -685,7 +801,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'nearmiss', title: 'Near miss during a drone trial',
+    id: 'nearmiss', fit: 'Unearthed scopes test work with vendors and tracks the results, so lessons from a trial are captured rather than lost.', title: 'Near miss during a drone trial',
     body: 'A drone survey trial has a near miss with a light vehicle. Nobody was hurt.',
     choices: [
       { t: 'Ban all drone trials company-wide', e: { safe: -6, path: -3 }, r: 'Every drone program stops, including the ones with good safety records.' },
@@ -694,7 +810,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'esg', title: 'Investors want decarbonisation',
+    id: 'esg', fit: 'An Unearthed open innovation challenge puts a defined problem like diesel displacement to a global network of more than 10,000 innovators.', title: 'Investors want decarbonisation',
     body: 'Major investors are pushing for real progress on reducing diesel use across your fleet.',
     choices: [
       { t: 'Buy carbon offsets and move on', e: { focus: -2, prob: -1 }, r: 'Investors ask the same question next year, with less patience.' },
@@ -703,7 +819,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'flood', title: 'Too many ideas',
+    id: 'flood', fit: 'In an Unearthed challenge, submissions are screened with your teams against one defined problem, so the volume stays manageable.', title: 'Too many ideas',
     body: 'Your ideas portal received 2,000 submissions. Your team of four is overwhelmed.',
     choices: [
       { t: 'Reply to none of them', e: { trust: -6, reach: -3 }, r: 'Two thousand innovators now think you are a black hole.' },
@@ -712,7 +828,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'nih', title: '"We could build that ourselves"',
+    id: 'nih', fit: 'Unearthed works alongside internal engineering and R&D teams, extending their search rather than duplicating it.', title: '"We could build that ourselves"',
     body: 'Your engineering team says the startup\'s sensor is simple. "Give us six months and we will build our own."',
     choices: [
       { t: 'Let engineering build it in-house', e: { path: -3, trust: -3, focus: -2, champ: 2 }, r: 'Eighteen months later the in-house version is still in testing.' },
@@ -721,7 +837,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'lockin', title: 'An offer that sounds too good',
+    id: 'lockin', fit: 'Unearthed searches globally and across industries, so you can compare options beyond a single equipment maker.', title: 'An offer that sounds too good',
     body: 'A large equipment maker offers free sensors across your fleet if you use their closed data platform exclusively.',
     choices: [
       { t: 'Sign the exclusive deal', b: 5, e: { reach: -5, data: -4 }, r: 'You saved money, but now no other innovator can access your fleet data.' },
@@ -730,7 +846,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'uni', title: 'University partnership',
+    id: 'uni', fit: 'An Unearthed options assessment starts with problem definition, so any research partner knows what result you need and by when.', title: 'University partnership',
     body: 'A university offers a five-year PhD research program on ore sorting.',
     choices: [
       { t: 'Sign up. Research is always good.', b: -4, e: { focus: -2, reach: 2 }, r: 'Interesting papers will arrive around the time your mine plan changes.' },
@@ -739,7 +855,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'ceo', title: 'New CEO, hard question',
+    id: 'ceo', fit: 'Unearthed assessments grade evidence and track results, so the value story you take to a new CEO can be checked.', title: 'New CEO, hard question',
     body: 'A new CEO starts and asks you one thing: "What has innovation actually delivered?"',
     choices: [
       { t: 'Show the number of ideas, events and startups engaged', e: { focus: -3, champ: -2 }, r: 'The CEO nods politely and asks the CFO about your budget.' },
@@ -748,7 +864,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'poached', title: 'Your best people are poached',
+    id: 'poached', fit: 'Unearthed works alongside internal teams, extending their search rather than duplicating it, so knowledge does not walk out the door with one person.', title: 'Your best people are poached',
     body: 'A tech company has offered your two best innovation leads double their salaries.',
     choices: [
       { t: 'Counter-offer with a big pay rise', b: -5, e: { safe: 1 }, r: 'They stay for now. Everyone else on the team has heard about the raise.' },
@@ -757,7 +873,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'outage', title: 'Connectivity outage',
+    id: 'outage', fit: 'Unearthed scopes test work with vendors, including the site conditions a trial depends on, before the trial starts.', title: 'Connectivity outage',
     body: 'A network outage at a remote site stops a remote operations pilot mid-trial.',
     choices: [
       { t: 'Blame the startup for not planning for it', e: { trust: -5 }, r: 'The network was your responsibility. The startup knows it.' },
@@ -766,7 +882,7 @@ const EVENTS = [
     ],
   },
   {
-    id: 'purgatory', title: 'The pilot audit',
+    id: 'purgatory', fit: 'Unearthed applies technical, commercial and adoption diligence upfront, so trials progress to deployment instead of piling up.', title: 'The pilot audit',
     body: 'Internal audit finds 40 active pilots and none scaled in two years. The board wants an explanation.',
     choices: [
       { t: 'Launch 20 more pilots to improve the odds', e: { focus: -6, path: -2 }, r: 'More pilots, same problem. Audit will be back.' },
@@ -781,6 +897,7 @@ const QUARTERS = 4;
 const MAX_PER_YEAR = 3;
 const INIT_SCALE = 0.85;
 const FIRE_BELOW = 35;
+const VENDOR_CHECKS = 3;
 
 const clamp = (v, lo = 0, hi = 100) => Math.max(lo, Math.min(hi, v));
 
@@ -817,7 +934,8 @@ function newGame(companyId, player, rnd = Math.random) {
   const nodes = { ...co.nodes };
   const m0 = metricsFrom(nodes);
   return {
-    player, companyId, nodes, budget: 100,
+    player, companyId, nodes, budget: co.budget, // Crib Credits left
+    checks: VENDOR_CHECKS, checked: [], // Unearthed vendor checks left, and the initiative or event ids they were used on
     funded: [], // { id, opt, year }
     year: 1, quarter: 0, // quarter 0 = planning
     history: [m0],
@@ -832,15 +950,19 @@ const initById = (id) => INITIATIVES.find((i) => i.id === id);
 const eventById = (id) => EVENTS.find((e) => e.id === id);
 const fundedThisYear = (s) => s.funded.filter((f) => f.year === s.year);
 
+// Option cost in whole Crib Credits for this company (negative means credits come back).
+const credits = (s, pct) => Math.round((pct * company(s).budget) / 100);
+const costOf = (s, id, opt) => credits(s, initById(id).opts[opt].c);
+
 function canFund(s, id, opt) {
   if (s.funded.some((f) => f.id === id)) return false;
   if (fundedThisYear(s).length >= MAX_PER_YEAR) return false;
-  return initById(id).opts[opt].c <= s.budget + 1e-9;
+  return costOf(s, id, opt) <= s.budget;
 }
 
 function fund(s, id, opt) {
   if (!canFund(s, id, opt)) return false;
-  s.budget = clamp(s.budget - initById(id).opts[opt].c, 0, 999);
+  s.budget = Math.max(0, s.budget - costOf(s, id, opt));
   s.funded.push({ id, opt, year: s.year });
   return true;
 }
@@ -848,8 +970,23 @@ function fund(s, id, opt) {
 function unfund(s, id) {
   const i = s.funded.findIndex((f) => f.id === id && f.year === s.year);
   if (i < 0) return;
-  s.budget += initById(s.funded[i].id).opts[s.funded[i].opt].c;
+  s.budget += costOf(s, s.funded[i].id, s.funded[i].opt);
   s.funded.splice(i, 1);
+}
+
+// Unearthed vendor check: reveals evidence grades for one initiative's options or one event's choices.
+function useCheck(s, key) {
+  if (s.checks <= 0 || s.checked.includes(key)) return false;
+  s.checks -= 1;
+  s.checked.push(key);
+  return true;
+}
+
+// A = strongest option, B = helps, C = no help or backfires. Mirrors Unearthed's evidence grading.
+function grades(items) {
+  const imp = items.map((it) => impact(it.e));
+  const max = Math.max(...imp);
+  return imp.map((v) => (v >= max - 1e-9 ? 'A' : v > 0 ? 'B' : 'C'));
 }
 
 function currentEvent(s) {
@@ -866,7 +1003,7 @@ function playQuarter(s, choiceIdx) {
   const ch = ev.choices[choiceIdx];
   const before = s.history[s.history.length - 1];
   for (const k in ch.e) s.nodes[k] = clamp(s.nodes[k] + ch.e[k]);
-  if (ch.b) s.budget = clamp(s.budget + ch.b, 0, 999);
+  if (ch.b) s.budget = Math.max(0, s.budget + credits(s, ch.b));
   for (const f of s.funded) {
     const e = initById(f.id).opts[f.opt].e;
     for (const k in e) s.nodes[k] = clamp(s.nodes[k] + e[k] * INIT_SCALE);
@@ -899,9 +1036,9 @@ function impact(e) {
 }
 
 const ENGINE = {
-  NODES, NODE_TIPS, UNEARTHED, METRICS, COMPANIES, INITIATIVES, EVENTS, YEARS, QUARTERS, MAX_PER_YEAR, FIRE_BELOW,
-  metricsFrom, avg, tier, newGame, company, initById, eventById, fundedThisYear, canFund, fund, unfund,
-  currentEvent, startYear, playQuarter, impact, shuffle,
+  NODES, NODE_TIPS, UNEARTHED, METRICS, COMPANIES, INITIATIVES, EVENTS, YEARS, QUARTERS, MAX_PER_YEAR, FIRE_BELOW, VENDOR_CHECKS,
+  metricsFrom, avg, tier, newGame, company, initById, eventById, fundedThisYear, credits, costOf, canFund, fund, unfund,
+  useCheck, grades, currentEvent, startYear, playQuarter, impact, shuffle,
 };
 
 if (typeof module !== 'undefined') module.exports = ENGINE;
@@ -1002,22 +1139,32 @@ const ART = (() => {
     <path d="M0 40 H800 V220 H0Z" fill="#F8CA8A"/>
     <path d="M0 95 C200 85 600 105 800 92 V220 H0Z" fill="#FC883F"/>
     <path d="M0 158 C220 148 560 168 800 154 V220 H0Z" fill="#FF6600"/>
-    <path d="M0 40 H60 V75 H170 V110 H280 V150 H520 V110 H630 V75 H740 V40 H800 V0 H0Z" fill="#F3F2F0"/>
+    <path d="M0 40 H60 V75 H170 V110 H280 V150 H520 V110 H630 V75 H740 V40 H800 V0 H0Z" fill="#F0EDE9"/>
     <path d="M0 40 H60 V75 H170 V110 H280 V150 H520 V110 H630 V75 H740 V40 H800" stroke="#333" stroke-width="2" fill="none"/>
   </svg>`;
 
-  return { MASCOTS, icon, pit };
+  // The Unearthed 'U' mark, used as a small badge wherever the game shows something Unearthed does.
+  const umark = () => `<svg class="umark" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M3 2 L8 4.2 V14 L3 17Z" fill="#F8CA8A"/><path d="M21 2 L16 4.2 V14 L21 17Z" fill="#FF6600"/>
+    <path d="M3 17 L8 14 L12 16.4 V22Z" fill="#FFA627"/><path d="M21 17 L16 14 L12 16.4 V22Z" fill="#FC883F"/></svg>`;
+
+  return { MASCOTS, icon, pit, umark };
 })();
 
 </script>
 <script>
 // Innovation Rush: screens and interaction. Renders the whole app from state on every change.
 (() => {
-  const E = ENGINE, A = ART;
+  const E = ENGINE, A = ART, U = ENGINE.UNEARTHED;
   const app = document.getElementById('app');
   const BEST_KEY = 'innovation-rush-best';
   const MCOL = { eco: 'var(--m-eco)', adopt: 'var(--m-adopt)', value: 'var(--m-value)', buyin: 'var(--m-buyin)' };
   const MHEX = { eco: '#FF6600', adopt: '#282726', value: '#FFA627', buyin: '#8C8986' };
+  const GRADE = {
+    A: { name: 'Proven', note: 'Strongest evidence of the options' },
+    B: { name: 'Some evidence', note: 'Helps, but there is a stronger option' },
+    C: { name: 'Weak evidence', note: 'Little benefit, or likely to backfire' },
+  };
 
   let S = null; // engine game state
   let V = { view: 'title', name: '', companyId: null, modal: null, pending: null, order: null, outcome: null };
@@ -1027,16 +1174,10 @@ const ART = (() => {
   const co = () => coById(S ? S.companyId : V.companyId);
   const mascot = (id, mood) => A.MASCOTS[coById(id).mascot](mood);
   const latest = () => S.history[S.history.length - 1];
-  const money = (pct) => {
-    const m = (Math.abs(pct) / 100) * co().budget;
-    if (m >= 1) return `$${m >= 10 ? Math.round(m) : m.toFixed(1).replace(/\.0$/, '')}M`;
-    return `$${Math.round(m * 1000)}K`;
-  };
-  const pips = (init) => {
-    const max = Math.max(...init.opts.map((o) => o.c));
-    const n = max <= 10 ? 1 : max <= 25 ? 2 : max <= 40 ? 3 : 4;
-    return `<span class="pips" aria-label="Cost level ${n} of 4">${'$'.repeat(n)}<i>${'$'.repeat(4 - n)}</i></span>`;
-  };
+  const num = (n) => Math.abs(n).toLocaleString('en-AU');
+  const coin = '<span class="coin" aria-hidden="true"></span>';
+  const cc = (n) => `<span class="cc">${coin}${num(n)}</span>`; // compact credits, for prices
+  const ccText = (n) => `${num(n)} Crib Credit${Math.abs(n) === 1 ? '' : 's'}`; // credits in a sentence
   const sign = (d) => {
     const r = Math.round(d);
     if (r === 0) return `<span class="d flat">no change</span>`;
@@ -1056,7 +1197,18 @@ const ART = (() => {
   // ---------- shared pieces ----------
 
   const LOGO = 'data:image/png;base64,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';
-  const brandline = () => `<header class="brandline"><a class="logo" href="https://unearthed.solutions" target="_blank" rel="noopener"><img src="${LOGO}" alt="Unearthed"></a><span class="gamename"><b>Innovation Rush</b>, a game by Unearthed</span></header>`;
+  const brandline = () => `<header class="brandline"><a class="logo" href="${U.contact.web}" target="_blank" rel="noopener"><img src="${LOGO}" alt="Unearthed"></a>
+    <nav class="topnav" aria-label="Game pages"><button data-a="home" class="${V.view === 'title' ? 'on' : ''}">Innovation Rush</button><button data-a="page" data-p="howto" class="${V.view === 'howto' ? 'on' : ''}">How to play</button><button data-a="page" data-p="approach" class="${V.view === 'approach' ? 'on' : ''}">The approach</button></nav></header>`;
+  const inGame = () => S && S.status === 'playing' && ['plan', 'event', 'outcome'].includes(V.back);
+  const backBar = () => (inGame() ? `<div class="backbar"><button class="btn ghost" data-a="back">Back to your game</button></div>` : '');
+
+  // A numbered section. Banded sections get a full-width grey background so neighbouring sections are easy to tell apart.
+  const sec = ({ id, n, title, intro, band, body, cls = '' }) => `<section class="sec ${band ? 'band' : ''} ${cls}" ${id ? `id="${id}"` : ''}>
+      <div class="sec-head"><span class="sec-n">${n}</span><div class="stack"><h2>${title}</h2>${intro ? `<p>${intro}</p>` : ''}</div></div>
+      ${body}
+    </section>`;
+
+  const uBadge = (text = 'Unearthed service') => `<span class="ubadge">${A.umark()}${text}</span>`;
 
   function hud() {
     const c = co();
@@ -1071,29 +1223,48 @@ const ART = (() => {
     }).join('');
     let fill = S.budget, ghost = S.budget;
     if (V.modal && V.pending != null) {
-      const init = E.initById(V.modal);
       const cur = S.funded.find((f) => f.id === V.modal && f.year === S.year);
-      const after = S.budget + (cur ? init.opts[cur.opt].c : 0) - init.opts[V.pending].c;
+      const after = S.budget + (cur ? E.costOf(S, V.modal, cur.opt) : 0) - E.costOf(S, V.modal, V.pending);
       fill = Math.min(after, S.budget); ghost = Math.max(after, S.budget);
     }
+    const pct = (v) => Math.min(100, Math.max(0, (v / c.budget) * 100));
     const m = latest();
     const where = S.quarter === 0 ? `Year ${S.year}, planning` : `Year ${S.year}, quarter ${S.quarter}`;
+    const dots = Array.from({ length: E.VENDOR_CHECKS }, (_, i) => `<i class="${i < S.checks ? 'on' : ''}"></i>`).join('');
     return `<div class="hud"><div class="hud-inner">
       <div class="who">${mascot(S.companyId)}<div style="min-width:0"><div class="name">${esc(S.player)}</div><div class="co">Chief Innovation Officer, ${c.name}</div></div></div>
       <div class="benches" role="img" aria-label="${where}. ${played} of 12 quarters played.">${years}</div>
-      <div class="budget"><div class="amt">${money(S.budget)} <small>left of $${c.budget}M</small></div>
-        <div class="track"><div class="ghost" style="width:${Math.min(100, Math.max(0, ghost))}%"></div><div class="fill" style="width:${Math.min(100, Math.max(0, fill))}%"></div></div></div>
+      <div class="hud-right">
+        <div class="budget"><div class="amt">${cc(S.budget)} <small>Crib Credits left of ${num(c.budget)}</small></div>
+          <div class="track"><div class="ghost" style="width:${pct(ghost)}%"></div><div class="fill" style="width:${pct(fill)}%"></div></div></div>
+        <div class="checks" title="Unearthed vendor checks grade the options for one initiative or event">${A.umark()}<span>${S.checks} vendor check${S.checks === 1 ? '' : 's'}</span><span class="dots" aria-hidden="true">${dots}</span></div>
+        <div class="hudlinks"><button data-a="page" data-p="howto">How to play</button><button data-a="page" data-p="approach">The approach</button></div>
+      </div>
       <div class="minimetrics">${E.METRICS.map((mt) => `<div class="mm" style="--c:${MCOL[mt.id]}"><div class="top"><span>${mt.name}</span><span>${Math.round(m[mt.id])}</span></div><div class="track"><div class="fill" style="width:${m[mt.id]}%"></div></div></div>`).join('')}</div>
     </div></div>`;
   }
+
+  // The vendor check panel shown in the initiative modal and on events.
+  function checkPanel(key, gradedNow) {
+    if (gradedNow) {
+      return `<div class="vcheck done">${A.umark()}<div><b>Unearthed vendor check complete</b><p>Each option is graded on the evidence behind it: <b>A</b> proven, <b>B</b> some evidence, <b>C</b> weak. In real life a vendor check gives you a short written view on deployment history, evidence and fit, usually within days.</p></div></div>`;
+    }
+    if (S.checks <= 0) {
+      return `<div class="vcheck empty">${A.umark()}<div><b>No vendor checks left</b><p>You have used all ${E.VENDOR_CHECKS} Unearthed vendor checks for this tenure. Trust your judgement.</p></div></div>`;
+    }
+    return `<div class="vcheck">${A.umark()}<div><b>Not sure? Ask Unearthed.</b><p>A vendor check grades every option on the evidence behind it. You have ${S.checks} left for your whole tenure.</p></div>
+      <button class="btn small" id="use-check" data-a="useCheck" data-key="${key}">Use a vendor check</button></div>`;
+  }
+
+  const gradeChip = (g) => `<span class="grade g${g}" title="${GRADE[g].note}">${g}<span>${GRADE[g].name}</span></span>`;
 
   function chart(hist) {
     const W = 1000, H = 330, L = 34, R = W - 12, T = 14, B = H - 30;
     const x = (i) => L + ((R - L) * i) / 12;
     const y = (v) => B - ((B - T) * v) / 100;
     let g = '';
-    for (const v of [0, 25, 50, 75, 100]) g += `<line x1="${L}" x2="${R}" y1="${y(v)}" y2="${y(v)}" stroke="#EFEDEA"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
-    for (const q of [4, 8]) g += `<line x1="${x(q)}" x2="${x(q)}" y1="${T}" y2="${B}" stroke="#E6E4E1"/>`;
+    for (const v of [0, 25, 50, 75, 100]) g += `<line x1="${L}" x2="${R}" y1="${y(v)}" y2="${y(v)}" stroke="#ECE9E5"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
+    for (const q of [4, 8]) g += `<line x1="${x(q)}" x2="${x(q)}" y1="${T}" y2="${B}" stroke="#E2DFDB"/>`;
     for (let q = 0; q <= 12; q++) g += `<line x1="${x(q)}" x2="${x(q)}" y1="${B}" y2="${B + 4}" stroke="#CFCAC5"/>`;
     [['Year 1', 2], ['Year 2', 6], ['Year 3', 10]].forEach(([t, q]) => { g += `<text x="${x(q)}" y="${B + 20}" text-anchor="middle">${t}</text>`; });
     g += `<line x1="${L}" x2="${R}" y1="${y(90)}" y2="${y(90)}" stroke="#FF6600" stroke-dasharray="5 4" opacity=".7"/><text x="${R - 4}" y="${y(90) - 6}" text-anchor="end" style="fill:#B84A00">Win: average 90+</text>`;
@@ -1109,8 +1280,8 @@ const ART = (() => {
     }
     const lastM = hist[hist.length - 1];
     const label = E.METRICS.map((mt) => `${mt.name} ${Math.round(lastM[mt.id])}`).join(', ');
-    return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Metrics by quarter. Latest: ${label}.">${g}</svg>
-      <div class="legend">${E.METRICS.map((mt) => `<span><i class="${mt.id === 'buyin' ? 'dash' : ''}" style="--c:${MHEX[mt.id]}"></i>${mt.name}</span>`).join('')}</div>`;
+    return `<div class="chart-card"><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Metrics by quarter. Latest: ${label}.">${g}</svg>
+      <div class="legend">${E.METRICS.map((mt) => `<span><i class="${mt.id === 'buyin' ? 'dash' : ''}" style="--c:${MHEX[mt.id]}"></i>${mt.name}</span>`).join('')}</div></div>`;
   }
 
   // ---------- screens ----------
@@ -1120,12 +1291,12 @@ const ART = (() => {
       const best = store.get();
       const bestAny = Math.max(0, ...Object.values(best));
       return `<div class="wrap">${brandline()}
-        <section class="screen stack-lg">
+        <main class="screen">
           <div class="hero">
             <div class="copy">
               <div class="stack">
                 <h1>Innovation Rush</h1>
-                <p class="lede">You are the new Chief Innovation Officer at a mining company. Unearth new technology, get it running on your sites and keep the board on side. You have three years and one budget.</p>
+                <p class="lede">You are the new Chief Innovation Officer at a mining company. Unearth new technology, get it running on your sites and keep the board on side. You have three years and one budget of Crib Credits.</p>
               </div>
               <div class="stack">
                 <div class="cta-row"><button class="btn" data-a="start">Start your tenure</button></div>
@@ -1141,53 +1312,56 @@ const ART = (() => {
               </div>
             </div>
           </div>
-          <div class="statrow">
+          ${sec({ n: '01', title: 'How the game works', band: true, body: `<div class="statrow">
             <div><span class="stat">3</span><span>years to prove your value</span></div>
-            <div><span class="stat">${E.INITIATIVES.length}</span><span>initiatives to choose from</span></div>
-            <div><span class="stat">${E.EVENTS.length}</span><span>real-world events</span></div>
+            <div><span class="stat">${E.INITIATIVES.length}</span><span>initiatives to fund with Crib Credits</span></div>
+            <div><span class="stat">${E.EVENTS.length}</span><span>real-world events to respond to</span></div>
             <div><span class="stat">4</span><span>metrics the board watches</span></div>
-          </div>
-        </section></div>`;
+          </div>` })}
+          ${sec({ n: '02', title: 'Unearthed is on your side', intro: 'The game is built on how Unearthed runs open innovation for mining companies. You will see it as you play.', body: `<div class="ufeatures">
+            <div>${A.umark()}<b>Vendor checks</b><p>Three per tenure. Use one to have Unearthed grade every option on the evidence behind it.</p></div>
+            <div>${A.umark()}<b>Unearthed services</b><p>Options Unearthed delivers for real mining companies are marked, so you can see where we fit.</p></div>
+            <div>${A.umark()}<b>Your plan at the end</b><p>Your scorecard shows where Unearthed would start with you, based on how you played.</p></div>
+          </div>` })}
+        </main></div>`;
     },
 
     name() {
       return `<div class="wrap">${brandline()}
-        <section class="screen stack-lg">
-          <h2>First, what should we call you?</h2>
-          <form class="field" id="nameform" novalidate>
+        <main class="screen">
+          ${sec({ n: '01', title: 'First, what should we call you?', body: `<form class="field" id="nameform" novalidate>
             <label for="player">Your name</label>
             <input id="player" maxlength="24" autocomplete="nickname" value="${esc(V.name)}" placeholder="e.g. Alex">
             <span class="hint">Only used on your scorecard.</span>
           </form>
-          <button class="btn" id="name-next" data-a="name" ${V.name.trim() ? '' : 'disabled'}>Next</button>
-        </section></div>`;
+          <div><button class="btn" id="name-next" data-a="name" ${V.name.trim() ? '' : 'disabled'}>Next</button></div>` })}
+        </main></div>`;
     },
 
     company() {
       const best = store.get();
       return `<div class="wrap">${brandline()}
-        <section class="screen stack-lg">
-          <div class="stack"><span class="label">Three job offers</span><h2>Which mining company will you join?</h2>
-          <p>Your track record has three companies competing for you. Bigger companies have bigger budgets, and bigger problems.</p></div>
+        <main class="screen">
+          ${sec({ n: '02', title: 'Which mining company will you join?', band: true, intro: 'Three companies are competing for you. Bigger companies have more Crib Credits, and bigger problems.', body: `
           <div class="companies">${E.COMPANIES.map((c) => `
             <button class="company" data-a="company" data-id="${c.id}" aria-pressed="${V.companyId === c.id}">
               <div class="portrait">${A.MASCOTS[c.mascot]()}</div>
               <div class="body">
                 <h3>${c.name}</h3>
-                <div class="facts"><span class="chip">${c.size}</span><span class="chip orange">$${c.budget}M budget</span><span class="chip ${c.difficulty === 'Brutal' ? 'bad' : c.difficulty === 'Gentle' ? 'good' : ''}">${c.difficulty}</span></div>
+                <div class="facts"><span class="chip">${c.size}</span><span class="chip orange">${coin}${num(c.budget)} Crib Credits</span><span class="chip ${c.difficulty === 'Brutal' ? 'bad' : c.difficulty === 'Gentle' ? 'good' : ''}">${c.difficulty}</span></div>
                 <p>${c.blurb}</p>
                 ${best[c.id] ? `<span class="hint">Your best here: ${Math.round(best[c.id])}%</span>` : ''}
               </div>
             </button>`).join('')}
           </div>
-          <div class="row"><button class="btn" data-a="accept" ${V.companyId ? '' : 'disabled'}>${V.companyId ? `Join ${coById(V.companyId).name}` : 'Pick a company'}</button></div>
-        </section></div>`;
+          <div class="row"><button class="btn" data-a="accept" ${V.companyId ? '' : 'disabled'}>${V.companyId ? `Join ${coById(V.companyId).name}` : 'Pick a company'}</button></div>` })}
+        </main></div>`;
     },
 
     welcome() {
       const c = co();
       return `<div class="wrap">${brandline()}
-        <section class="screen stack-lg">
+        <main class="screen">
           <div class="letter">
             <div class="portrait">${mascot(c.id)}</div>
             <div class="copy">
@@ -1196,22 +1370,20 @@ const ART = (() => {
               ${c.welcome.map((p) => `<p>${p}</p>`).join('')}
             </div>
           </div>
-          <div class="stack">
-            <h3>How it works</h3>
-            <div class="steps">
-              <div class="step"><span class="n">01</span><b>Fund initiatives</b><span>At the start of each year, fund up to three. They keep working until you leave.</span></div>
-              <div class="step"><span class="n">02</span><b>Make $${c.budget}M last</b><span>One budget covers all three years. Spend it all in Year 1 and Years 2 and 3 run dry.</span></div>
-              <div class="step"><span class="n">03</span><b>Respond to events</b><span>Something happens every quarter. Your call moves the metrics.</span></div>
-              <div class="step"><span class="n">04</span><b>Average 90 to win</b><span>Below ${E.FIRE_BELOW} at any point and the board asks for your hard hat back.</span></div>
-            </div>
+          ${sec({ n: '01', title: 'How it works', band: true, body: `<div class="steps">
+            <div class="step"><span class="n">Step 1</span><b>Fund initiatives</b><span>At the start of each year, fund up to three. They keep working until you leave.</span></div>
+            <div class="step"><span class="n">Step 2</span><b>Make ${ccText(c.budget)} last</b><span>Crib Credits are your innovation budget for all three years. Spend them all in Year 1 and Years 2 and 3 run dry.</span></div>
+            <div class="step"><span class="n">Step 3</span><b>Respond to events</b><span>Something happens every quarter. Your call moves the metrics.</span></div>
+            <div class="step"><span class="n">Step 4</span><b>Average 90 to win</b><span>Below ${E.FIRE_BELOW} at any point and the board asks for your hard hat back.</span></div>
+          </div>` })}
+          ${sec({ n: '02', title: 'Your four metrics', intro: `Average <b>90 or more</b> across all four when your three years are up to win.`, body: `<div class="metric-legend">${E.METRICS.map((m) => `<div style="--c:${MHEX[m.id]}"><b>${m.name}</b><span>${m.desc}</span></div>`).join('')}</div>` })}
+          ${sec({ n: '03', title: 'Unearthed is on your side', band: true, body: `<div class="ufeatures">
+            <div>${A.umark()}<b>${E.VENDOR_CHECKS} vendor checks</b><p>Stuck on an initiative or an event? Use a vendor check and Unearthed grades every option A, B or C on the evidence behind it, the same way we grade technology for mining companies.</p></div>
+            <div>${A.umark()}<b>Unearthed services</b><p>${uBadge()} marks options that Unearthed delivers for real mining companies, such as open innovation challenges and problem framing with site teams.</p></div>
+            <div>${A.umark()}<b>Where Unearthed fits</b><p>After every event you will see how Unearthed handles that situation in real life.</p></div>
           </div>
-          <div class="stack">
-            <h3>Your four metrics</h3>
-            <div class="metric-legend">${E.METRICS.map((m) => `<div style="--c:${MHEX[m.id]}"><b>${m.name}</b><span>${m.desc}</span></div>`).join('')}</div>
-            <p>Average <b>90 or more</b> across all four when your three years are up to win. If the average drops below <b>${E.FIRE_BELOW}</b> at any point, the board will ask for your hard hat back.</p>
-          </div>
-          <div><button class="btn" data-a="plan">Plan Year 1</button></div>
-        </section></div>`;
+          <div><button class="btn" data-a="plan">Plan Year 1</button></div>` })}
+        </main></div>`;
     },
 
     plan() {
@@ -1219,25 +1391,28 @@ const ART = (() => {
       const mine = E.fundedThisYear(S);
       const full = mine.length >= E.MAX_PER_YEAR;
       const notice = y === 1
-        ? `Your $${co().budget}M budget has to last all three years. Initiatives start paying off in the first quarter after you fund them and keep working until your tenure ends, so early bets have longer to pay back.`
-        : `Year ${y - 1} is done. You have ${money(S.budget)} left to cover ${y === 3 ? 'your final year' : 'the next two years'}. Initiatives you already funded keep running.`;
+        ? `Your ${ccText(co().budget)} have to last all three years. Initiatives start paying off in the first quarter after you fund them and keep working until your tenure ends, so early bets have longer to pay back.`
+        : `Year ${y - 1} is done. You have ${ccText(S.budget)} left to cover ${y === 3 ? 'your final year' : 'the next two years'}. Initiatives you already funded keep running.`;
       const cards = E.INITIATIVES.map((init) => {
         const f = S.funded.find((x) => x.id === init.id);
+        const costs = init.opts.map((o, i) => E.costOf(S, init.id, i));
+        const lo = Math.min(...costs), hi = Math.max(...costs);
+        const range = `<span class="range">${lo <= 0 ? 'Free' : cc(lo)} to ${cc(hi)}</span>`;
+        const hasU = init.opts.some((o) => o.u);
+        const checked = S.checked.includes(init.id) ? '<span class="state">Vendor check done</span>' : '';
         if (f && f.year < y) {
           return `<button class="card locked" disabled><span class="ic">${A.icon(init.icon)}</span><span class="txt"><span class="nm">${init.name}</span><span class="pick">${init.opts[f.opt].t}</span><span class="state">Running since Year ${f.year}</span></span></button>`;
         }
         if (f) {
           return `<button class="card funded" data-a="card" data-id="${init.id}"><span class="ic">${A.icon(init.icon)}</span><span class="txt"><span class="nm">${init.name}</span><span class="pick">${init.opts[f.opt].t}</span><span class="state">Funded for Year ${y}. Tap to change.</span></span></button>`;
         }
-        return `<button class="card ${full ? 'dim' : ''}" data-a="card" data-id="${init.id}" ${full ? 'disabled' : ''}><span class="ic">${A.icon(init.icon)}</span><span class="txt"><span class="nm">${init.name}</span>${pips(init)}</span></button>`;
+        return `<button class="card ${full ? 'dim' : ''}" data-a="card" data-id="${init.id}" ${full ? 'disabled' : ''}><span class="ic">${A.icon(init.icon)}</span><span class="txt"><span class="nm">${init.name}</span>${range}${hasU ? uBadge() : ''}${checked}</span></button>`;
       }).join('');
       const slots = [0, 1, 2].map((i) => `<span class="slot ${i < mine.length ? 'on' : ''}"></span>`).join('');
       return `${hud()}
-        <div class="wrap screen stack-lg">
-          <div class="plan-head"><div class="stack"><span class="label">Year ${y} of 3 · Planning</span><h2>Choose up to three initiatives for Year ${y}</h2></div></div>
-          <div class="notice">${notice}</div>
-          <div class="grid">${cards}</div>
-        </div>
+        <div class="wrap"><main class="screen">
+          ${sec({ n: `Year ${y}`, title: `Choose up to three initiatives for Year ${y}`, intro: notice, band: true, body: `<div class="grid">${cards}</div>` })}
+        </main></div>
         <div class="dock"><div class="dock-inner">
           <div class="row"><div class="slots" aria-hidden="true">${slots}</div><span>${mine.length} of 3 picked${full ? '. That is your limit for this year.' : ''}</span></div>
           <button class="btn" data-a="startYear">Start Year ${y}</button>
@@ -1247,18 +1422,18 @@ const ART = (() => {
 
     event() {
       const ev = E.currentEvent(S);
+      const key = `ev:${ev.id}`;
+      const graded = S.checked.includes(key);
+      const g = graded ? E.grades(ev.choices) : null;
       return `${hud()}
-        <div class="wrap screen stack-lg">
-          <div class="panel">
-            <span class="label">Year ${S.year} · Quarter ${S.quarter} · Something happened</span>
-            <h2>${ev.title}</h2>
-            <p class="lead">${ev.body}</p>
+        <div class="wrap"><main class="screen">
+          ${sec({ n: `Y${S.year} Q${S.quarter}`, title: ev.title, intro: ev.body, band: true, body: `
             <div class="choices" role="group" aria-label="Your response">
-              ${V.order.map((i) => `<button class="choice" id="choice-${i}" data-a="choose" data-i="${i}" aria-pressed="${V.pending === i}">${ev.choices[i].t}</button>`).join('')}
+              ${V.order.map((i) => `<button class="choice" id="choice-${i}" data-a="choose" data-i="${i}" aria-pressed="${V.pending === i}"><span>${ev.choices[i].t}</span><span class="tags">${ev.choices[i].u ? uBadge() : ''}${g ? gradeChip(g[i]) : ''}</span></button>`).join('')}
             </div>
-            <div><button class="btn" data-a="lock" ${V.pending == null ? 'disabled' : ''}>Lock it in</button></div>
-          </div>
-        </div>`;
+            ${checkPanel(key, graded)}
+            <div><button class="btn" data-a="lock" ${V.pending == null ? 'disabled' : ''}>Lock it in</button></div>` })}
+        </main></div>`;
     },
 
     outcome() {
@@ -1267,20 +1442,18 @@ const ART = (() => {
       const ch = ev.choices[o.choice];
       const running = S.funded.length;
       const next = S.status === 'fired' ? 'Face the board' : S.status === 'done' ? 'See your scorecard' : S.quarter === 0 ? `Plan Year ${S.year}` : 'Next quarter';
+      const budgetChange = ch.b ? E.credits(S, ch.b) : 0;
       return `${hud()}
-        <div class="wrap screen stack-lg">
-          <div class="panel">
-            <span class="label">Year ${o.year} · Quarter ${o.quarter} · What happened</span>
-            <h2>${ev.title}</h2>
-            <p><b style="color:var(--ink)">You chose:</b> ${ch.t}</p>
+        <div class="wrap"><main class="screen">
+          ${sec({ n: `Y${o.year} Q${o.quarter}`, title: ev.title, band: true, body: `
+            <p><b>You chose:</b> ${ch.t}</p>
             <p class="quote">${ch.r}</p>
-            ${ch.b ? `<p><span class="chip ${ch.b < 0 ? 'bad' : 'good'}">Budget ${ch.b < 0 ? '−' : '+'}${money(ch.b)}</span></p>` : ''}
+            ${budgetChange ? `<p><span class="chip ${budgetChange < 0 ? 'bad' : 'good'}">${budgetChange < 0 ? '−' : '+'}${ccText(budgetChange)}</span></p>` : ''}
             <div class="deltas">${E.METRICS.map((m) => `<div class="delta" style="--c:${MHEX[m.id]}"><span class="t">${m.name}</span><span class="v">${Math.round(o.after[m.id])}</span>${sign(o.after[m.id] - o.before[m.id])}</div>`).join('')}</div>
             <p class="hint">${running ? `These changes include the ${running} initiative${running > 1 ? 's' : ''} you have running.` : 'You have no initiatives running, so only your decision moved the metrics this quarter.'}</p>
-          </div>
-          <div class="stack"><h3>Your metrics so far</h3>${chart(S.history)}</div>
-          <div><button class="btn" data-a="next">${next}</button></div>
-        </div>`;
+            <div class="fit">${A.umark()}<div><span class="label">Where Unearthed fits</span><p>${ev.fit}</p></div></div>` })}
+          ${sec({ n: 'So far', title: 'Your metrics', body: `${chart(S.history)}<div><button class="btn" data-a="next">${next}</button></div>` })}
+        </main></div>`;
     },
 
     end() {
@@ -1298,7 +1471,6 @@ const ART = (() => {
       const headlines = { elite: 'You struck the mother lode.', high: 'You struck a rich vein.', medium: 'You found low-grade ore.', low: 'Your tenure went straight to tailings.' };
       const lastLog = S.log[S.log.length - 1];
       const nodes = Object.keys(E.NODES).map((k) => ({ k, v: S.nodes[k] })).sort((a, b) => b.v - a.v);
-      const U = E.UNEARTHED;
       const strong = nodes[nodes.length - 1].v >= 80;
       const picks = [];
       for (const n of nodes.slice().reverse()) {
@@ -1326,7 +1498,7 @@ const ART = (() => {
       const planIntro = fired
         ? 'The board let you go, but these are the two areas we would fix first at a real mining company.'
         : strong
-          ? 'You ran a strong program. This is how we help mining companies keep one ahead of the field.'
+          ? 'You ran a strong program. This is how we help mining companies stay ahead of the field.'
           : `Your weakest areas were ${E.NODES[picks[0].k].toLowerCase()} and ${E.NODES[picks[1].k].toLowerCase()}. This is how we would work on them with a real mining company.`;
       const helpCards = (strong
         ? [{ k: null, v: null, h: { form: 'review', how: 'We review relevant developments against your priorities at an agreed interval, so you see technologies as they emerge rather than when a competitor announces them.' } },
@@ -1338,14 +1510,14 @@ const ART = (() => {
             <div class="help-top">${p.k ? `<span class="label">You scored ${Math.round(p.v)} on</span><h3>${E.NODES[p.k]}</h3>` : `<span class="label">To stay ahead</span><h3>${f.name}</h3>`}
               ${hurt ? `<p class="hurt">Cost you here: <b>${hurt.text}</b> <span class="when">${hurt.when}</span></p>` : p.k ? `<p class="hurt">${E.NODE_TIPS[p.k]}</p>` : ''}</div>
             <div class="help-body">
-              <span class="label">How Unearthed helps</span>
+              ${uBadge('How Unearthed helps')}
               <b class="form">${f.name}</b>
               <p>${p.h.how}</p>
               <dl><div><dt>What it involves</dt><dd>${f.what}</dd></div><div><dt>Outcome</dt><dd>${f.outcome}</dd></div><div><dt>Typical timing</dt><dd>${f.timing}</dd></div></dl>
             </div>
           </div>`;
         }).join('');
-      const uTag = (x) => (x.u ? ' <span class="chip u">Unearthed runs this</span>' : '');
+      const uTag = (x) => (x.u ? ` ${uBadge()}` : '');
       const verdict = (chosenImpact, impacts) => {
         const max = Math.max(...impacts);
         if (chosenImpact >= max - 1e-9) return '<span class="chip good">Strong call</span>';
@@ -1367,8 +1539,10 @@ const ART = (() => {
         return `<div class="dec"><span class="what">${ev.title}: ${ch.t} <span class="when">Y${l.year} Q${l.quarter}</span>${uTag(ch)}</span>${verdict(E.impact(ch.e), ev.choices.map((c) => E.impact(c.e)))}
           <span class="why">${ch.r}${b !== ch ? ` Stronger choice: <b>${b.t}</b>.` : ''}</span></div>`;
       }).join('');
+      const used = E.VENDOR_CHECKS - S.checks;
+      const navItems = [['s-years', 'Your three years'], ['s-drivers', 'What drove your score'], ['s-plan', 'Where Unearthed would start'], ['s-contact', 'Talk to us'], ['s-decisions', 'Every decision']];
       return `<div class="wrap">${brandline()}
-        <section class="screen stack-lg">
+        <main class="screen">
           <div class="score-hero">
             <div class="portrait">${mascot(S.companyId, fired || t.id === 'low' ? 'sad' : 'happy')}</div>
             <div class="stack">
@@ -1379,68 +1553,157 @@ const ART = (() => {
                 <div><span class="label">${fired ? 'Average when fired' : 'Final score'}</span><span class="big">${Math.round(score)}<small>%</small></span></div>
                 <div><span class="label">Performance</span><span class="v">${fired ? 'Fired' : t.name}</span></div>
                 <div><span class="label">Award</span><span class="v">${fired ? 'The Empty Core Tray' : t.award}</span></div>
+                <div><span class="label">Vendor checks used</span><span class="v">${used} of ${E.VENDOR_CHECKS}</span></div>
                 ${best ? `<div><span class="label">Your best at ${co().name}</span><span class="v">${Math.round(best)}%</span></div>` : ''}
               </div>
             </div>
           </div>
-          <div class="section"><h3>Your ${fired ? 'tenure' : 'three years'}</h3>${chart(S.history)}</div>
-          <div class="section">
-            <h3>What drove your score</h3>
-            <p>Eight hidden drivers sit behind the four metrics. Every initiative and decision moved some of them.</p>
-            <div class="drivers">${nodes.map((n) => `<div class="drv" style="--c:${n.v >= 75 ? 'var(--orange)' : n.v >= 50 ? 'var(--amber)' : 'var(--m-buyin)'}"><span class="nm">${E.NODES[n.k]}</span><span class="num">${Math.round(n.v)}</span><div class="track"><div class="fill" style="width:${n.v}%"></div></div></div>`).join('')}</div>
-          </div>
-          <div class="section plan">
-            <div class="stack">
-              <span class="label">Where Unearthed would start with you</span>
-              <h2>${fired ? 'What we would fix first.' : strong ? 'Keep your lead.' : 'From game to real sites.'}</h2>
-              <p>${planIntro}</p>
-            </div>
+          <nav class="secnav" aria-label="Scorecard sections">${navItems.map(([id, label], i) => `<button data-a="jump" data-to="${id}"><span>0${i + 1}</span>${label}</button>`).join('')}</nav>
+          ${sec({ id: 's-years', n: '01', title: `Your ${fired ? 'tenure' : 'three years'}`, band: true, body: chart(S.history) })}
+          ${sec({ id: 's-drivers', n: '02', title: 'What drove your score', intro: 'Eight hidden drivers sit behind the four metrics. Every initiative and decision moved some of them.', body: `<div class="drivers">${nodes.map((n) => `<div class="drv" style="--c:${n.v >= 75 ? 'var(--orange)' : n.v >= 50 ? 'var(--amber)' : 'var(--m-buyin)'}"><span class="nm">${E.NODES[n.k]}</span><span class="num">${Math.round(n.v)}</span><div class="track"><div class="fill" style="width:${n.v}%"></div></div></div>`).join('')}</div>` })}
+          ${sec({ id: 's-plan', n: '03', title: `Where Unearthed would start with you: ${fired ? 'what we would fix first' : strong ? 'keep your lead' : 'from game to real sites'}`, intro: planIntro, band: true, cls: 'plan', body: `
             <ol class="stages">${U.stages.map((st) => `<li class="${usedStages.has(st.id) ? 'on' : ''}"><span class="n">${st.n}</span><b>${st.name}</b><span>${st.title}</span></li>`).join('')}</ol>
             <div class="helps">${helpCards}</div>
-            <div class="statrow">${U.stats.map((x) => `<div><span class="stat">${x.n}</span><span>${x.label}. ${x.why}</span></div>`).join('')}</div>
-          </div>
-          <div class="cta">
-            <div class="stack">
-              <img src="${LOGO}" alt="Unearthed">
-              <h2>${firstForm.cta}.</h2>
-              <p>Unearthed is a specialist mining and metals technology advisory firm in Perth, Western Australia. We find, assess and pilot technology from across mining and adjacent industries, so trials progress to deployment.</p>
+            <div class="statrow">${U.stats.map((x) => `<div><span class="stat">${x.n}</span><span>${x.label}. ${x.why}</span></div>`).join('')}</div>` })}
+          <section class="sec" id="s-contact">
+            <div class="cta">
+              <div class="stack">
+                <img src="${LOGO}" alt="Unearthed">
+                <h2>${firstForm.cta}.</h2>
+                <p>Unearthed is a specialist mining and metals technology advisory firm in Perth, Western Australia. We find, assess and pilot technology from across mining and adjacent industries, so trials progress to deployment.</p>
+              </div>
+              <div class="actions">
+                <a class="btn" href="${U.contact.web}" target="_blank" rel="noopener">Talk to Unearthed</a>
+                <div class="email"><span>Or email</span> <span id="u-email" class="addr">${U.contact.email}</span> <button class="copy-btn" id="copy-email" data-a="copyEmail">Copy</button></div>
+              </div>
             </div>
-            <div class="actions">
-              <a class="btn" href="${U.contact.web}" target="_blank" rel="noopener">Talk to Unearthed</a>
-              <div class="email"><span>Or email</span> <span id="u-email" class="addr">${U.contact.email}</span> <button class="copy-btn" id="copy-email" data-a="copyEmail">Copy</button></div>
+          </section>
+          ${sec({ id: 's-decisions', n: '05', title: 'Every decision you made', intro: `${S.funded.length} initiatives and ${S.log.length} event calls, each with how it played out.`, band: true, body: `
+            <details class="more">
+              <summary>Show all ${S.funded.length + S.log.length} decisions</summary>
+              <div class="stack-lg">
+                <div class="stack"><h3>Your initiatives</h3><div class="decisions">${inits}</div></div>
+                <div class="stack"><h3>Your calls</h3><div class="decisions">${events}</div></div>
+              </div>
+            </details>
+            <div class="row"><button class="btn" data-a="again">Play again</button><button class="btn ghost" data-a="other">Try another company</button></div>` })}
+        </main></div>`;
+    },
+
+    howto() {
+      const rows = E.COMPANIES.map((c) => `<tr><td><b>${c.name}</b></td><td>${c.size}</td><td>${cc(c.budget)}</td><td>${c.difficulty}</td></tr>`).join('');
+      return `<div class="wrap">${brandline()}
+        <main class="screen">
+          ${backBar()}
+          <div class="pagehead"><span class="label">How to play</span><h1>Lead open innovation for three years. Keep the board happy.</h1>
+            <p class="lede">You are the new Chief Innovation Officer at a mining company. Fund initiatives, respond to events and use Unearthed's help to get new technology running on your sites. A game takes about 10 minutes.</p></div>
+          ${sec({ n: '01', title: 'Pick a company', band: true, intro: 'Each company has a different budget of Crib Credits for your whole tenure, and a different starting position.', body: `<div class="tablewrap"><table class="tbl"><thead><tr><th>Company</th><th>Type</th><th>Crib Credits</th><th>Difficulty</th></tr></thead><tbody>${rows}</tbody></table></div>
+            <p>Bigger companies have more credits, but they start with more bureaucracy, and some of their drivers slip every quarter unless you act.</p>` })}
+          ${sec({ n: '02', title: 'Each year: fund up to three initiatives', body: `<div class="steps">
+            <div class="step"><span class="n">Cost</span><b>Paid in Crib Credits</b><span>Each initiative has four or five approaches at different prices. Some are free and one gives credits back.</span></div>
+            <div class="step"><span class="n">Timing</span><b>Effects build every quarter</b><span>An initiative starts working the quarter after you fund it and keeps working until you leave. Year 1 bets get 12 quarters; Year 3 bets get 4.</span></div>
+            <div class="step"><span class="n">Budget</span><b>Credits last all tenure</b><span>There is no top-up each year. Spend everything in Year 1 and you will watch Years 2 and 3 from the sidelines.</span></div>
+            <div class="step"><span class="n">Trap</span><b>Price is not quality</b><span>The most expensive approach is often not the best. Some of the strongest moves are cheap.</span></div>
+          </div>` })}
+          ${sec({ n: '03', title: 'Each quarter: respond to an event', band: true, body: `<div class="steps three">
+            <div class="step"><span class="n">Choose</span><b>Three ways to respond</b><span>A site GM blocks a pilot, a startup runs out of cash, the copper price crashes. Each event has three responses and no cost.</span></div>
+            <div class="step"><span class="n">See</span><b>What happened and why</b><span>After you choose, you see the result and how your four metrics moved, including the effect of your running initiatives.</span></div>
+            <div class="step"><span class="n">Learn</span><b>Where Unearthed fits</b><span>Every outcome ends with how Unearthed handles that situation for real mining companies.</span></div>
+          </div>` })}
+          ${sec({ n: '04', title: 'Use Unearthed', body: `<div class="ufeatures">
+            <div>${A.umark()}<b>${E.VENDOR_CHECKS} vendor checks per tenure</b><p>Use one on an initiative or an event and every option is graded on the evidence behind it: ${gradeChip('A')} ${gradeChip('B')} ${gradeChip('C')}</p></div>
+            <div>${A.umark()}<b>Unearthed services</b><p>${uBadge()} marks the options Unearthed delivers for real mining companies. They are worth a close look.</p></div>
+            <div>${A.umark()}<b>Your plan at the end</b><p>Your scorecard maps your weakest areas to the Unearthed services that address them.</p></div>
+          </div>` })}
+          ${sec({ n: '05', title: 'How you are scored', band: true, intro: 'Four metrics, each from 0 to 100, start near 60. Behind them sit eight hidden drivers that your decisions move.', body: `
+            <div class="metric-legend">${E.METRICS.map((m) => `<div style="--c:${MHEX[m.id]}"><b>${m.name}</b><span>${m.desc}</span></div>`).join('')}</div>
+            <div class="tablewrap"><table class="tbl"><thead><tr><th>Average of the four metrics</th><th>Result</th></tr></thead><tbody>
+              <tr><td>90 or more at the end</td><td><b>Elite.</b> You win: The Mother Lode</td></tr>
+              <tr><td>75 to 89</td><td><b>High.</b> A Rich Vein</td></tr>
+              <tr><td>55 to 74</td><td><b>Medium.</b> Low-Grade Ore</td></tr>
+              <tr><td>Below 55</td><td><b>Low.</b> Straight to Tailings</td></tr>
+              <tr><td>Below ${E.FIRE_BELOW} at any point</td><td><b>Fired.</b> Hand back your hard hat</td></tr>
+            </tbody></table></div>
+            <p>Random choices almost never win. Good players spread their credits across the three years, fix the basics early and treat innovators and site teams well.</p>` })}
+          ${sec({ n: '06', title: 'Ready?', body: `<div class="row">${inGame() ? '<button class="btn" data-a="back">Back to your game</button>' : '<button class="btn" data-a="start">Start your tenure</button>'}<button class="btn ghost" data-a="page" data-p="approach">Read the approach behind the game</button></div>` })}
+        </main></div>`;
+    },
+
+    approach() {
+      const W = {};
+      for (const m of E.METRICS) for (const k in m.w) (W[k] = W[k] || []).push(`${m.name} ${Math.round(m.w[k] * 100)}%`);
+      const driverRows = Object.keys(E.NODES).map((k) => `<tr><td><b>${E.NODES[k]}</b></td><td>${W[k].join(', ')}</td><td>${E.NODE_TIPS[k]}</td></tr>`).join('');
+      return `<div class="wrap">${brandline()}
+        <main class="screen">
+          ${backBar()}
+          <div class="pagehead"><span class="label">The approach behind the game</span><h1>How Unearthed improves innovation portfolio outcomes.</h1>
+            <p class="lede">Innovation Rush is built on how Unearthed runs open innovation for mining and metals companies. Portfolios underperform for familiar reasons: the problem is vague, the search stops at known suppliers, claims are hard to check and pilots never scale. We address these with three practices: open innovation, open assessment through challenges, and market intelligence.</p></div>
+          ${sec({ n: '01', title: 'Open innovation: search beyond the usual suppliers', band: true, body: `<div class="split">
+            <div class="stack"><p>Open innovation extends your search beyond internal teams and known vendors to ideas, technologies and practices from a global ecosystem: universities, research institutions, startups, scale-ups, established vendors and even competitors.</p>
+              <p>Unearthed has built that network over more than a decade of challenges. Our commercial relationships are with industrial companies only, so technology developers share performance and cost data with us that is not published. We work alongside internal R&D teams, extending their search rather than duplicating it.</p></div>
+            <div class="facts-card"><span class="stat">50%+</span><span>of challenge submissions come from outside the mining sector, which widens the pool of possible solutions.</span>
+              <span class="label">In the game</span><p>Ecosystem reach and Innovator trust. Fair IP terms, fast payment and replying to every submission keep the best innovators coming back.</p></div>
+          </div>` })}
+          ${sec({ n: '02', title: 'Open assessment through challenges', intro: 'A challenge puts one defined problem to the global network, then assesses the responses side by side with your teams. You see many approaches against the same problem before committing to one.', body: `
+            <ol class="stages four">
+              <li><span class="n">01</span><b>Impactful problems</b><span>A verified problem, defined with the people who live it</span></li>
+              <li><span class="n">02</span><b>Global capability</b><span>Demonstrated capability sourced from inside and outside mining</span></li>
+              <li><span class="n">03</span><b>Open to solutions</b><span>An open, transparent process anyone in the world can submit to</span></li>
+              <li><span class="n">04</span><b>Support to move forward</b><span>Each challenge ends with tangible action on the right solutions</span></li>
+            </ol>
+            <div class="case"><span class="label">Published case study</span><h3>OZ Minerals Explorer Challenge</h3>
+              <p>OZ Minerals opened its exploration data to a global challenge with a $1 million prize. The crowdsourced approaches cut the time to generate quality targets by more than 75%, with 120 new data science approaches to exploration developed, while increasing confidence in the targets.</p>
+              <span class="hint">Source: unearthed.solutions, Challenges.</span></div>
+            <p class="ingame"><b>In the game:</b> Problem clarity, Site champions and Data and site access. A challenge with a real site problem and real data beats an ideas portal every time.</p>` })}
+          ${sec({ n: '03', title: 'Market intelligence: know what exists before you commit', band: true, intro: 'Not every problem needs a challenge. Often the technology already exists, and the job is to find it, check it and decide fast.', body: `
+            <div class="steps">
+              <div class="step"><span class="n">01</span><b>Build understanding</b><span>Domain knowledge applied to the complexities of your specific problem.</span></div>
+              <div class="step"><span class="n">02</span><b>Tailor and deep dive</b><span>A scan tailored to your strategic needs, using curated data and the global ecosystem.</span></div>
+              <div class="step"><span class="n">03</span><b>Insights and impacts</b><span>The most relevant, high-value findings, with the impact of each opportunity measured.</span></div>
+              <div class="step"><span class="n">04</span><b>Deliver and embed</b><span>Findings reviewed with your teams, with support for further questions.</span></div>
             </div>
-          </div>
-          <details class="more">
-            <summary>Review every decision you made (${S.funded.length + S.log.length})</summary>
-            <div class="stack-lg">
-              <div class="stack"><h3>Your initiatives</h3><div class="decisions">${inits}</div></div>
-              <div class="stack"><h3>Your calls</h3><div class="decisions">${events}</div></div>
+            <div class="forms">${['vendor', 'options', 'review'].map((k) => { const f = U.forms[k]; return `<div class="form-card">${uBadge(f.name)}<p>${f.what}</p><dl><div><dt>Outcome</dt><dd>${f.outcome}</dd></div><div><dt>Timing</dt><dd>${f.timing}</dd></div></dl></div>`; }).join('')}</div>
+            <p>Every claim is graded by source: <b>A</b> independently verified, <b>B</b> operator-reported, <b>C</b> company-supplied. You see what has been proven, and at what scale, before committing time to a trial. Unearthed's Launched list also profiles five new mining technologies every week.</p>
+            <p class="ingame"><b>In the game:</b> vendor checks and Portfolio focus. Fund fewer things, on better evidence, with clear kill criteria.</p>` })}
+          ${sec({ n: '04', title: 'From pilot to production', intro: 'The portfolio only creates value when technology runs on site. Technical, commercial and adoption diligence happens upfront, so trials progress to deployment.', body: `
+            <ol class="stages">${U.stages.map((st) => `<li class="on"><span class="n">${st.n}</span><b>${st.name}</b><span>${st.title}</span></li>`).join('')}</ol>
+            <p class="ingame"><b>In the game:</b> Pilot-to-production pathway and Safety to experiment. Light procurement, a scale-up budget, an executive owner and permission to fail move pilots out of purgatory.</p>` })}
+          ${sec({ n: '05', title: 'How the game turns this into a score', band: true, intro: 'Eight hidden drivers stand for the practices above. Each metric is a weighted mix of drivers; the table shows where each driver counts.', body: `
+            <div class="tablewrap"><table class="tbl"><thead><tr><th>Driver</th><th>Feeds</th><th>What moves it</th></tr></thead><tbody>${driverRows}</tbody></table></div>
+            <p class="hint">The model is a simplification built from Unearthed's experience running challenges, assessments and pilots with mining companies. The weights are our judgement, not a statistical study. Like any good game, it is meant to make you think about the decisions you make in real life.</p>` })}
+          ${sec({ n: '06', title: 'Put it to work', body: `<div class="cta">
+              <div class="stack"><img src="${LOGO}" alt="Unearthed"><h2>Talk to us about your innovation portfolio.</h2>
+                <p>Unearthed is a specialist mining and metals technology advisory firm in Perth, Western Australia. We find, assess and pilot technology from across mining and adjacent industries.</p></div>
+              <div class="actions"><a class="btn" href="${U.contact.web}" target="_blank" rel="noopener">Talk to Unearthed</a>
+                <div class="email"><span>Or email</span> <span id="u-email" class="addr">${U.contact.email}</span> <button class="copy-btn" id="copy-email" data-a="copyEmail">Copy</button></div></div>
             </div>
-          </details>
-          <div class="row"><button class="btn" data-a="again">Play again</button><button class="btn ghost" data-a="other">Try another company</button></div>
-        </section></div>`;
+            <div class="row">${inGame() ? '<button class="btn" data-a="back">Back to your game</button>' : '<button class="btn" data-a="start">Play Innovation Rush</button>'}<button class="btn ghost" data-a="page" data-p="howto">How to play</button></div>` })}
+        </main></div>`;
     },
   };
 
   function modal() {
     const init = E.initById(V.modal);
     const cur = S.funded.find((f) => f.id === init.id && f.year === S.year);
-    const avail = S.budget + (cur ? init.opts[cur.opt].c : 0);
-    const order = init.opts.map((o, i) => ({ o, i })).sort((a, b) => a.o.c - b.o.c);
+    const avail = S.budget + (cur ? E.costOf(S, init.id, cur.opt) : 0);
+    const order = init.opts.map((o, i) => ({ o, i, c: E.costOf(S, init.id, i) })).sort((a, b) => a.c - b.c);
     const sel = V.pending;
-    const tooDear = sel != null && init.opts[sel].c > avail + 1e-9;
+    const tooDear = sel != null && E.costOf(S, init.id, sel) > avail;
     const ok = sel != null && !tooDear && !(cur && cur.opt === sel);
+    const graded = S.checked.includes(init.id);
+    const g = graded ? E.grades(init.opts) : null;
     return `<div class="overlay" data-a="closeBg"><div class="modal" data-a="noop" role="dialog" aria-modal="true" aria-labelledby="mtitle">
       <div class="modal-head"><span class="ic">${A.icon(init.icon)}</span><h2 id="mtitle">${init.name}</h2><button class="x" id="modal-close" data-a="close" aria-label="Close">×</button></div>
       <p>${init.desc}</p>
       <fieldset class="opts"><legend class="label">Choose your approach</legend>
-        ${order.map(({ o, i }) => {
-          const afford = o.c <= avail + 1e-9;
-          const cost = o.c < 0 ? `+${money(o.c)} back` : o.c === 0 ? 'No cost' : money(o.c);
-          return `<label class="opt ${sel === i ? 'sel' : ''} ${afford ? '' : 'no'}" for="opt-${init.id}-${i}"><input type="radio" name="opt" id="opt-${init.id}-${i}" value="${i}" ${sel === i ? 'checked' : ''}><span>${o.t}</span><span class="cost ${o.c < 0 ? 'back' : ''}">${cost}</span></label>`;
+        ${order.map(({ o, i, c }) => {
+          const afford = c <= avail;
+          const cost = c < 0 ? `<span class="back">+${cc(c)} back</span>` : c === 0 ? 'Free' : cc(c);
+          return `<label class="opt ${sel === i ? 'sel' : ''} ${afford ? '' : 'no'}" for="opt-${init.id}-${i}"><input type="radio" name="opt" id="opt-${init.id}-${i}" value="${i}" ${sel === i ? 'checked' : ''}><span class="otext">${o.t}<span class="tags">${o.u ? uBadge() : ''}${g ? gradeChip(g[i]) : ''}</span></span><span class="cost">${cost}</span></label>`;
         }).join('')}
       </fieldset>
-      ${tooDear ? `<p class="warn">Not enough budget for this option. You have ${money(avail)} to spend.</p>` : ''}
+      ${tooDear ? `<p class="warn">Not enough Crib Credits for this option. You have ${ccText(avail)} to spend.</p>` : ''}
+      ${checkPanel(init.id, graded)}
       <div class="row" style="justify-content:flex-end">
         ${cur ? '<button class="btn ghost" data-a="remove">Remove</button>' : ''}
         <button class="btn" data-a="confirm" ${ok ? '' : 'disabled'}>${cur ? 'Change approach' : 'Fund this'}</button>
@@ -1473,7 +1736,15 @@ const ART = (() => {
   }
 
   const actions = {
-    start() { V.view = 'name'; return 'scroll'; },
+    start() { V.view = 'name'; V.back = null; return 'scroll'; },
+    home() { V.view = 'title'; V.back = null; return 'scroll'; },
+    page(el) {
+      if (!['howto', 'approach'].includes(V.view)) V.back = V.view;
+      V.modal = null; V.pending = null;
+      V.view = el.dataset.p;
+      return 'scroll';
+    },
+    back() { V.view = V.back || 'title'; V.back = null; return 'scroll'; },
     name() { if (!V.name.trim()) return false; V.view = 'company'; return 'scroll'; },
     company(el) { V.companyId = el.dataset.id; },
     accept() { if (!V.companyId) return false; newRun(V.companyId); return 'scroll'; },
@@ -1486,6 +1757,7 @@ const ART = (() => {
     close() { V.modal = null; V.pending = null; },
     closeBg(el, e) { if (e.target !== el) return false; V.modal = null; V.pending = null; },
     noop() { return false; },
+    useCheck(el) { if (!E.useCheck(S, el.dataset.key)) return false; },
     confirm() {
       const id = V.modal;
       const cur = S.funded.find((f) => f.id === id && f.year === S.year);
@@ -1511,9 +1783,14 @@ const ART = (() => {
       else toEvent();
       return 'scroll';
     },
+    jump(el) {
+      const target = document.getElementById(el.dataset.to);
+      if (target) target.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+      return false;
+    },
     again() { newRun(S.companyId); return 'scroll'; },
     copyEmail(el) {
-      const addr = E.UNEARTHED.contact.email;
+      const addr = U.contact.email;
       const done = () => { el.textContent = 'Copied'; };
       const fallback = () => { const r = document.createRange(); r.selectNodeContents(document.getElementById('u-email')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); el.textContent = 'Selected'; };
       try { navigator.clipboard.writeText(addr).then(done, fallback); } catch { fallback(); }
@@ -1551,10 +1828,10 @@ const ART = (() => {
     if (e.key === 'Escape' && V.modal) { V.modal = null; V.pending = null; render(); }
   });
 
-  // Keep a game in progress across live updates of the page.
+  // Keep a game in progress across live updates of the page. Older saved games (before Crib Credits) start fresh.
   try { window.claude?.hot?.snapshot?.(() => ({ S, V })); } catch { /* not in a viewer */ }
   const boot = (data) => {
-    if (data && data.V && data.V.view) { S = data.S; V = data.V; }
+    if (data && data.V && data.V.view && (!data.S || Array.isArray(data.S.checked))) { S = data.S; V = data.V; }
     render();
   };
   if (window.claude?.hot?.ready) window.claude.hot.ready(boot);
