@@ -116,7 +116,7 @@
               </div>
               <div class="stack">
                 <div class="cta-row"><button class="btn" data-a="start">Start your tenure</button></div>
-                <span class="hint">${bestAny ? `Your best score so far: ${Math.round(bestAny)}%` : 'Takes about 10 minutes.'} Built by Unearthed from more than 200 innovation challenges run for mining and metals companies.</span>
+                <span class="hint">${bestAny ? `Your best score so far: ${Math.round(bestAny)}%.` : 'Takes about 10 minutes.'} Built by Unearthed from more than 200 innovation challenges run for mining and metals companies.</span>
               </div>
             </div>
             <div class="photo">
@@ -394,7 +394,7 @@
             </div>
             <div class="actions">
               <a class="btn" href="${U.contact.web}" target="_blank" rel="noopener">Talk to Unearthed</a>
-              <div class="email"><span>Or email</span> <span id="u-email" class="addr">${U.contact.email}</span> <button class="copy" id="copy-email" data-a="copyEmail">Copy</button></div>
+              <div class="email"><span>Or email</span> <span id="u-email" class="addr">${U.contact.email}</span> <button class="copy-btn" id="copy-email" data-a="copyEmail">Copy</button></div>
             </div>
           </div>
           <details class="more">
