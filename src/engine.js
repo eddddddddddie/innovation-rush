@@ -53,12 +53,12 @@ const COMPANIES = [
     drag: { champ: -0.4 },
   },
   {
-    id: 'major', name: 'Big Rocks', size: 'Global major', budget: 120, mascot: 'mammoth', difficulty: 'Brutal',
+    id: 'major', name: 'Big Rocks', size: 'Global major', budget: 120, mascot: 'rock', difficulty: 'Brutal',
     blurb: 'Thirty sites on four continents, a famous brand and a big budget. Also seven approval committees and a long memory.',
     welcome: [
       'We have an innovation lab, a venture fund and a very nice video about the future of mining.',
       'What we do not have is many new technologies running on our sites. Startups say we are slow and hard to work with.',
-      'You have the budget. Can you get this mammoth moving before the board loses patience?',
+      'You have the budget. Can you get this rock rolling before the board loses patience?',
     ],
     nodes: { prob: 44, safe: 40, data: 50, path: 34, reach: 62, champ: 40, trust: 42, focus: 38 },
     drag: { path: -1.1, safe: -0.6, champ: -0.3 },

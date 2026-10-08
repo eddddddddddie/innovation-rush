@@ -13,7 +13,7 @@ src = root / 'src'
 body = (src / 'template.html').read_text()
 for marker, name in [('/*ENGINE*/', 'engine.js'), ('/*ART*/', 'art.js'), ('/*UI*/', 'ui.js')]:
     body = body.replace(marker, (src / name).read_text())
-for marker, name in [('__LOGO_WHITE__', 'unearthed-logo-white.png'), ('__LOGO__', 'unearthed-logo.png')]:
+for marker, name in [('__LOGO__', 'unearthed-logo.png')]:
     data = base64.b64encode((src / 'assets' / name).read_bytes()).decode()
     body = body.replace(marker, f'data:image/png;base64,{data}')
 

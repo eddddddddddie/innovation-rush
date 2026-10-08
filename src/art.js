@@ -45,25 +45,22 @@ const ART = (() => {
     <rect x="140" y="64" width="9" height="6" rx="2" fill="#fff"/>
   </svg>`;
 
-  const mammoth = (mood = 'happy') => `<svg viewBox="0 0 140 120" aria-hidden="true">
-    <ellipse cx="74" cy="113" rx="52" ry="5" fill="#000" opacity=".08"/>
-    <rect x="50" y="84" width="13" height="24" rx="5" fill="#7A7A7A"/><rect x="68" y="86" width="13" height="22" rx="5" fill="#858585"/>
-    <rect x="96" y="84" width="13" height="24" rx="5" fill="#7A7A7A"/><rect x="110" y="86" width="12" height="22" rx="5" fill="#858585"/>
-    <ellipse cx="84" cy="68" rx="44" ry="30" fill="#8C8C8C"/>
-    <path d="M60 44 q4 -6 8 0 M74 40 q4 -6 8 0 M88 40 q4 -6 8 0 M102 44 q4 -6 8 0" stroke="#6E6E6E" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <path d="M124 64 q10 2 8 14" stroke="#7A7A7A" stroke-width="4" fill="none" stroke-linecap="round"/>
-    <circle cx="44" cy="60" r="27" fill="#9B9B9B"/>
-    <ellipse cx="64" cy="60" rx="11" ry="16" fill="#7D7D7D"/>
-    <path d="M28 70 C14 80 16 100 30 102" stroke="#9B9B9B" stroke-width="12" fill="none" stroke-linecap="round"/>
-    <path d="M34 76 C30 92 42 100 52 94" stroke="#D8CBB8" stroke-width="7" fill="none" stroke-linecap="round"/>
-    <path d="M34 76 C30 92 42 100 52 94" stroke="#F3EBDD" stroke-width="4" fill="none" stroke-linecap="round"/>
-    ${mood === 'sad'
-      ? `<path d="M31 58 q4 -3 8 0 M46 58 q4 -3 8 0" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M52 62 q3 6 0 9 q-3 -3 0 -9z" fill="#DADADA"/>`
-      : `<circle cx="35" cy="58" r="3.6" fill="#333"/><circle cx="50" cy="58" r="3.6" fill="#333"/><circle cx="36.2" cy="56.6" r="1.1" fill="#fff"/><circle cx="51.2" cy="56.6" r="1.1" fill="#fff"/>`}
-    ${hat(22, 40, 44)}
+  const rock = (mood = 'happy') => `<svg viewBox="0 0 140 120" aria-hidden="true">
+    <ellipse cx="70" cy="112" rx="54" ry="5" fill="#000" opacity=".08"/>
+    <path d="M22 106 L12 76 L28 46 L62 32 L102 38 L126 62 L130 94 L112 108Z" fill="#9A9A9A"/>
+    <path d="M62 32 L102 38 L92 56 L58 52Z" fill="#B8B8B8"/>
+    <path d="M102 38 L126 62 L106 70 L92 56Z" fill="#AAAAAA"/>
+    <path d="M12 76 L28 46 L58 52 L38 80Z" fill="#A8A8A8"/>
+    <path d="M22 106 L38 80 L70 90 L112 108Z" fill="#868686"/>
+    <path d="M106 70 L130 94 L112 108 L70 90Z" fill="#909090"/>
+    <path d="M96 96 l6 -8 l-2 -6 l7 -6" stroke="#6E6E6E" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M26 66 l8 4 l4 -5" stroke="#7A7A7A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="40" cy="96" r="3.2" fill="#FC883F"/><circle cx="46" cy="100" r="2" fill="#FC883F"/><circle cx="114" cy="84" r="2.6" fill="#FC883F"/>
+    ${face(mood, [[58, 70], [82, 70]], 82, 70)}
+    ${hat(46, 40, 48)}
   </svg>`;
 
-  const MASCOTS = { nugget, truck, mammoth };
+  const MASCOTS = { nugget, truck, rock };
 
   const P = {
     target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/>',
@@ -95,7 +92,7 @@ const ART = (() => {
     <path d="M0 40 H800 V220 H0Z" fill="#F8CA8A"/>
     <path d="M0 95 C200 85 600 105 800 92 V220 H0Z" fill="#FC883F"/>
     <path d="M0 158 C220 148 560 168 800 154 V220 H0Z" fill="#FF6600"/>
-    <path d="M0 40 H60 V75 H170 V110 H280 V150 H520 V110 H630 V75 H740 V40 H800 V0 H0Z" fill="#fff"/>
+    <path d="M0 40 H60 V75 H170 V110 H280 V150 H520 V110 H630 V75 H740 V40 H800 V0 H0Z" fill="#F3F2F0"/>
     <path d="M0 40 H60 V75 H170 V110 H280 V150 H520 V110 H630 V75 H740 V40 H800" stroke="#333" stroke-width="2" fill="none"/>
   </svg>`;
 

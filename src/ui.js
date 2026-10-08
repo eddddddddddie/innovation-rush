@@ -4,7 +4,7 @@
   const app = document.getElementById('app');
   const BEST_KEY = 'innovation-rush-best';
   const MCOL = { eco: 'var(--m-eco)', adopt: 'var(--m-adopt)', value: 'var(--m-value)', buyin: 'var(--m-buyin)' };
-  const MHEX = { eco: '#FF6600', adopt: '#333333', value: '#FFA627', buyin: '#656565' };
+  const MHEX = { eco: '#FF6600', adopt: '#282726', value: '#FFA627', buyin: '#8C8986' };
 
   let S = null; // engine game state
   let V = { view: 'title', name: '', companyId: null, modal: null, pending: null, order: null, outcome: null };
@@ -43,8 +43,7 @@
   // ---------- shared pieces ----------
 
   const LOGO = '__LOGO__';
-  const LOGO_WHITE = '__LOGO_WHITE__';
-  const brandline = () => `<header class="brandline"><a class="logo" href="https://unearthed.solutions" target="_blank" rel="noopener"><img src="${LOGO}" alt="Unearthed"></a><span class="gamename"><b>Innovation Rush</b> · A game by Unearthed</span></header>`;
+  const brandline = () => `<header class="brandline"><a class="logo" href="https://unearthed.solutions" target="_blank" rel="noopener"><img src="${LOGO}" alt="Unearthed"></a><span class="gamename"><b>Innovation Rush</b>, a game by Unearthed</span></header>`;
 
   function hud() {
     const c = co();
@@ -76,13 +75,13 @@
   }
 
   function chart(hist) {
-    const W = 600, H = 250, L = 34, R = W - 12, T = 14, B = H - 30;
+    const W = 1000, H = 330, L = 34, R = W - 12, T = 14, B = H - 30;
     const x = (i) => L + ((R - L) * i) / 12;
     const y = (v) => B - ((B - T) * v) / 100;
     let g = '';
-    for (const v of [0, 25, 50, 75, 100]) g += `<line x1="${L}" x2="${R}" y1="${y(v)}" y2="${y(v)}" stroke="#EFE9E3"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
-    for (const q of [4, 8]) g += `<line x1="${x(q)}" x2="${x(q)}" y1="${T}" y2="${B}" stroke="#E8E1DA"/>`;
-    for (let q = 0; q <= 12; q++) g += `<line x1="${x(q)}" x2="${x(q)}" y1="${B}" y2="${B + 4}" stroke="#C9C0B8"/>`;
+    for (const v of [0, 25, 50, 75, 100]) g += `<line x1="${L}" x2="${R}" y1="${y(v)}" y2="${y(v)}" stroke="#EFEDEA"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
+    for (const q of [4, 8]) g += `<line x1="${x(q)}" x2="${x(q)}" y1="${T}" y2="${B}" stroke="#E6E4E1"/>`;
+    for (let q = 0; q <= 12; q++) g += `<line x1="${x(q)}" x2="${x(q)}" y1="${B}" y2="${B + 4}" stroke="#CFCAC5"/>`;
     [['Year 1', 2], ['Year 2', 6], ['Year 3', 10]].forEach(([t, q]) => { g += `<text x="${x(q)}" y="${B + 20}" text-anchor="middle">${t}</text>`; });
     g += `<line x1="${L}" x2="${R}" y1="${y(90)}" y2="${y(90)}" stroke="#FF6600" stroke-dasharray="5 4" opacity=".7"/><text x="${R - 4}" y="${y(90) - 6}" text-anchor="end" style="fill:#B84A00">Win: average 90+</text>`;
     g += `<line x1="${L}" x2="${R}" y1="${y(E.FIRE_BELOW)}" y2="${y(E.FIRE_BELOW)}" stroke="#C0392B" stroke-dasharray="5 4" opacity=".6"/><text x="${R - 4}" y="${y(E.FIRE_BELOW) + 15}" text-anchor="end" style="fill:#C0392B">Fired: average below ${E.FIRE_BELOW}</text>`;
@@ -110,20 +109,24 @@
       return `<div class="wrap">${brandline()}
         <section class="screen stack-lg">
           <div class="hero">
-            <div class="stack">
-              <span class="label">A game for mining innovation leaders</span>
-              <h1>Innovation Rush</h1>
-              <p class="lede">You are the new Chief Innovation Officer at a mining company. Unearth new technology, get it running on your sites and keep the board on side.</p>
+            <div class="copy">
+              <div class="stack">
+                <h1>Innovation Rush</h1>
+                <p class="lede">You are the new Chief Innovation Officer at a mining company. Unearth new technology, get it running on your sites and keep the board on side. You have three years and one budget.</p>
+              </div>
+              <div class="stack">
+                <div class="cta-row"><button class="btn" data-a="start">Start your tenure</button></div>
+                <span class="hint">${bestAny ? `Your best score so far: ${Math.round(bestAny)}%` : 'Takes about 10 minutes. Built on what works in real mining open innovation programs.'}</span>
+              </div>
             </div>
-            <div class="side">
-              <button class="btn" data-a="start">Start your tenure</button>
-              <span class="hint">${bestAny ? `Your best score so far: ${Math.round(bestAny)}%` : 'About 10 minutes. Built on what works in real mining open innovation programs.'}</span>
+            <div class="photo">
+              <div class="float"><h3>Three companies are hiring</h3><p>A junior explorer, a mid-tier copper miner and a global major. Pick your pit.</p></div>
+              <div class="scene">${A.pit()}
+                <div class="m m-nugget">${A.MASCOTS.nugget()}</div>
+                <div class="m m-rock">${A.MASCOTS.rock()}</div>
+                <div class="m m-truck">${A.MASCOTS.truck()}</div>
+              </div>
             </div>
-          </div>
-          <div class="scene">${A.pit()}
-            <div class="m m-nugget">${A.MASCOTS.nugget()}</div>
-            <div class="m m-mammoth">${A.MASCOTS.mammoth()}</div>
-            <div class="m m-truck">${A.MASCOTS.truck()}</div>
           </div>
           <div class="statrow">
             <div><span class="stat">3</span><span>years to prove your value</span></div>
@@ -164,7 +167,7 @@
               </div>
             </button>`).join('')}
           </div>
-          <div class="row" style="justify-content:center"><button class="btn" data-a="accept" ${V.companyId ? '' : 'disabled'}>${V.companyId ? `Join ${coById(V.companyId).name}` : 'Pick a company'}</button></div>
+          <div class="row"><button class="btn" data-a="accept" ${V.companyId ? '' : 'disabled'}>${V.companyId ? `Join ${coById(V.companyId).name}` : 'Pick a company'}</button></div>
         </section></div>`;
     },
 
@@ -208,10 +211,10 @@
       const cards = E.INITIATIVES.map((init) => {
         const f = S.funded.find((x) => x.id === init.id);
         if (f && f.year < y) {
-          return `<button class="card locked" disabled><span class="ic">${A.icon(init.icon)}</span><span class="txt"><span class="nm">${init.name}</span><span class="pick">${init.opts[f.opt].t}</span><span class="label">Running since Year ${f.year}</span></span></button>`;
+          return `<button class="card locked" disabled><span class="ic">${A.icon(init.icon)}</span><span class="txt"><span class="nm">${init.name}</span><span class="pick">${init.opts[f.opt].t}</span><span class="state">Running since Year ${f.year}</span></span></button>`;
         }
         if (f) {
-          return `<button class="card funded" data-a="card" data-id="${init.id}"><span class="ic">${A.icon(init.icon)}</span><span class="txt"><span class="nm">${init.name}</span><span class="pick">${init.opts[f.opt].t}</span><span class="label" style="color:#B84A00">Funded for Year ${y}. Tap to change</span></span></button>`;
+          return `<button class="card funded" data-a="card" data-id="${init.id}"><span class="ic">${A.icon(init.icon)}</span><span class="txt"><span class="nm">${init.name}</span><span class="pick">${init.opts[f.opt].t}</span><span class="state">Funded for Year ${y}. Tap to change.</span></span></button>`;
         }
         return `<button class="card ${full ? 'dim' : ''}" data-a="card" data-id="${init.id}" ${full ? 'disabled' : ''}><span class="ic">${A.icon(init.icon)}</span><span class="txt"><span class="nm">${init.name}</span>${pips(init)}</span></button>`;
       }).join('');
@@ -313,7 +316,7 @@
               <h2>${fired ? 'Please hand back your hard hat.' : headlines[t.id]}</h2>
               <p>${fired ? 'Your metrics fell below what the board will accept and they have asked you to step aside. Luckily this was only a game. See what went wrong, then try again.' : verdicts[t.id]}</p>
               <div class="stats">
-                <div><span class="label">${fired ? 'Average when fired' : 'Final score'}</span><span class="big">${Math.round(score)}%</span></div>
+                <div><span class="label">${fired ? 'Average when fired' : 'Final score'}</span><span class="big">${Math.round(score)}<small>%</small></span></div>
                 <div><span class="label">Performance</span><span class="v">${fired ? 'Fired' : t.name}</span></div>
                 <div><span class="label">Award</span><span class="v">${fired ? 'The Empty Core Tray' : t.award}</span></div>
                 ${best ? `<div><span class="label">Your best at ${co().name}</span><span class="v">${Math.round(best)}%</span></div>` : ''}
@@ -330,12 +333,14 @@
           <div class="section"><h3>Your initiatives</h3><div class="decisions">${inits}</div></div>
           <div class="section"><h3>Your calls</h3><div class="decisions">${events}</div></div>
           <div class="cta">
-            <img src="${LOGO_WHITE}" alt="Unearthed">
-            <h2>Run open innovation on your own sites.</h2>
-            <p>Unearthed connects you with a global ecosystem of innovators to solve your hardest operational challenges, then helps turn the best pilots into production.</p>
-            <a class="btn outline-white" href="https://unearthed.solutions" target="_blank" rel="noopener">Talk to Unearthed</a>
+            <div class="stack">
+              <img src="${LOGO}" alt="Unearthed">
+              <h2>Run open innovation on your own sites.</h2>
+              <p>Unearthed connects you with a global ecosystem of innovators to solve your hardest operational challenges, then helps turn the best pilots into production.</p>
+            </div>
+            <div class="actions"><a class="btn" href="https://unearthed.solutions" target="_blank" rel="noopener">Talk to Unearthed</a></div>
           </div>
-          <div class="row" style="justify-content:center"><button class="btn" data-a="again">Play again</button><button class="btn ghost" data-a="other">Try another company</button></div>
+          <div class="row"><button class="btn" data-a="again">Play again</button><button class="btn ghost" data-a="other">Try another company</button></div>
         </section></div>`;
     },
   };
@@ -351,7 +356,7 @@
     return `<div class="overlay" data-a="closeBg"><div class="modal" data-a="noop" role="dialog" aria-modal="true" aria-labelledby="mtitle">
       <div class="modal-head"><span class="ic">${A.icon(init.icon)}</span><h2 id="mtitle">${init.name}</h2><button class="x" id="modal-close" data-a="close" aria-label="Close">×</button></div>
       <p>${init.desc}</p>
-      <fieldset class="opts"><legend class="label" style="margin-bottom:8px">Choose your approach</legend>
+      <fieldset class="opts"><legend class="label">Choose your approach</legend>
         ${order.map(({ o, i }) => {
           const afford = o.c <= avail + 1e-9;
           const cost = o.c < 0 ? `+${money(o.c)} back` : o.c === 0 ? 'No cost' : money(o.c);
