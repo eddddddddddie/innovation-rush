@@ -374,6 +374,23 @@ details.more[open] summary { margin-bottom: 24px; }
 .tbl td { padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--grey); }
 .tbl tr:last-child td { border-bottom: 0; }
 
+/* Lead capture form inside the dark contact panel */
+.leadform { background: var(--bg); color: var(--ink); border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 460px; text-align: left; }
+.leadform p, .cta .leadform p { color: var(--grey); font-size: 0.9rem; }
+.lf-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.lf-grid label { display: flex; flex-direction: column; gap: 4px; font-size: 0.8rem; color: var(--grey); }
+.lf-grid label:nth-child(n+3) { grid-column: 1 / -1; }
+.lf-grid input { font: inherit; font-size: 0.95rem; padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: 10px; color: var(--ink); background: var(--bg); }
+.lf-grid input:focus { border-color: var(--orange); outline: none; }
+.lf-consent { display: flex; gap: 10px; align-items: flex-start; font-size: 0.82rem; color: var(--grey); }
+.lf-consent input { accent-color: var(--orange); margin-top: 3px; width: 16px; height: 16px; flex: none; }
+.lf-consent a { color: var(--ink); }
+.lf-error { color: var(--bad) !important; font-weight: 600; }
+.leadform .btn, .cta .leadform .btn { color: var(--ink); background: var(--bg); align-self: flex-start; }
+.cta .leadform .btn:hover { background: var(--peach-soft); }
+.leadform.sent { border-left: 3px solid var(--good); }
+.cta .actions { width: 100%; }
+
 /* Dark contact panel for contrast at the end */
 .cta { background: var(--ink); color: #fff; }
 .cta h2 { color: #fff; }

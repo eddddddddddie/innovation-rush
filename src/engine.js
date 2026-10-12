@@ -56,7 +56,10 @@ const UNEARTHED = {
     champ: { form: 'options', stages: ['scope', 'evaluate'], how: 'We work with the people who will run the technology from problem framing onwards, so sites own the choice rather than inherit it.' },
     safe: { form: 'vendor', stages: ['evaluate'], how: 'A vendor check within days gives your teams a low-risk way to test an idea before committing anyone to a trial.' },
   },
-  contact: { web: 'https://unearthed.solutions', email: 'industry@unearthed.solutions' },
+  contact: { web: 'https://unearthed.solutions', email: 'industry@unearthed.solutions', privacy: 'https://unearthed.solutions/privacy-and-terms' },
+  // Lead capture on the scorecard posts to this HubSpot form (Forms API v3, no login needed). Leave formGuid empty to hide the form.
+  // The form needs these fields: firstname, lastname, email, company, jobtitle, message. Game results go in message.
+  hubspot: { portalId: '44410384', formGuid: '' },
 };
 
 const METRICS = [

@@ -2,6 +2,12 @@
 (() => {
   const stop = new URLSearchParams(location.search).get('stop') || 'end';
   const errors = [];
+  // Lead form tests never reach HubSpot: fetch is replaced and the request body is kept for inspection.
+  if (stop === 'lead' || stop === 'leadform') {
+    ENGINE.UNEARTHED.hubspot.formGuid = 'test-guid';
+    window.__sent = null;
+    window.fetch = async (url, opts) => { window.__sent = { url, body: JSON.parse(opts.body) }; return { ok: true, json: async () => ({}) }; };
+  }
   window.addEventListener('error', (e) => errors.push(e.message));
   const $ = (s) => document.querySelector(s);
   const click = (s) => { const el = typeof s === 'string' ? $(s) : s; if (!el) throw new Error('missing ' + s); el.click(); };
@@ -37,6 +43,13 @@
       if ($('.score-hero')) break;
     }
   } catch (e) { errors.push('harness: ' + e.message); }
+  if (stop === 'lead') {
+    const set = (id, v) => { const el = $('#lf-' + id); el.value = v; el.dispatchEvent(new Event('input', { bubbles: true })); };
+    set('lastname', 'Tester'); set('email', 'test@example.com'); set('company', 'Example Mining');
+    const c = $('#lf-consent'); c.checked = true; c.dispatchEvent(new Event('input', { bubbles: true }));
+    $('#leadform').requestSubmit();
+    return setTimeout(() => { errors.push('SENT:' + JSON.stringify(window.__sent)); errors.push('FORM:' + ($('.leadform') || {}).textContent); done(); }, 300);
+  }
   done();
   function done() {
     const pre = document.createElement('pre');

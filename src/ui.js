@@ -12,7 +12,7 @@
   };
 
   let S = null; // engine game state
-  let V = { view: 'title', name: '', companyId: null, modal: null, pending: null, order: null, outcome: null };
+  let V = { view: 'title', name: '', companyId: null, modal: null, pending: null, order: null, outcome: null, lead: { status: 'idle', f: {} } };
 
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const coById = (id) => E.COMPANIES.find((c) => c.id === id);
@@ -418,8 +418,8 @@
                 <p>Unearthed is a specialist mining and metals technology advisory firm in Perth, Western Australia. We find, assess and pilot technology from across mining and adjacent industries, so trials progress to deployment.</p>
               </div>
               <div class="actions">
-                <a class="btn" href="${U.contact.web}" target="_blank" rel="noopener">Talk to Unearthed</a>
-                <div class="email"><span>Or email</span> <span id="u-email" class="addr">${U.contact.email}</span> <button class="copy-btn" id="copy-email" data-a="copyEmail">Copy</button></div>
+                ${U.hubspot.formGuid ? leadForm(picks, strong, firstForm) : `<a class="btn" href="${U.contact.web}" target="_blank" rel="noopener">Talk to Unearthed</a>`}
+                <div class="email"><span>${U.hubspot.formGuid ? 'Prefer email?' : 'Or email'}</span> <span id="u-email" class="addr">${U.contact.email}</span> <button class="copy-btn" id="copy-email" data-a="copyEmail">Copy</button></div>
               </div>
             </div>
           </section>
@@ -556,6 +556,85 @@
     </div></div>`;
   }
 
+
+  // ---------- lead capture (HubSpot Forms API) ----------
+
+  const CONSENT = 'I agree to Unearthed contacting me about my results and its services.';
+  const LEAD_FIELDS = [
+    { id: 'firstname', label: 'First name', type: 'text', auto: 'given-name', req: true },
+    { id: 'lastname', label: 'Last name', type: 'text', auto: 'family-name', req: true },
+    { id: 'email', label: 'Work email', type: 'email', auto: 'email', req: true },
+    { id: 'company', label: 'Company', type: 'text', auto: 'organization', req: true },
+    { id: 'jobtitle', label: 'Job title (optional)', type: 'text', auto: 'organization-title', req: false },
+  ];
+
+  function leadForm(picks, strong, firstForm) {
+    const L = V.lead;
+    if (L.status === 'sent') {
+      return `<div class="leadform sent" role="status"><b>Thanks, ${esc(L.f.firstname || '')}. Your results are with us.</b><p>Someone from Unearthed will be in touch about where we would start with you.</p></div>`;
+    }
+    const val = (id) => esc(L.f[id] ?? (id === 'firstname' ? (S.player !== 'Explorer' ? S.player : '') : ''));
+    return `<form class="leadform" id="leadform" novalidate>
+      <b>Send your results to Unearthed</b>
+      <p>We will follow up on ${strong ? 'how to keep your lead' : `${E.NODES[picks[0].k].toLowerCase()} and ${E.NODES[picks[1].k].toLowerCase()}`}, starting with ${firstForm.name.toLowerCase()}.</p>
+      <div class="lf-grid">${LEAD_FIELDS.map((f) => `<label for="lf-${f.id}"><span>${f.label}</span><input id="lf-${f.id}" name="${f.id}" type="${f.type}" autocomplete="${f.auto}" maxlength="100" value="${val(f.id)}" ${f.req ? 'required' : ''}></label>`).join('')}</div>
+      <label class="lf-consent" for="lf-consent"><input id="lf-consent" name="consent" type="checkbox" ${L.f.consent ? 'checked' : ''} required><span>${CONSENT} <a href="${U.contact.privacy}" target="_blank" rel="noopener">Privacy policy</a></span></label>
+      ${L.status === 'error' ? `<p class="lf-error" role="alert">${esc(L.error)}</p>` : ''}
+      <button class="btn" type="submit" ${L.status === 'sending' ? 'disabled' : ''}>${L.status === 'sending' ? 'Sending' : 'Send my results'}</button>
+    </form>`;
+  }
+
+  // Short plain-text summary of the game for the HubSpot message field.
+  function resultSummary() {
+    const last = latest();
+    const score = Math.round(E.avg(last));
+    const c = co();
+    const nodes = Object.keys(E.NODES).map((k) => ({ k, v: S.nodes[k] })).sort((a, b) => a.v - b.v);
+    const weak = nodes.slice(0, 2);
+    const forms = [...new Set(weak.map((n) => U.forms[U.help[n.k].form].name))];
+    const lastLog = S.log[S.log.length - 1];
+    return [
+      'Innovation Rush result',
+      `Company played: ${c.name} (${c.size}, ${c.difficulty})`,
+      S.status === 'fired' ? `Result: fired in Year ${lastLog.year} Q${lastLog.quarter} (average ${score})` : `Final score: ${score}% (${E.tier(score).name})`,
+      `Metrics: ${E.METRICS.map((m) => `${m.name} ${Math.round(last[m.id])}`).join(', ')}`,
+      `Weakest areas: ${weak.map((n) => `${E.NODES[n.k]} (${Math.round(n.v)})`).join(', ')}`,
+      `Suggested starting point: ${forms.join('; ')}`,
+      `Vendor checks used: ${E.VENDOR_CHECKS - S.checks} of ${E.VENDOR_CHECKS}`,
+      `Consent: ${CONSENT} (${new Date().toISOString()})`,
+    ].join('\n');
+  }
+
+  async function submitLead(form) {
+    const data = Object.fromEntries(LEAD_FIELDS.map((f) => [f.id, form.elements[f.id].value.trim()]));
+    data.consent = form.elements.consent.checked;
+    V.lead.f = data;
+    const missing = LEAD_FIELDS.filter((f) => f.req && !data[f.id]).map((f) => f.label.toLowerCase());
+    let error = '';
+    if (missing.length) error = `Please add your ${missing.join(', ')}.`;
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) error = 'Please check your email address.';
+    else if (!data.consent) error = 'Please tick the box so we can contact you.';
+    if (error) { V.lead.status = 'error'; V.lead.error = error; render(); return; }
+    V.lead.status = 'sending'; render();
+    const { portalId, formGuid } = U.hubspot;
+    const body = {
+      fields: [...LEAD_FIELDS.filter((f) => data[f.id]).map((f) => ({ name: f.id, value: data[f.id] })), { name: 'message', value: resultSummary() }],
+      context: { pageUri: location.href.split('#')[0], pageName: 'Innovation Rush scorecard' },
+    };
+    try {
+      const res = await fetch(`https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuid}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      if (res.ok) { V.lead.status = 'sent'; render(); return; }
+      const j = await res.json().catch(() => ({}));
+      const invalidEmail = (j.errors || []).some((x) => /EMAIL/i.test(x.errorType || ''));
+      V.lead.status = 'error';
+      V.lead.error = invalidEmail ? 'HubSpot did not accept that email address. Please check it.' : `That did not go through. Please email us at ${U.contact.email}.`;
+    } catch {
+      V.lead.status = 'error';
+      V.lead.error = `That did not go through. Please email us at ${U.contact.email}.`;
+    }
+    render();
+  }
+
   // ---------- rendering and actions ----------
 
   function render(scroll) {
@@ -577,7 +656,7 @@
 
   function newRun(companyId) {
     S = E.newGame(companyId, V.name.trim() || 'Explorer');
-    V = { ...V, companyId, modal: null, pending: null, outcome: null, view: 'welcome' };
+    V = { ...V, companyId, modal: null, pending: null, outcome: null, view: 'welcome', lead: { status: 'idle', f: {} } };
   }
 
   const actions = {
@@ -657,6 +736,10 @@
   });
 
   document.addEventListener('input', (e) => {
+    if (e.target.id && e.target.id.startsWith('lf-')) {
+      V.lead.f[e.target.name] = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+      return;
+    }
     if (e.target.id === 'player') {
       V.name = e.target.value;
       const b = document.getElementById('name-next');
@@ -667,6 +750,7 @@
   document.addEventListener('submit', (e) => {
     e.preventDefault();
     if (e.target.id === 'nameform' && actions.name() !== false) render(true);
+    if (e.target.id === 'leadform' && V.lead.status !== 'sending') submitLead(e.target);
   });
 
   document.addEventListener('keydown', (e) => {
