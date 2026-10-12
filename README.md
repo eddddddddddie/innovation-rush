@@ -31,6 +31,7 @@ Open `docs/index.html` in a browser, or visit the GitHub Pages site once it is e
 | `tools/simulate.js` | Balance check: plays thousands of games per strategy |
 | `tools/autoplay.js` | Headless browser test harness |
 | `DEVOPS_DREAM_TEARDOWN.md` | Notes from playing the original game |
+| `CLAUDE.md` | Workflow and rules for Claude Code sessions in this repo |
 
 ## Editing
 
