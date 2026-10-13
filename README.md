@@ -2,7 +2,7 @@
 
 A playful strategy game about leading open innovation at a mining company, by Unearthed. Inspired by [DevOps Dream](https://devops.games).
 
-You are the new Chief Innovation Officer. Over three years you fund up to three initiatives a year from one tenure-long budget of Crib Credits (40, 300 or 1,200 depending on the company), and respond to one event each quarter. Four metrics (Ecosystem, Adoption, Value, Buy-in) are driven by eight hidden drivers. Average 90+ to win; drop below 35 and you are fired.
+You are the new Chief Innovation Officer. Over three years you source technology for site problems (including through Unearthed open challenges), move it through Evaluate, Pilot and Scale, fund up to three initiatives a year from one tenure-long budget of Crib Credits (40, 300 or 1,200 depending on the company), face a board meeting each year, and respond to one event each quarter. Four metrics (Ecosystem, Adoption, Value, Buy-in) are driven by eight hidden drivers. Average 90+ to win; drop below 35 and you are fired.
 
 ## Sales content
 

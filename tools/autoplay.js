@@ -25,23 +25,38 @@
     click('[data-a=accept]');
     if (stop === 'welcome') return done();
     click('[data-a=plan]');
-    for (let y = 1; y <= 3; y++) {
-      if (stop === 'modal' && y === 1) { click('[data-a=card][data-id=challenges]'); click('[data-a=useCheck]'); pickRadio(1); return done(); }
-      for (const [id, nth] of plans[y]) fundCard(id, nth);
-      if (stop === 'ingame-howto' && y === 2) { click('.hudlinks [data-a=page][data-p=howto]'); click('[data-a=back]'); if (!$('.grid')) throw new Error('back did not return to planning'); }
-      if (stop === 'plan' + y) return done();
-      click('[data-a=startYear]');
-      for (let q = 1; q <= 4; q++) {
-        if (q === 1) click('[data-a=useCheck]');
+    // Plays quarter by quarter: plan each year (challenges for both problems, three initiatives), answer events,
+    // pick the first submission for each challenge, go through board meetings, until the scorecard.
+    let year = 0, events = 0, quarters = 0, guard = 0;
+    while (!$('.score-hero') && guard++ < 200) {
+      if ($('.problems')) {
+        year += 1;
+        if (stop === 'modal' && year === 1) { click('[data-a=card][data-id=challenges]'); click('[data-a=useCheck]'); pickRadio(1); return done(); }
+        document.querySelectorAll('[data-a=route][data-r=challenge]').forEach((b) => { if (!b.disabled) b.click(); });
+        for (const [id, nth] of plans[year]) fundCard(id, nth);
+        if (stop === 'ingame-howto' && year === 2) { click('.hudlinks [data-a=page][data-p=howto]'); click('[data-a=back]'); if (!$('.problems')) throw new Error('back did not return to planning'); }
+        if (stop === 'plan' + year) return done();
+        click('[data-a=startYear]');
+      } else if ($('.choice')) {
+        events += 1;
+        if (events === 1) click('[data-a=useCheck]');
         click('.choice');
         if (stop === 'event') return done();
         click('[data-a=lock]');
-        if (stop === 'outcome' && y === 2) return done();
+      } else if ($('[data-a=pickSub]')) {
+        if (stop === 'pick') return done();
+        if (!$('.vcheck.done') && $('[data-a=useCheck]')) click('[data-a=useCheck]');
+        click('[data-a=pickSub]');
+      } else if ($('.boardroom')) {
+        if (stop === 'board') return done();
+        click('[data-a=plan]');
+      } else if ($('[data-a=next]')) {
+        quarters += 1;
+        if (stop === 'outcome' && quarters === 5) return done();
         click('[data-a=next]');
-        if (!document.querySelector('[data-a=lock], [data-a=startYear], .choice') && $('.score-hero')) break;
-      }
-      if ($('.score-hero')) break;
+      } else throw new Error('stuck on view: ' + document.body.innerText.slice(0, 120));
     }
+    if (!$('.score-hero')) throw new Error('did not reach the scorecard');
   } catch (e) { errors.push('harness: ' + e.message); }
   if (stop === 'lead') {
     const set = (id, v) => { const el = $('#lf-' + id); el.value = v; el.dispatchEvent(new Event('input', { bubbles: true })); };
