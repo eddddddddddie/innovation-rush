@@ -77,9 +77,14 @@ a { color: var(--ink); }
 .scene .pit { position: absolute; inset: 0; width: 100%; height: 100%; }
 .scene .m { position: absolute; }
 .scene .m svg { width: 100%; height: auto; display: block; }
-.m-nugget { left: 22.5%; bottom: 48.5%; width: 11.25%; animation: bob 3.2s ease-in-out infinite; }
-.m-rock { left: 41.9%; bottom: 31%; width: 16.25%; animation: bob 3.8s ease-in-out .4s infinite; }
-.m-truck { left: 64.4%; bottom: 48.5%; width: 15%; animation: bob 3.5s ease-in-out .8s infinite; }
+.m-echidna { left: 21.5%; bottom: 49%; width: 12.5%; animation: bob 3.2s ease-in-out infinite; }
+.m-croc { left: 38.5%; bottom: 31%; width: 23%; animation: bob 3.8s ease-in-out .4s infinite; }
+.m-wombat { left: 64%; bottom: 48.5%; width: 14.5%; animation: bob 3.5s ease-in-out .8s infinite; }
+.avatars { display: flex; flex-wrap: wrap; gap: 10px; }
+.avatar { width: 84px; height: 84px; padding: 6px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); }
+.avatar svg { width: 100%; height: 100%; display: block; }
+.avatar:hover { border-color: var(--line-strong); }
+.avatar[aria-pressed="true"] { border-color: var(--orange); background: var(--peach-soft); box-shadow: 0 0 0 2px var(--orange); }
 @keyframes bob { 50% { transform: translateY(-4%); } }
 .statrow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; border-top: 1px solid var(--line); padding-top: 28px; }
 .statrow div { display: flex; flex-direction: column; gap: 4px; }
@@ -123,7 +128,7 @@ a { color: var(--ink); }
 .hud { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: rgba(255, 255, 255, .96); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); margin-inline: -20px; padding: 12px 20px; }
 .hud-inner { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: auto 1fr auto; gap: 10px 24px; align-items: center; }
 .hud .who { display: flex; gap: 10px; align-items: center; min-width: 0; }
-.hud .who svg { width: 46px; height: 40px; flex: none; }
+.hud .who svg { width: 42px; height: 42px; flex: none; border-radius: 50%; background: var(--panel); }
 .hud .who .name { font-weight: 600; font-size: 0.95rem; line-height: 1.2; }
 .hud .who .co { font-size: 0.8rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .benches { display: flex; align-items: flex-start; gap: 4px; justify-self: center; }

@@ -71,7 +71,7 @@ const METRICS = [
 
 const COMPANIES = [
   {
-    id: 'junior', name: 'Lucky Strike Resources', size: 'Junior explorer', budget: 40, mascot: 'nugget', difficulty: 'Gentle',
+    id: 'junior', name: 'Lucky Strike Resources', size: 'Junior explorer', budget: 40, mascot: 'echidna', difficulty: 'Gentle',
     blurb: 'A 40-person explorer sitting on one promising lithium deposit. Not much money, not much bureaucracy, lots of ambition.',
     welcome: [
       'We found lithium! Now we need to work out how to mine it smarter than the majors, on a fraction of their budget.',
@@ -82,7 +82,7 @@ const COMPANIES = [
     drag: {},
   },
   {
-    id: 'mid', name: 'Copper Canyon Mining', size: 'Mid-tier producer', budget: 300, mascot: 'truck', difficulty: 'Moderate',
+    id: 'mid', name: 'Copper Canyon Mining', size: 'Mid-tier producer', budget: 300, mascot: 'wombat', difficulty: 'Moderate',
     blurb: 'Two open-pit copper mines and a concentrator. Margins are tight, ore grades are falling and the board wants new ideas.',
     welcome: [
       'Our grades are dropping, energy costs are climbing and our haul fleet is getting old.',
@@ -93,12 +93,12 @@ const COMPANIES = [
     drag: { champ: -0.4 },
   },
   {
-    id: 'major', name: 'Big Rocks', size: 'Global major', budget: 1200, mascot: 'rock', difficulty: 'Brutal',
+    id: 'major', name: 'Big Rocks', size: 'Global major', budget: 1200, mascot: 'croc', difficulty: 'Brutal',
     blurb: 'Thirty sites on four continents, a famous brand and a big budget. Also seven approval committees and a long memory.',
     welcome: [
       'We have an innovation lab, a venture fund and a very nice video about the future of mining.',
       'What we do not have is many new technologies running on our sites. Startups say we are slow and hard to work with.',
-      'You have the budget. Can you get this rock rolling before the board loses patience?',
+      'You have the budget. Can you get this old croc moving before the board loses patience?',
     ],
     nodes: { prob: 44, safe: 40, data: 50, path: 34, reach: 62, champ: 40, trust: 42, focus: 38 },
     drag: { path: -0.9, safe: -0.5, champ: -0.3 },
@@ -633,6 +633,7 @@ function metricsFrom(nodes, bonus) {
 const avg = (ms) => METRICS.reduce((s, m) => s + ms[m.id], 0) / METRICS.length;
 
 function tier(score) {
+  score = Math.round(score); // tiers follow the score players see
   if (score >= 90) return { id: 'elite', name: 'Elite', award: 'The Mother Lode' };
   if (score >= 75) return { id: 'high', name: 'High', award: 'A Rich Vein' };
   if (score >= 55) return { id: 'medium', name: 'Medium', award: 'Low-Grade Ore' };
@@ -881,7 +882,7 @@ function playQuarter(s, choiceIdx) {
 // Achievements earned in a finished (or fired) game.
 function achievements(s) {
   const scaled = s.techs.filter((t) => t.status === 'running');
-  const score = avg(metrics(s));
+  const score = Math.round(avg(metrics(s)));
   const done = s.status === 'done';
   const got = new Set();
   if (scaled.length >= 3) got.add('purgatory');

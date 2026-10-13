@@ -19,6 +19,8 @@
     if (stop === 'howto' || stop === 'approach') { click(`[data-a=page][data-p=${stop}]`); return done(); }
     click('[data-a=start]');
     const inp = $('#player'); inp.value = 'Ed'; inp.dispatchEvent(new Event('input', { bubbles: true }));
+    click('[data-a=avatar][data-id=p4]');
+    if (stop === 'name') return done();
     click('[data-a=name]');
     click('[data-a=company][data-id=mid]');
     if (stop === 'company') return done();

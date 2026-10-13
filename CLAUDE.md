@@ -15,12 +15,12 @@ A single-page strategy game by Unearthed, inspired by DevOps Dream (devops.games
 |---|---|
 | `src/engine.js` | All game content and rules, pure JS with no DOM: `COMPANIES`, `INITIATIVES`, `EVENTS`, `PROBLEMS` (site problems and their innovator approaches), `ROUTES`, `STAGES`, `ACHIEVEMENTS`, `EVENT_QUARTERS`, `UNEARTHED` (services, figures, driver-to-service mapping, contact, HubSpot), `METRICS` weights, `TUNE` (balance settings), and the rules: pipeline odds, copper price, board review, scoring, vendor checks |
 | `src/ui.js` | Every screen, including How to play, The approach and the scorecard. Renders the whole app from state on each change |
-| `src/art.js` | Mascots (nugget, truck, rock), line icons, the open-pit scene and the Unearthed U mark, as inline SVG |
+| `src/art.js` | Company mascots (echidna, wombat, saltwater croc, all in hard hats and hi-vis), six player avatars (`PEOPLE`, `person()`), line icons, the open-pit scene and the Unearthed U mark, as inline SVG |
 | `src/template.html` | Page shell and all CSS (design tokens in `:root`) |
 | `src/assets/unearthed-logo.png` | Logo, inlined as a data URI at build time |
 | `build.py` | Inlines the sources into `docs/index.html` (standalone, for Pages) and `dist/innovation-rush.html` (body only, for the Claude artifact) |
 | `tools/simulate.js` | Balance check: plays thousands of games per strategy and company |
-| `tools/autoplay.js` | Headless browser harness that plays to a stop point (`?stop=title|company|welcome|modal|plan1|plan2|plan3|event|pick|outcome|board|end|howto|approach|ingame-howto|lead|leadform`) |
+| `tools/autoplay.js` | Headless browser harness that plays to a stop point (`?stop=title|name|company|welcome|modal|plan1|plan2|plan3|event|pick|outcome|board|end|howto|approach|ingame-howto|lead|leadform`) |
 | `DEVOPS_DREAM_TEARDOWN.md` | Notes from playing the original game |
 
 `docs/` and `dist/` are generated. Never edit them by hand; edit `src/` and rebuild.

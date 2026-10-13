@@ -12,7 +12,7 @@
   };
 
   let S = null; // engine game state
-  let V = { view: 'title', name: '', companyId: null, modal: null, pending: null, order: null, outcome: null, lead: { status: 'idle', f: {} } };
+  let V = { view: 'title', name: '', avatar: 'p1', companyId: null, modal: null, pending: null, order: null, outcome: null, lead: { status: 'idle', f: {} } };
 
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const coById = (id) => E.COMPANIES.find((c) => c.id === id);
@@ -83,7 +83,7 @@
     const where = S.quarter === 0 ? `Year ${S.year}, planning` : `Year ${S.year}, quarter ${S.quarter}`;
     const dots = Array.from({ length: E.VENDOR_CHECKS }, (_, i) => `<i class="${i < S.checks ? 'on' : ''}"></i>`).join('');
     return `<div class="hud"><div class="hud-inner">
-      <div class="who">${mascot(S.companyId)}<div style="min-width:0"><div class="name">${esc(S.player)}</div><div class="co">Chief Innovation Officer, ${c.name}</div></div></div>
+      <div class="who">${A.person(S.avatar)}<div style="min-width:0"><div class="name">${esc(S.player)}</div><div class="co">Chief Innovation Officer, ${c.name}</div></div></div>
       <div class="benches" role="img" aria-label="${where}. ${played} of 12 quarters played.">${years}</div>
       <div class="hud-right">
         <div class="budget"><div class="amt">${cc(S.budget)} <small>Crib Credits left of ${num(c.budget)}</small></div>
@@ -209,9 +209,9 @@
             <div class="photo">
               <div class="float"><h3>Three companies are hiring</h3><p>A junior explorer, a mid-tier copper miner and a global major. Pick your pit.</p></div>
               <div class="scene">${A.pit()}
-                <div class="m m-nugget">${A.MASCOTS.nugget()}</div>
-                <div class="m m-rock">${A.MASCOTS.rock()}</div>
-                <div class="m m-truck">${A.MASCOTS.truck()}</div>
+                <div class="m m-echidna">${A.MASCOTS.echidna()}</div>
+                <div class="m m-croc">${A.MASCOTS.croc()}</div>
+                <div class="m m-wombat">${A.MASCOTS.wombat()}</div>
               </div>
             </div>
           </div>
@@ -238,6 +238,9 @@
             <input id="player" maxlength="24" autocomplete="nickname" value="${esc(V.name)}" placeholder="e.g. Alex">
             <span class="hint">Only used on your scorecard.</span>
           </form>
+          <div class="stack"><b>Pick your look</b>
+            <div class="avatars" role="group" aria-label="Your avatar">${A.PEOPLE.map((pp, i) => `<button class="avatar" data-a="avatar" data-id="${pp.id}" aria-pressed="${V.avatar === pp.id}" aria-label="Avatar ${i + 1}">${A.person(pp.id)}</button>`).join('')}</div>
+          </div>
           <div><button class="btn" id="name-next" data-a="name" ${V.name.trim() ? '' : 'disabled'}>Next</button></div>` })}
         </main></div>`;
     },
@@ -511,7 +514,7 @@
       return `<div class="wrap">${brandline()}
         <main class="screen">
           <div class="score-hero">
-            <div class="portrait">${mascot(S.companyId, fired || t.id === 'low' ? 'sad' : 'happy')}</div>
+            <div class="portrait">${A.person(S.avatar, fired || t.id === 'low' ? 'sad' : 'happy')}</div>
             <div class="stack">
               <span class="label">${fired ? `Board meeting · Year ${lastLog.year}, quarter ${lastLog.quarter}` : `${esc(S.player)} · Chief Innovation Officer scorecard`}</span>
               <h2>${fired ? 'Please hand back your hard hat.' : headlines[t.id]}</h2>
@@ -815,6 +818,7 @@
 
   function newRun(companyId) {
     S = E.newGame(companyId, V.name.trim() || 'Explorer');
+    S.avatar = V.avatar;
     V = { ...V, companyId, modal: null, pending: null, outcome: null, view: 'welcome', lead: { status: 'idle', f: {} } };
   }
 
@@ -829,6 +833,7 @@
     },
     back() { V.view = V.back || 'title'; V.back = null; return 'scroll'; },
     name() { if (!V.name.trim()) return false; V.view = 'company'; return 'scroll'; },
+    avatar(el) { V.avatar = el.dataset.id; },
     company(el) { V.companyId = el.dataset.id; },
     accept() { if (!V.companyId) return false; newRun(V.companyId); return 'scroll'; },
     plan() { V.view = 'plan'; return 'scroll'; },
