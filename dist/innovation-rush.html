@@ -212,6 +212,15 @@ a { color: var(--ink); }
 .delta .v { font-size: 2rem; font-weight: 300; font-variant-numeric: tabular-nums; line-height: 1.1; }
 .delta .d { font-weight: 600; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
 .d.up { color: var(--good); } .d.down { color: var(--bad); } .d.flat { color: var(--muted); }
+.delta.big-up { box-shadow: inset 0 0 0 1.5px var(--good); }
+.delta.big-down { box-shadow: inset 0 0 0 1.5px var(--bad); }
+.swing { font-size: 0.72rem; font-weight: 600; margin-top: 2px; }
+.delta .split { display: flex; justify-content: space-between; gap: 8px; font-size: 0.8rem; color: var(--grey); }
+.delta .split.muted { color: var(--muted); }
+.delta .split .d { font-size: 0.85rem; }
+.delta.big-up .split:first-of-type .d, .delta.big-down .split:first-of-type .d { font-size: 1.05rem; }
+.big-up .swing { color: var(--good); }
+.big-down .swing { color: var(--bad); }
 .delta .t { font-size: 0.8rem; color: var(--grey); }
 
 .chart { width: 100%; height: auto; display: block; }
@@ -920,18 +929,25 @@ const EVENTS = [
 const YEARS = 3;
 const QUARTERS = 4;
 const MAX_PER_YEAR = 3;
-const INIT_SCALE = 0.85;
+// Balance settings. tools/simulate.js can override them (TUNE='{"eventScale":3}') without editing this file.
+const TUNE = {
+  initScale: 0.85, // share of an initiative's per-quarter effect applied each quarter
+  eventScale: 1, // multiplier on the lasting effect of event choices
+  shock: 3, // extra immediate metric swing from an event choice, as a multiple of its lasting effect
+  shockDecay: 0.4, // share of the swing still left the next quarter
+  metricBase: 16.5, // metric = base + 0.8 x weighted drivers + shock
+};
 const FIRE_BELOW = 35;
 const VENDOR_CHECKS = 3;
 
 const clamp = (v, lo = 0, hi = 100) => Math.max(lo, Math.min(hi, v));
 
-function metricsFrom(nodes) {
+function metricsFrom(nodes, shock) {
   const out = {};
   for (const m of METRICS) {
     let s = 0;
     for (const k in m.w) s += m.w[k] * nodes[k];
-    out[m.id] = clamp(20 + 0.8 * s);
+    out[m.id] = clamp(TUNE.metricBase + 0.8 * s + (shock ? shock[m.id] || 0 : 0));
   }
   return out;
 }
@@ -1028,15 +1044,28 @@ function playQuarter(s, choiceIdx) {
   const ev = currentEvent(s);
   const ch = ev.choices[choiceIdx];
   const before = s.history[s.history.length - 1];
-  for (const k in ch.e) s.nodes[k] = clamp(s.nodes[k] + ch.e[k]);
+  // Events hit hard straight away (the shock) and leave a smaller lasting change in the drivers.
+  // Last quarter's shock fades first, so the event's own effect can be reported separately.
+  s.shock = s.shock || { eco: 0, adopt: 0, value: 0, buyin: 0 };
+  for (const m of METRICS) s.shock[m.id] *= TUNE.shockDecay;
+  const preEvent = metricsFrom(s.nodes, s.shock);
+  for (const m of METRICS) {
+    let d = 0;
+    for (const k in m.w) d += m.w[k] * (ch.e[k] || 0);
+    s.shock[m.id] += 0.8 * d * TUNE.shock;
+  }
+  for (const k in ch.e) s.nodes[k] = clamp(s.nodes[k] + ch.e[k] * TUNE.eventScale);
+  const postEvent = metricsFrom(s.nodes, s.shock);
+  const fromEvent = {};
+  for (const m of METRICS) fromEvent[m.id] = postEvent[m.id] - preEvent[m.id];
   if (ch.b) s.budget = Math.max(0, s.budget + credits(s, ch.b));
   for (const f of s.funded) {
     const e = initById(f.id).opts[f.opt].e;
-    for (const k in e) s.nodes[k] = clamp(s.nodes[k] + e[k] * INIT_SCALE);
+    for (const k in e) s.nodes[k] = clamp(s.nodes[k] + e[k] * TUNE.initScale);
   }
   const drag = company(s).drag;
   for (const k in drag) s.nodes[k] = clamp(s.nodes[k] + drag[k]);
-  const after = metricsFrom(s.nodes);
+  const after = metricsFrom(s.nodes, s.shock);
   s.history.push(after);
   s.log.push({ year: s.year, quarter: s.quarter, event: ev.id, choice: choiceIdx });
   if (avg(after) < FIRE_BELOW) s.status = 'fired';
@@ -1044,7 +1073,7 @@ function playQuarter(s, choiceIdx) {
     if (s.year === YEARS) s.status = 'done';
     else { s.year += 1; s.quarter = 0; }
   } else s.quarter += 1;
-  return { ev, ch, before, after };
+  return { ev, ch, before, after, fromEvent };
 }
 
 // Rough quality of a choice for the debrief: driver changes weighted by how much each driver feeds the metrics.
@@ -1062,7 +1091,7 @@ function impact(e) {
 }
 
 const ENGINE = {
-  NODES, NODE_TIPS, UNEARTHED, METRICS, COMPANIES, INITIATIVES, EVENTS, YEARS, QUARTERS, MAX_PER_YEAR, FIRE_BELOW, VENDOR_CHECKS,
+  TUNE, NODES, NODE_TIPS, UNEARTHED, METRICS, COMPANIES, INITIATIVES, EVENTS, YEARS, QUARTERS, MAX_PER_YEAR, FIRE_BELOW, VENDOR_CHECKS,
   metricsFrom, avg, tier, newGame, company, initById, eventById, fundedThisYear, credits, costOf, canFund, fund, unfund,
   useCheck, grades, currentEvent, startYear, playQuarter, impact, shuffle,
 };
@@ -1544,8 +1573,15 @@ const ART = (() => {
             <p><b>You chose:</b> ${ch.t}</p>
             <p class="quote">${ch.r}</p>
             ${budgetChange ? `<p><span class="chip ${budgetChange < 0 ? 'bad' : 'good'}">${budgetChange < 0 ? '−' : '+'}${ccText(budgetChange)}</span></p>` : ''}
-            <div class="deltas">${E.METRICS.map((m) => `<div class="delta" style="--c:${MHEX[m.id]}"><span class="t">${m.name}</span><span class="v">${Math.round(o.after[m.id])}</span>${sign(o.after[m.id] - o.before[m.id])}</div>`).join('')}</div>
-            <p class="hint">${running ? `These changes include the ${running} initiative${running > 1 ? 's' : ''} you have running.` : 'You have no initiatives running, so only your decision moved the metrics this quarter.'}</p>
+            <div class="deltas">${E.METRICS.map((m) => {
+              const total = o.after[m.id] - o.before[m.id];
+              const call = o.fromEvent ? o.fromEvent[m.id] : total;
+              const c = Math.round(call), rest = Math.round(total - call);
+              const big = Math.abs(c) >= 5 ? (c > 0 ? 'big-up' : 'big-down') : '';
+              return `<div class="delta ${big}" style="--c:${MHEX[m.id]}"><span class="t">${m.name}</span><span class="v">${Math.round(o.after[m.id])}</span>
+                <span class="split"><span>Your call</span>${sign(c)}</span><span class="split muted"><span>Everything else</span>${sign(rest)}</span>${big ? `<span class="swing">${c > 0 ? 'Big jump' : 'Big drop'}</span>` : ''}</div>`;
+            }).join('')}</div>
+            <p class="hint">Your call hits hard straight away, and part of that swing fades over the next few quarters. Everything else is ${running ? `your ${running} running initiative${running > 1 ? 's' : ''}, ` : ''}earlier swings fading and ${co().drag && Object.keys(co().drag).length ? 'company inertia' : 'the rest of the business'}.</p>
             <div class="fit">${A.umark()}<div><span class="label">Where Unearthed fits</span><p>${ev.fit}</p></div></div>` })}
           ${sec({ n: 'So far', title: 'Your metrics', body: `${chart(S.history)}<div><button class="btn" data-a="next">${next}</button></div>` })}
         </main></div>`;
@@ -1948,7 +1984,7 @@ const ART = (() => {
       if (V.pending == null) return false;
       const year = S.year, quarter = S.quarter;
       const r = E.playQuarter(S, V.pending);
-      V.outcome = { ev: r.ev.id, choice: V.pending, before: r.before, after: r.after, year, quarter };
+      V.outcome = { ev: r.ev.id, choice: V.pending, before: r.before, after: r.after, fromEvent: r.fromEvent, year, quarter };
       V.view = 'outcome';
       if (S.status === 'done') store.set(S.companyId, E.avg(latest()));
       return 'scroll';

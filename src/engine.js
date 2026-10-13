@@ -479,18 +479,25 @@ const EVENTS = [
 const YEARS = 3;
 const QUARTERS = 4;
 const MAX_PER_YEAR = 3;
-const INIT_SCALE = 0.85;
+// Balance settings. tools/simulate.js can override them (TUNE='{"eventScale":3}') without editing this file.
+const TUNE = {
+  initScale: 0.85, // share of an initiative's per-quarter effect applied each quarter
+  eventScale: 1, // multiplier on the lasting effect of event choices
+  shock: 3, // extra immediate metric swing from an event choice, as a multiple of its lasting effect
+  shockDecay: 0.4, // share of the swing still left the next quarter
+  metricBase: 16.5, // metric = base + 0.8 x weighted drivers + shock
+};
 const FIRE_BELOW = 35;
 const VENDOR_CHECKS = 3;
 
 const clamp = (v, lo = 0, hi = 100) => Math.max(lo, Math.min(hi, v));
 
-function metricsFrom(nodes) {
+function metricsFrom(nodes, shock) {
   const out = {};
   for (const m of METRICS) {
     let s = 0;
     for (const k in m.w) s += m.w[k] * nodes[k];
-    out[m.id] = clamp(20 + 0.8 * s);
+    out[m.id] = clamp(TUNE.metricBase + 0.8 * s + (shock ? shock[m.id] || 0 : 0));
   }
   return out;
 }
@@ -587,15 +594,28 @@ function playQuarter(s, choiceIdx) {
   const ev = currentEvent(s);
   const ch = ev.choices[choiceIdx];
   const before = s.history[s.history.length - 1];
-  for (const k in ch.e) s.nodes[k] = clamp(s.nodes[k] + ch.e[k]);
+  // Events hit hard straight away (the shock) and leave a smaller lasting change in the drivers.
+  // Last quarter's shock fades first, so the event's own effect can be reported separately.
+  s.shock = s.shock || { eco: 0, adopt: 0, value: 0, buyin: 0 };
+  for (const m of METRICS) s.shock[m.id] *= TUNE.shockDecay;
+  const preEvent = metricsFrom(s.nodes, s.shock);
+  for (const m of METRICS) {
+    let d = 0;
+    for (const k in m.w) d += m.w[k] * (ch.e[k] || 0);
+    s.shock[m.id] += 0.8 * d * TUNE.shock;
+  }
+  for (const k in ch.e) s.nodes[k] = clamp(s.nodes[k] + ch.e[k] * TUNE.eventScale);
+  const postEvent = metricsFrom(s.nodes, s.shock);
+  const fromEvent = {};
+  for (const m of METRICS) fromEvent[m.id] = postEvent[m.id] - preEvent[m.id];
   if (ch.b) s.budget = Math.max(0, s.budget + credits(s, ch.b));
   for (const f of s.funded) {
     const e = initById(f.id).opts[f.opt].e;
-    for (const k in e) s.nodes[k] = clamp(s.nodes[k] + e[k] * INIT_SCALE);
+    for (const k in e) s.nodes[k] = clamp(s.nodes[k] + e[k] * TUNE.initScale);
   }
   const drag = company(s).drag;
   for (const k in drag) s.nodes[k] = clamp(s.nodes[k] + drag[k]);
-  const after = metricsFrom(s.nodes);
+  const after = metricsFrom(s.nodes, s.shock);
   s.history.push(after);
   s.log.push({ year: s.year, quarter: s.quarter, event: ev.id, choice: choiceIdx });
   if (avg(after) < FIRE_BELOW) s.status = 'fired';
@@ -603,7 +623,7 @@ function playQuarter(s, choiceIdx) {
     if (s.year === YEARS) s.status = 'done';
     else { s.year += 1; s.quarter = 0; }
   } else s.quarter += 1;
-  return { ev, ch, before, after };
+  return { ev, ch, before, after, fromEvent };
 }
 
 // Rough quality of a choice for the debrief: driver changes weighted by how much each driver feeds the metrics.
@@ -621,7 +641,7 @@ function impact(e) {
 }
 
 const ENGINE = {
-  NODES, NODE_TIPS, UNEARTHED, METRICS, COMPANIES, INITIATIVES, EVENTS, YEARS, QUARTERS, MAX_PER_YEAR, FIRE_BELOW, VENDOR_CHECKS,
+  TUNE, NODES, NODE_TIPS, UNEARTHED, METRICS, COMPANIES, INITIATIVES, EVENTS, YEARS, QUARTERS, MAX_PER_YEAR, FIRE_BELOW, VENDOR_CHECKS,
   metricsFrom, avg, tier, newGame, company, initById, eventById, fundedThisYear, credits, costOf, canFund, fund, unfund,
   useCheck, grades, currentEvent, startYear, playQuarter, impact, shuffle,
 };

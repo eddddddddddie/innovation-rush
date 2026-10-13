@@ -1,5 +1,6 @@
 // Balance check: plays many games with different strategies and reports score distributions.
 const E = require('../src/engine.js');
+if (process.env.TUNE) Object.assign(E.TUNE, JSON.parse(process.env.TUNE));
 
 function bestEventChoice(ev) { let b = 0; ev.choices.forEach((c, i) => { if (E.impact(c.e) > E.impact(ev.choices[b].e)) b = i; }); return b; }
 function worstEventChoice(ev) { let b = 0; ev.choices.forEach((c, i) => { if (E.impact(c.e) < E.impact(ev.choices[b].e)) b = i; }); return b; }

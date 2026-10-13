@@ -212,6 +212,15 @@ a { color: var(--ink); }
 .delta .v { font-size: 2rem; font-weight: 300; font-variant-numeric: tabular-nums; line-height: 1.1; }
 .delta .d { font-weight: 600; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
 .d.up { color: var(--good); } .d.down { color: var(--bad); } .d.flat { color: var(--muted); }
+.delta.big-up { box-shadow: inset 0 0 0 1.5px var(--good); }
+.delta.big-down { box-shadow: inset 0 0 0 1.5px var(--bad); }
+.swing { font-size: 0.72rem; font-weight: 600; margin-top: 2px; }
+.delta .split { display: flex; justify-content: space-between; gap: 8px; font-size: 0.8rem; color: var(--grey); }
+.delta .split.muted { color: var(--muted); }
+.delta .split .d { font-size: 0.85rem; }
+.delta.big-up .split:first-of-type .d, .delta.big-down .split:first-of-type .d { font-size: 1.05rem; }
+.big-up .swing { color: var(--good); }
+.big-down .swing { color: var(--bad); }
 .delta .t { font-size: 0.8rem; color: var(--grey); }
 
 .chart { width: 100%; height: auto; display: block; }

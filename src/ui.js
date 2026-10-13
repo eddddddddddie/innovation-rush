@@ -297,8 +297,15 @@
             <p><b>You chose:</b> ${ch.t}</p>
             <p class="quote">${ch.r}</p>
             ${budgetChange ? `<p><span class="chip ${budgetChange < 0 ? 'bad' : 'good'}">${budgetChange < 0 ? '−' : '+'}${ccText(budgetChange)}</span></p>` : ''}
-            <div class="deltas">${E.METRICS.map((m) => `<div class="delta" style="--c:${MHEX[m.id]}"><span class="t">${m.name}</span><span class="v">${Math.round(o.after[m.id])}</span>${sign(o.after[m.id] - o.before[m.id])}</div>`).join('')}</div>
-            <p class="hint">${running ? `These changes include the ${running} initiative${running > 1 ? 's' : ''} you have running.` : 'You have no initiatives running, so only your decision moved the metrics this quarter.'}</p>
+            <div class="deltas">${E.METRICS.map((m) => {
+              const total = o.after[m.id] - o.before[m.id];
+              const call = o.fromEvent ? o.fromEvent[m.id] : total;
+              const c = Math.round(call), rest = Math.round(total - call);
+              const big = Math.abs(c) >= 5 ? (c > 0 ? 'big-up' : 'big-down') : '';
+              return `<div class="delta ${big}" style="--c:${MHEX[m.id]}"><span class="t">${m.name}</span><span class="v">${Math.round(o.after[m.id])}</span>
+                <span class="split"><span>Your call</span>${sign(c)}</span><span class="split muted"><span>Everything else</span>${sign(rest)}</span>${big ? `<span class="swing">${c > 0 ? 'Big jump' : 'Big drop'}</span>` : ''}</div>`;
+            }).join('')}</div>
+            <p class="hint">Your call hits hard straight away, and part of that swing fades over the next few quarters. Everything else is ${running ? `your ${running} running initiative${running > 1 ? 's' : ''}, ` : ''}earlier swings fading and ${co().drag && Object.keys(co().drag).length ? 'company inertia' : 'the rest of the business'}.</p>
             <div class="fit">${A.umark()}<div><span class="label">Where Unearthed fits</span><p>${ev.fit}</p></div></div>` })}
           ${sec({ n: 'So far', title: 'Your metrics', body: `${chart(S.history)}<div><button class="btn" data-a="next">${next}</button></div>` })}
         </main></div>`;
@@ -701,7 +708,7 @@
       if (V.pending == null) return false;
       const year = S.year, quarter = S.quarter;
       const r = E.playQuarter(S, V.pending);
-      V.outcome = { ev: r.ev.id, choice: V.pending, before: r.before, after: r.after, year, quarter };
+      V.outcome = { ev: r.ev.id, choice: V.pending, before: r.before, after: r.after, fromEvent: r.fromEvent, year, quarter };
       V.view = 'outcome';
       if (S.status === 'done') store.set(S.companyId, E.avg(latest()));
       return 'scroll';

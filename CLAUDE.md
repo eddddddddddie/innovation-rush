@@ -31,11 +31,13 @@ A single-page strategy game by Unearthed, inspired by DevOps Dream (devops.games
 2. If costs, effects, events, companies or metric weights changed, run the balance check and keep these targets:
    ```bash
    node tools/simulate.js
+   TUNE='{"shock":3.5}' node tools/simulate.js 1000   # try settings without editing the engine
    ```
-   - random play: median about 55 to 65, never elite
-   - strong ("smart") play: just over 90 for every company
+   - random play: median about 50 to 62, never elite
    - spending everything in Year 1: clearly below 90
-   - Big Croc Resources fires the "terrible" strategy almost every time; Spiny Ridge Resources never does
+   - strong ("smart") play: about 92 to 93 (Big Croc about 92); good event answers with no initiatives ("goodEventsNoInit") well below 90, so initiatives still matter
+   - the "terrible" strategy gets fired at every company (event swings are large by design)
+   - event swings: the biggest metric move per choice should stay around 5 to 6 points on average and about 12 at most (`TUNE.shock`, `TUNE.shockDecay`)
 3. Rebuild and syntax-check:
    ```bash
    python3 build.py
