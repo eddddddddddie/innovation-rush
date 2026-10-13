@@ -71,7 +71,7 @@ const METRICS = [
 
 const COMPANIES = [
   {
-    id: 'junior', name: 'Lucky Strike Resources', size: 'Junior explorer', budget: 40, mascot: 'echidna', difficulty: 'Gentle',
+    id: 'junior', name: 'Spiny Ridge Resources', size: 'Junior explorer', budget: 40, mascot: 'echidna', difficulty: 'Gentle',
     blurb: 'A 40-person explorer sitting on one promising lithium deposit. Not much money, not much bureaucracy, lots of ambition.',
     welcome: [
       'We found lithium! Now we need to work out how to mine it smarter than the majors, on a fraction of their budget.',
@@ -82,7 +82,7 @@ const COMPANIES = [
     drag: {},
   },
   {
-    id: 'mid', name: 'Copper Canyon Mining', size: 'Mid-tier producer', budget: 300, mascot: 'wombat', difficulty: 'Moderate',
+    id: 'mid', name: 'Burrow Creek Copper', size: 'Mid-tier producer', budget: 300, mascot: 'wombat', difficulty: 'Moderate',
     blurb: 'Two open-pit copper mines and a concentrator. Margins are tight, ore grades are falling and the board wants new ideas.',
     welcome: [
       'Our grades are dropping, energy costs are climbing and our haul fleet is getting old.',
@@ -93,7 +93,7 @@ const COMPANIES = [
     drag: { champ: -0.4 },
   },
   {
-    id: 'major', name: 'Big Rocks', size: 'Global major', budget: 1200, mascot: 'croc', difficulty: 'Brutal',
+    id: 'major', name: 'Big Croc Resources', size: 'Global major', budget: 1200, mascot: 'croc', difficulty: 'Brutal',
     blurb: 'Thirty sites on four continents, a famous brand and a big budget. Also seven approval committees and a long memory.',
     welcome: [
       'We have an innovation lab, a venture fund and a very nice video about the future of mining.',

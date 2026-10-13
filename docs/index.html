@@ -523,7 +523,7 @@ const METRICS = [
 
 const COMPANIES = [
   {
-    id: 'junior', name: 'Lucky Strike Resources', size: 'Junior explorer', budget: 40, mascot: 'echidna', difficulty: 'Gentle',
+    id: 'junior', name: 'Spiny Ridge Resources', size: 'Junior explorer', budget: 40, mascot: 'echidna', difficulty: 'Gentle',
     blurb: 'A 40-person explorer sitting on one promising lithium deposit. Not much money, not much bureaucracy, lots of ambition.',
     welcome: [
       'We found lithium! Now we need to work out how to mine it smarter than the majors, on a fraction of their budget.',
@@ -534,7 +534,7 @@ const COMPANIES = [
     drag: {},
   },
   {
-    id: 'mid', name: 'Copper Canyon Mining', size: 'Mid-tier producer', budget: 300, mascot: 'wombat', difficulty: 'Moderate',
+    id: 'mid', name: 'Burrow Creek Copper', size: 'Mid-tier producer', budget: 300, mascot: 'wombat', difficulty: 'Moderate',
     blurb: 'Two open-pit copper mines and a concentrator. Margins are tight, ore grades are falling and the board wants new ideas.',
     welcome: [
       'Our grades are dropping, energy costs are climbing and our haul fleet is getting old.',
@@ -545,7 +545,7 @@ const COMPANIES = [
     drag: { champ: -0.4 },
   },
   {
-    id: 'major', name: 'Big Rocks', size: 'Global major', budget: 1200, mascot: 'croc', difficulty: 'Brutal',
+    id: 'major', name: 'Big Croc Resources', size: 'Global major', budget: 1200, mascot: 'croc', difficulty: 'Brutal',
     blurb: 'Thirty sites on four continents, a famous brand and a big budget. Also seven approval committees and a long memory.',
     welcome: [
       'We have an innovation lab, a venture fund and a very nice video about the future of mining.',
@@ -1109,7 +1109,7 @@ const ART = (() => {
     ? `<path d="M${ex - 4} ${ey} q4 -3 8 0" stroke="#282726" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M${ex + 2} ${ey + 5} q3 6 0 9 q-3 -3 0 -9z" fill="#DADADA"/>${mouth ? `<path d="${mouth.sad}" stroke="#282726" stroke-width="2.4" fill="none" stroke-linecap="round"/>` : ''}`
     : `<circle cx="${ex}" cy="${ey}" r="3.6" fill="#282726"/><circle cx="${ex + 1.2}" cy="${ey - 1.3}" r="1.1" fill="#fff"/>${mouth ? `<path d="${mouth.happy}" stroke="#282726" stroke-width="2.4" fill="none" stroke-linecap="round"/>` : ''}`);
 
-  // Lucky Strike: an echidna, small, spiky and tough.
+  // Spiny Ridge Resources: an echidna, small, spiky and tough.
   const echidna = (mood = 'happy') => {
     let spines = '';
     for (let i = 0; i <= 14; i++) {
@@ -1133,7 +1133,7 @@ const ART = (() => {
     </svg>`;
   };
 
-  // Copper Canyon: a wombat, a stocky tunneller.
+  // Burrow Creek Copper: a wombat, a stocky tunneller.
   const wombat = (mood = 'happy') => `<svg viewBox="0 0 150 120" aria-hidden="true">
     <ellipse cx="80" cy="112" rx="58" ry="5" fill="#000" opacity=".08"/>
     <rect x="46" y="90" width="15" height="20" rx="6" fill="#6E6156"/><rect x="64" y="92" width="14" height="18" rx="6" fill="#7A6C60"/>
@@ -1147,7 +1147,7 @@ const ART = (() => {
     ${hat(21, 42, 38)}
   </svg>`;
 
-  // Big Rocks: a saltwater croc, ancient, armoured and slow to move.
+  // Big Croc Resources: a saltwater croc, ancient, armoured and slow to move.
   const croc = (mood = 'happy') => {
     let scutes = '', teeth = '';
     for (let x = 68; x <= 140; x += 12) scutes += `<circle cx="${x}" cy="${57 + Math.abs(x - 104) * 0.05}" r="4.2" fill="#5C6944"/>`;

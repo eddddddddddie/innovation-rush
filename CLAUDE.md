@@ -35,7 +35,7 @@ A single-page strategy game by Unearthed, inspired by DevOps Dream (devops.games
    - random play: median about 55 to 65, never elite
    - strong ("smart") play: just over 90 for every company
    - spending everything in Year 1: clearly below 90
-   - Big Rocks fires the "terrible" strategy almost every time; Lucky Strike never does
+   - Big Croc Resources fires the "terrible" strategy almost every time; Spiny Ridge Resources never does
 3. Rebuild and syntax-check:
    ```bash
    python3 build.py

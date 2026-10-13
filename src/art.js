@@ -25,7 +25,7 @@ const ART = (() => {
     ? `<path d="M${ex - 4} ${ey} q4 -3 8 0" stroke="#282726" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M${ex + 2} ${ey + 5} q3 6 0 9 q-3 -3 0 -9z" fill="#DADADA"/>${mouth ? `<path d="${mouth.sad}" stroke="#282726" stroke-width="2.4" fill="none" stroke-linecap="round"/>` : ''}`
     : `<circle cx="${ex}" cy="${ey}" r="3.6" fill="#282726"/><circle cx="${ex + 1.2}" cy="${ey - 1.3}" r="1.1" fill="#fff"/>${mouth ? `<path d="${mouth.happy}" stroke="#282726" stroke-width="2.4" fill="none" stroke-linecap="round"/>` : ''}`);
 
-  // Lucky Strike: an echidna, small, spiky and tough.
+  // Spiny Ridge Resources: an echidna, small, spiky and tough.
   const echidna = (mood = 'happy') => {
     let spines = '';
     for (let i = 0; i <= 14; i++) {
@@ -49,7 +49,7 @@ const ART = (() => {
     </svg>`;
   };
 
-  // Copper Canyon: a wombat, a stocky tunneller.
+  // Burrow Creek Copper: a wombat, a stocky tunneller.
   const wombat = (mood = 'happy') => `<svg viewBox="0 0 150 120" aria-hidden="true">
     <ellipse cx="80" cy="112" rx="58" ry="5" fill="#000" opacity=".08"/>
     <rect x="46" y="90" width="15" height="20" rx="6" fill="#6E6156"/><rect x="64" y="92" width="14" height="18" rx="6" fill="#7A6C60"/>
@@ -63,7 +63,7 @@ const ART = (() => {
     ${hat(21, 42, 38)}
   </svg>`;
 
-  // Big Rocks: a saltwater croc, ancient, armoured and slow to move.
+  // Big Croc Resources: a saltwater croc, ancient, armoured and slow to move.
   const croc = (mood = 'happy') => {
     let scutes = '', teeth = '';
     for (let x = 68; x <= 140; x += 12) scutes += `<circle cx="${x}" cy="${57 + Math.abs(x - 104) * 0.05}" r="4.2" fill="#5C6944"/>`;
