@@ -1590,9 +1590,9 @@ const ART = (() => {
               const c = Math.round(call), rest = Math.round(total - call);
               const big = Math.abs(c) >= 5 ? (c > 0 ? 'big-up' : 'big-down') : '';
               return `<div class="delta ${big}" style="--c:${MHEX[m.id]}"><span class="t">${m.name}</span><span class="v">${Math.round(o.after[m.id])}</span>
-                <span class="split"><span>Your call</span>${sign(c)}</span><span class="split muted"><span>Everything else</span>${sign(rest)}</span>${big ? `<span class="swing">${c > 0 ? 'Big jump' : 'Big drop'}</span>` : ''}</div>`;
+                <span class="split"><span>This decision</span>${sign(c)}</span><span class="split muted"><span>Ongoing effects</span>${sign(rest)}</span>${big ? `<span class="swing">${c > 0 ? 'Big jump' : 'Big drop'}</span>` : ''}</div>`;
             }).join('')}</div>
-            <p class="hint">Your call hits hard straight away, and part of that swing fades over the next few quarters. Everything else is ${running ? `your ${running} running initiative${running > 1 ? 's' : ''}, ` : ''}earlier swings fading and ${co().drag && Object.keys(co().drag).length ? 'company inertia' : 'the rest of the business'}.</p>
+            <p class="hint">This decision hits hard straight away, and part of that swing wears off over the next few quarters. Ongoing effects are ${running ? `your ${running} running initiative${running > 1 ? 's' : ''}, ` : ''}earlier decisions wearing off and ${co().drag && Object.keys(co().drag).length ? 'company inertia' : 'the rest of the business'}.</p>
             <div class="fit">${A.umark()}<div><span class="label">Where Unearthed fits</span><p>${ev.fit}</p></div></div>` })}
           ${sec({ n: 'So far', title: 'Your metrics', body: `${chart(S.history)}<div><button class="btn" data-a="next">${next}</button></div>` })}
         </main></div>`;
