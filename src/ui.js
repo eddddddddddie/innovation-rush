@@ -103,8 +103,8 @@
 
   const gradeChip = (g) => `<span class="grade g${g}" title="${GRADE[g].note}">${g}<span>${GRADE[g].name}</span></span>`;
 
-  function chart(hist) {
-    const W = 1000, H = 330, L = 34, R = W - 12, T = 14, B = H - 30;
+  function chart(hist, compact) {
+    const W = compact ? 640 : 1000, H = compact ? 220 : 330, L = 34, R = W - 12, T = 14, B = H - 30;
     const x = (i) => L + ((R - L) * i) / 12;
     const y = (v) => B - ((B - T) * v) / 100;
     let g = '';
@@ -257,14 +257,15 @@
         return `<button class="card ${full ? 'dim' : ''}" data-a="card" data-id="${init.id}" ${full ? 'disabled' : ''}><span class="ic">${A.icon(init.icon)}</span><span class="txt"><span class="nm">${init.name}</span>${range}${hasU ? uBadge() : ''}${checked}</span></button>`;
       }).join('');
       const slots = [0, 1, 2].map((i) => `<span class="slot ${i < mine.length ? 'on' : ''}"></span>`).join('');
-      return `${hud()}
-        <div class="wrap"><main class="screen">
-          ${sec({ n: `Year ${y}`, title: `Choose up to three initiatives for Year ${y}`, intro: notice, band: true, body: `<div class="grid">${cards}</div>` })}
-        </main></div>
+      return `<div class="gameshell">${hud()}
+        <main class="game"><div class="gstage">
+          <div class="ghead"><span class="gtag">Year ${y} · Planning</span><h2>Choose up to three initiatives for Year ${y}</h2><p>${notice}</p></div>
+          <div class="grid compact">${cards}</div>
+        </div></main>
         <div class="dock"><div class="dock-inner">
           <div class="row"><div class="slots" aria-hidden="true">${slots}</div><span>${mine.length} of 3 picked${full ? '. That is your limit for this year.' : ''}</span></div>
           <button class="btn" data-a="startYear">Start Year ${y}</button>
-        </div></div>
+        </div></div></div>
         ${V.modal ? modal() : ''}`;
     },
 
@@ -273,15 +274,16 @@
       const key = `ev:${ev.id}`;
       const graded = S.checked.includes(key);
       const g = graded ? E.grades(ev.choices) : null;
-      return `${hud()}
-        <div class="wrap"><main class="screen">
-          ${sec({ n: `Y${S.year} Q${S.quarter}`, title: ev.title, intro: ev.body, band: true, body: `
+      return `<div class="gameshell">${hud()}
+        <main class="game"><div class="gstage two">
+          <div class="gcol"><span class="gtag">Year ${S.year} · Quarter ${S.quarter}</span><h2>${ev.title}</h2><p class="lead">${ev.body}</p>${checkPanel(key, graded)}</div>
+          <div class="gcol">
             <div class="choices" role="group" aria-label="Your response">
               ${V.order.map((i) => `<button class="choice" id="choice-${i}" data-a="choose" data-i="${i}" aria-pressed="${V.pending === i}"><span>${ev.choices[i].t}</span><span class="tags">${ev.choices[i].u ? uBadge() : ''}${g ? gradeChip(g[i]) : ''}</span></button>`).join('')}
             </div>
-            ${checkPanel(key, graded)}
-            <div><button class="btn" data-a="lock" ${V.pending == null ? 'disabled' : ''}>Lock it in</button></div>` })}
-        </main></div>`;
+            <div><button class="btn" data-a="lock" ${V.pending == null ? 'disabled' : ''}>Lock it in</button></div>
+          </div>
+        </div></main></div>`;
     },
 
     outcome() {
@@ -291,13 +293,17 @@
       const running = S.funded.length;
       const next = S.status === 'fired' ? 'Face the board' : S.status === 'done' ? 'See your scorecard' : S.quarter === 0 ? `Plan Year ${S.year}` : 'Next quarter';
       const budgetChange = ch.b ? E.credits(S, ch.b) : 0;
-      return `${hud()}
-        <div class="wrap"><main class="screen">
-          ${sec({ n: `Y${o.year} Q${o.quarter}`, title: ev.title, band: true, body: `
+      return `<div class="gameshell">${hud()}
+        <main class="game"><div class="gstage two">
+          <div class="gcol">
+            <span class="gtag">Year ${o.year} · Quarter ${o.quarter} · What happened</span><h2>${ev.title}</h2>
             <p><b>You chose:</b> ${ch.t}</p>
             <p class="quote">${ch.r}</p>
             ${budgetChange ? `<p><span class="chip ${budgetChange < 0 ? 'bad' : 'good'}">${budgetChange < 0 ? '−' : '+'}${ccText(budgetChange)}</span></p>` : ''}
-            <div class="deltas">${E.METRICS.map((m) => {
+            <div class="fit">${A.umark()}<div><span class="label">Where Unearthed fits</span><p>${ev.fit}</p></div></div>
+          </div>
+          <div class="gcol">
+            <div class="deltas two">${E.METRICS.map((m) => {
               const total = o.after[m.id] - o.before[m.id];
               const call = o.fromEvent ? o.fromEvent[m.id] : total;
               const c = Math.round(call), rest = Math.round(total - call);
@@ -305,10 +311,11 @@
               return `<div class="delta ${big}" style="--c:${MHEX[m.id]}"><span class="t">${m.name}</span><span class="v">${Math.round(o.after[m.id])}</span>
                 <span class="split"><span>This decision</span>${sign(c)}</span><span class="split muted"><span>Ongoing effects</span>${sign(rest)}</span>${big ? `<span class="swing">${c > 0 ? 'Big jump' : 'Big drop'}</span>` : ''}</div>`;
             }).join('')}</div>
-            <p class="hint">This decision hits hard straight away, and part of that swing wears off over the next few quarters. Ongoing effects are ${running ? `your ${running} running initiative${running > 1 ? 's' : ''}, ` : ''}earlier decisions wearing off and ${co().drag && Object.keys(co().drag).length ? 'company inertia' : 'the rest of the business'}.</p>
-            <div class="fit">${A.umark()}<div><span class="label">Where Unearthed fits</span><p>${ev.fit}</p></div></div>` })}
-          ${sec({ n: 'So far', title: 'Your metrics', body: `${chart(S.history)}<div><button class="btn" data-a="next">${next}</button></div>` })}
-        </main></div>`;
+            <p class="hint">This decision hits hard straight away and partly wears off over the next few quarters. Ongoing effects are ${running ? `your ${running} running initiative${running > 1 ? 's' : ''}, ` : ''}earlier decisions wearing off and ${co().drag && Object.keys(co().drag).length ? 'company inertia' : 'the rest of the business'}.</p>
+            ${chart(S.history, true)}
+            <div><button class="btn" data-a="next">${next}</button></div>
+          </div>
+        </div></main></div>`;
     },
 
     end() {
@@ -647,9 +654,32 @@
 
   // ---------- rendering and actions ----------
 
+  // Gameplay screens fill the window. If a screen's content is still taller than the space left under
+  // the top bar (and above the dock), it is zoomed down to fit, to no less than 65%. Phones scroll instead.
+  function fitGame() {
+    const main = app.querySelector('main.game');
+    if (!main) return;
+    const stage = main.querySelector('.gstage');
+    stage.style.zoom = '';
+    if (window.innerWidth < 760) return;
+    // Zooming out also widens the layout (charts grow taller, text rewraps), so re-measure a few times.
+    const cs = getComputedStyle(main);
+    const avail = main.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 2;
+    let z = 1;
+    for (let i = 0; i < 6; i++) {
+      const h = stage.getBoundingClientRect().height;
+      if (h <= avail || z <= 0.65) break;
+      z = Math.max(0.65, z * (avail / h) * 0.99);
+      stage.style.zoom = z.toFixed(3);
+    }
+  }
+  window.addEventListener('resize', () => fitGame());
+
   function render(scroll) {
     const focusId = document.activeElement && document.activeElement.id;
     app.innerHTML = views[V.view]();
+    document.body.classList.toggle('in-game', !!app.querySelector('.gameshell'));
+    fitGame();
     if (scroll) window.scrollTo(0, 0);
     if (focusId && document.getElementById(focusId)) document.getElementById(focusId).focus({ preventScroll: true });
     else if (V.modal) {

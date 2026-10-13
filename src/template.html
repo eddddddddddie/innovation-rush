@@ -388,6 +388,44 @@ details.more[open] summary { margin-bottom: 24px; }
 .tbl td { padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--grey); }
 .tbl tr:last-child td { border-bottom: 0; }
 
+/* ---------- Gameplay screens fit the window ---------- */
+body.in-game { padding-block: 0; }
+.gameshell { height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; }
+.gameshell .hud { position: static; flex: none; padding: 8px 20px; }
+.gameshell .hud-inner { grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 6px 24px; }
+.gameshell .minimetrics { grid-column: auto; gap: 12px; }
+.gameshell .hud-right { gap: 3px; }
+.hud .budget .amt, .hud .checks, .hudlinks button { white-space: nowrap; }
+@media (max-width: 1180px) {
+  .gameshell .hud-inner { grid-template-columns: auto auto minmax(0, 1fr); }
+  .gameshell .benches { justify-self: start; }
+  .gameshell .hud-right { grid-column: 3; justify-self: end; }
+  .gameshell .minimetrics { grid-column: 1 / -1; grid-row: 2; }
+}
+.gameshell .hud .who svg { width: 36px; height: 36px; }
+.gameshell .dock { position: static; flex: none; margin-top: 0; padding-block: 10px; }
+main.game { flex: 1; min-height: 0; overflow: hidden; width: 100%; max-width: 1160px; margin: 0 auto; padding-block: 22px 10px; }
+.gstage { display: flex; flex-direction: column; gap: 16px; }
+.gstage.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 36px; align-items: start; }
+.gcol { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.gtag { font-size: 0.85rem; font-weight: 600; color: var(--orange); }
+.ghead { display: flex; flex-direction: column; gap: 8px; }
+.ghead p { max-width: 100ch; }
+.game h2 { font-size: clamp(1.6rem, 2.8vw, 2.2rem); }
+.game .lead { font-size: 1.05rem; color: var(--ink); }
+.game .quote { font-size: 1.15rem; }
+.game .chart-card { border: 1px solid var(--line); padding: 10px 14px 12px; }
+.grid.compact { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.grid.compact .card { padding: 10px 12px; gap: 10px; border-radius: 12px; }
+.grid.compact .card .ic, .grid.compact .card .ic .icon { width: 20px; height: 20px; }
+.grid.compact .card .nm { font-size: 0.88rem; }
+.grid.compact .card .pick { font-size: 0.76rem; }
+.grid.compact .card .state, .grid.compact .card .range { font-size: 0.72rem; }
+.grid.compact .ubadge { font-size: 0.68rem; padding: 1px 7px 1px 4px; }
+.deltas.two { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.game .delta { padding: 10px 14px; }
+.game .delta .v { font-size: 1.7rem; }
+
 /* Lead capture form inside the dark contact panel */
 .leadform { background: var(--bg); color: var(--ink); border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 460px; text-align: left; }
 .leadform p, .cta .leadform p { color: var(--grey); font-size: 0.9rem; }
@@ -434,6 +472,12 @@ details.more[open] summary { margin-bottom: 24px; }
   .stages.four li { clip-path: none; border-radius: 10px; }
   .hud-right { align-items: flex-start; }
   .hudlinks { display: none; }
+  .gameshell { height: auto; }
+  main.game { overflow: visible; }
+  .gstage.two { grid-template-columns: 1fr; gap: 20px; }
+  .grid.compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gameshell .hud-inner { grid-template-columns: 1fr auto; }
+  .gameshell .minimetrics { grid-column: 1 / -1; }
   .brandline { flex-wrap: wrap; }
   .letter .portrait { width: 120px; }
   .score-hero .portrait { width: 150px; }
