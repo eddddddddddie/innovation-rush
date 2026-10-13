@@ -21,7 +21,7 @@ standalone = (
     '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
     '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
     '<meta property="og:title" content="Innovation Rush">\n'
-    '<meta property="og:description" content="Lead open innovation at a mining company for three years. Get new technology from site problem to production. A game by Unearthed.">\n'
+    '<meta property="og:description" content="Lead open innovation at a mining company for three years. A game by Unearthed.">\n'
     '<meta property="og:url" content="https://eddddddddddie.github.io/innovation-rush/">\n'
     '<meta property="og:type" content="website">\n'
     '</head>\n<body>\n' + body + '\n</body>\n</html>\n'

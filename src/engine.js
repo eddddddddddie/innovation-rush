@@ -101,7 +101,7 @@ const COMPANIES = [
       'You have the budget. Can you get this old croc moving before the board loses patience?',
     ],
     nodes: { prob: 44, safe: 40, data: 50, path: 34, reach: 62, champ: 40, trust: 42, focus: 38 },
-    drag: { path: -0.9, safe: -0.5, champ: -0.3 },
+    drag: { path: -1.1, safe: -0.6, champ: -0.3 },
   },
 ];
 
@@ -476,156 +476,21 @@ const EVENTS = [
   },
 ];
 
-// Site problems that feed the technology pipeline. Each game draws two per year.
-// Approaches are fictional innovators described by sector and country, never by name. q is the hidden evidence grade
-// (A strongest); outside marks technology from outside mining. The outside-mining A approaches for underground
-// positioning, heap leach irrigation and drilling follow the examples in Unearthed's sales master copy.
-const PROBLEMS = [
-  {
-    id: 'tyres', title: 'Haul truck tyres are wearing out early', v: 1,
-    detail: 'Tyres on the Pit 2 fleet are lasting well short of their rated hours, and each one costs more than a family car.',
-    vendor: { t: 'Upgraded tyre package from your equipment supplier', q: 'C' },
-    approaches: [
-      { t: 'Machine-vision haul road inspection', from: 'Agricultural vision startup, New Zealand', outside: true, q: 'A' },
-      { t: 'Tyre pressure and temperature telemetry', from: 'Motorsport telemetry firm, United Kingdom', outside: true, q: 'B' },
-      { t: 'Haul road maintenance scheduling software', from: 'Logistics software scale-up, Netherlands', outside: true, q: 'B' },
-      { t: 'Premium tyre compound trial', from: 'Tyre manufacturer', outside: false, q: 'C' },
-    ],
-  },
-  {
-    id: 'flotation', title: 'Flotation recovery has dropped 3%', v: 1.2,
-    detail: 'The concentrator is losing copper to tailings and nobody can agree why.',
-    vendor: { t: 'Flotation cell upgrade from your equipment supplier', q: 'C' },
-    approaches: [
-      { t: 'Online froth imaging and control', from: 'Food processing vision company, Denmark', outside: true, q: 'A' },
-      { t: 'Reagent dosing optimiser', from: 'Chemical process control firm, Germany', outside: true, q: 'B' },
-      { t: 'Bubble size sensor', from: 'University spin-out, Chile', outside: false, q: 'B' },
-      { t: 'Larger replacement flotation cells', from: 'Mining equipment vendor', outside: false, q: 'C' },
-    ],
-  },
-  {
-    id: 'dust', title: 'Dust exceedances at the ROM pad', v: 0.9,
-    detail: 'Dust monitors keep tripping limits, and the community has started calling.',
-    vendor: { t: 'More water carts from your site contractor', q: 'C' },
-    approaches: [
-      { t: 'Dust forecasting from weather data', from: 'Agricultural weather analytics firm, Australia', outside: true, q: 'A' },
-      { t: 'Automated water cannon control', from: 'Firefighting equipment maker, United States', outside: true, q: 'B' },
-      { t: 'Long-life dust suppressant polymer', from: 'Road construction chemicals supplier, South Africa', outside: true, q: 'B' },
-      { t: 'Extra water carts on night shift', from: 'Local earthmoving contractor', outside: false, q: 'C' },
-    ],
-  },
-  {
-    id: 'underground', title: 'Losing track of equipment underground', v: 1.1,
-    detail: 'GPS does not work underground, so loaders and people are tracked by radio calls and a whiteboard.',
-    vendor: { t: 'Radio network upgrade from your communications vendor', q: 'C' },
-    approaches: [
-      { t: 'Inertial navigation without GPS', from: 'Defence navigation startup, Norway', outside: true, q: 'A' },
-      { t: 'Bluetooth tag tracking', from: 'Warehouse tracking scale-up, Canada', outside: true, q: 'B' },
-      { t: 'Lidar mapping on loaders', from: 'Autonomous vehicle supplier, Germany', outside: true, q: 'B' },
-      { t: 'Upgraded leaky feeder radio', from: 'Mine communications vendor', outside: false, q: 'C' },
-    ],
-  },
-  {
-    id: 'heap', title: 'Uneven irrigation on the heap leach pads', v: 1,
-    detail: 'Some cells are flooded while others dry out, and recovery is suffering.',
-    vendor: { t: 'Bigger pumps from your equipment supplier', q: 'C' },
-    approaches: [
-      { t: 'Zoned wireless irrigation control', from: 'Agricultural irrigation company, Israel', outside: true, q: 'A' },
-      { t: 'Drone thermal surveys of the pads', from: 'Drone survey firm, Peru', outside: true, q: 'B' },
-      { t: 'Moisture sensing cables', from: 'Civil engineering sensor maker, Switzerland', outside: true, q: 'B' },
-      { t: 'More manual pad inspections', from: 'Labour hire contractor', outside: false, q: 'C' },
-    ],
-  },
-  {
-    id: 'drilling', title: 'Slow, costly drilling for orebody knowledge', v: 1.1,
-    detail: 'Grade control drilling is the bottleneck in the mine plan, and assays take two weeks to come back.',
-    vendor: { t: 'Two more drill rigs from your drilling contractor', q: 'C' },
-    approaches: [
-      { t: 'Downhole sensing while drilling', from: 'Planetary drilling systems developer, United States', outside: true, q: 'A' },
-      { t: 'Portable XRF analysis at the rig', from: 'Scrap metal sorting firm, Belgium', outside: true, q: 'B' },
-      { t: 'AI core photo logging', from: 'Medical imaging software company, Canada', outside: true, q: 'B' },
-      { t: 'Faster assay turnaround contract', from: 'Commercial laboratory', outside: false, q: 'C' },
-    ],
-  },
-  {
-    id: 'diesel', title: 'The haul fleet diesel bill keeps climbing', v: 1.2,
-    detail: 'Diesel is now one of the biggest costs on site, and the board wants emissions down.',
-    vendor: { t: 'Fuel additive trial from your fuel supplier', q: 'C' },
-    approaches: [
-      { t: 'Trolley assist on the main ramp', from: 'Rail electrification contractor, Sweden', outside: true, q: 'A' },
-      { t: 'Fuel analytics from truck data', from: 'Airline fuel analytics firm, Ireland', outside: true, q: 'B' },
-      { t: 'Battery swap for light vehicles', from: 'Electric bus operator, South Korea', outside: true, q: 'B' },
-      { t: 'Idle time reduction campaign', from: 'Mining consultancy', outside: false, q: 'C' },
-    ],
-  },
-  {
-    id: 'conveyor', title: 'The overland conveyor keeps breaking down', v: 1,
-    detail: 'Unplanned stops on the overland conveyor cost hours of throughput every week.',
-    vendor: { t: 'Shorter inspection intervals from your maintenance contractor', q: 'C' },
-    approaches: [
-      { t: 'Acoustic idler failure detection', from: 'Wind turbine monitoring company, Denmark', outside: true, q: 'A' },
-      { t: 'Belt rip detection cameras', from: 'Airport baggage systems supplier, Netherlands', outside: true, q: 'B' },
-      { t: 'Thermal drone inspections', from: 'Power line inspection firm, Australia', outside: true, q: 'B' },
-      { t: 'Replacement idlers from a new supplier', from: 'Conveyor parts distributor', outside: false, q: 'C' },
-    ],
-  },
-];
-
-// Ways to source a solution for a site problem. c is the cost as % of the company budget.
-const ROUTES = {
-  vendor: { name: 'Ask your usual vendor', c: 5, note: 'Cheap and fast. You get what they sell.' },
-  challenge: { name: 'Run an Unearthed open challenge', c: 10, u: true, note: 'Takes a quarter. Three submissions from the global network, often from outside mining.' },
-  inhouse: { name: 'Build it in-house', c: 8, note: 'Your engineers build it. Slower to start, and sites own the result.' },
-};
-
-// Pipeline stages and what drives the odds of passing each one.
-const STAGES = [
-  { id: 'evaluate', name: 'Evaluate', base: 0.85, drivers: ['prob', 'focus'], fail: 'did not stack up and was stopped' },
-  { id: 'pilot', name: 'Pilot', base: 0.62, drivers: ['data', 'safe', 'champ'], fail: 'stalled in pilot purgatory' },
-  { id: 'scale', name: 'Scale', base: 0.6, drivers: ['path', 'champ'], fail: 'stalled before roll-out' },
-];
-const GRADE_ODDS = { A: 0.15, B: 0, C: -0.25 };
-
-// Events now land in 8 of the 12 quarters; the rest are quiet quarters for the pipeline.
-const EVENT_QUARTERS = { 1: [1, 3], 2: [1, 2, 4], 3: [1, 3, 4] };
-
-const ACHIEVEMENTS = [
-  { id: 'purgatory', name: 'Out of purgatory', desc: 'Scale three or more technologies.' },
-  { id: 'quick', name: 'Fast mover', desc: 'Scale a technology in Year 1.' },
-  { id: 'open', name: 'Open door', desc: 'Run three or more Unearthed open challenges.' },
-  { id: 'outside', name: 'Outside the pit', desc: 'Scale a technology from outside mining.' },
-  { id: 'verify', name: 'Trust but verify', desc: 'Use all your vendor checks.' },
-  { id: 'frugal', name: 'Tight-fisted', desc: 'Finish High or better with a quarter of your Crib Credits left.' },
-  { id: 'board', name: 'Board favourite', desc: 'Win a credit top-up at both board meetings.' },
-  { id: 'clean', name: 'Clean pipeline', desc: 'Scale at least one technology and finish with nothing stuck in purgatory.' },
-  { id: 'lode', name: 'The mother lode', desc: 'Finish Elite.' },
-  { id: 'rocks', name: 'Moved the mountain', desc: 'Finish your tenure at Big Rocks without being fired.' },
-];
-
 const YEARS = 3;
 const QUARTERS = 4;
 const MAX_PER_YEAR = 3;
+const INIT_SCALE = 0.85;
 const FIRE_BELOW = 35;
 const VENDOR_CHECKS = 3;
-// Balance settings. tools/simulate.js can override them (TUNE='{"initScale":0.7}') without editing this file.
-const TUNE = {
-  initScale: 0.7, // share of an initiative's per-quarter effect applied each quarter
-  scaleBonus: { value: 4.5, adopt: 3.5, buyin: 1.2 }, // permanent metric gain when a technology scales, times the problem's v
-  challengeEco: 1.5, // permanent Ecosystem gain for each open challenge run
-  metricBase: 22, metricMult: 0.7, // metric = base + mult x weighted drivers + pipeline bonus; drivers alone top out near 85
-  routeScale: 0.6, // multiplier on sourcing route costs
-};
 
 const clamp = (v, lo = 0, hi = 100) => Math.max(lo, Math.min(hi, v));
-let rng = Math.random; // swappable for seeded simulation
-const setRng = (fn) => { rng = fn; };
 
-function metricsFrom(nodes, bonus) {
+function metricsFrom(nodes) {
   const out = {};
   for (const m of METRICS) {
     let s = 0;
     for (const k in m.w) s += m.w[k] * nodes[k];
-    out[m.id] = clamp(TUNE.metricBase + TUNE.metricMult * s + (bonus ? bonus[m.id] || 0 : 0));
+    out[m.id] = clamp(20 + 0.8 * s);
   }
   return out;
 }
@@ -640,7 +505,7 @@ function tier(score) {
   return { id: 'low', name: 'Low', award: 'Straight to Tailings' };
 }
 
-function shuffle(a, rnd = rng) {
+function shuffle(a, rnd = Math.random) {
   a = a.slice();
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(rnd() * (i + 1));
@@ -649,27 +514,17 @@ function shuffle(a, rnd = rng) {
   return a;
 }
 
-const eventCount = () => Object.values(EVENT_QUARTERS).reduce((n, q) => n + q.length, 0);
-
-function newGame(companyId, player) {
+function newGame(companyId, player, rnd = Math.random) {
   const co = COMPANIES.find((c) => c.id === companyId);
   const nodes = { ...co.nodes };
-  const bonus = { eco: 0, adopt: 0, value: 0, buyin: 0 };
-  const probs = shuffle(PROBLEMS.map((p) => p.id)).slice(0, YEARS * 2);
+  const m0 = metricsFrom(nodes);
   return {
-    player, companyId, nodes, bonus, budget: co.budget, // Crib Credits left
-    checks: VENDOR_CHECKS, checked: [], // Unearthed vendor checks left, and the keys they were used on
+    player, companyId, nodes, budget: co.budget, // Crib Credits left
+    checks: VENDOR_CHECKS, checked: [], // Unearthed vendor checks left, and the initiative or event ids they were used on
     funded: [], // { id, opt, year }
-    problems: { 1: probs.slice(0, 2), 2: probs.slice(2, 4), 3: probs.slice(4, 6) },
-    sourcing: [], // { pid, year, route }
-    techs: [], // technologies in the pipeline
-    picks: [], // open challenges waiting for the player to choose a submission: { pid, year, options: [approach index] }
-    price: [100], // copper price index, one point per quarter
-    boards: [], // year-end board reviews
-    news: [], // what happened in the pipeline last quarter
     year: 1, quarter: 0, // quarter 0 = planning
-    history: [metricsFrom(nodes, bonus)],
-    deck: shuffle(EVENTS.map((e) => e.id)).slice(0, eventCount()),
+    history: [m0],
+    deck: shuffle(EVENTS.map((e) => e.id), rnd).slice(0, YEARS * QUARTERS),
     log: [], // { year, quarter, event, choice }
     status: 'playing',
   };
@@ -678,15 +533,11 @@ function newGame(companyId, player) {
 const company = (s) => COMPANIES.find((c) => c.id === s.companyId);
 const initById = (id) => INITIATIVES.find((i) => i.id === id);
 const eventById = (id) => EVENTS.find((e) => e.id === id);
-const problemById = (id) => PROBLEMS.find((p) => p.id === id);
 const fundedThisYear = (s) => s.funded.filter((f) => f.year === s.year);
-const metrics = (s) => metricsFrom(s.nodes, s.bonus);
-const qIndex = (y, q) => (y - 1) * QUARTERS + q; // 1..12
 
-// Costs in whole Crib Credits for this company (negative means credits come back).
+// Option cost in whole Crib Credits for this company (negative means credits come back).
 const credits = (s, pct) => Math.round((pct * company(s).budget) / 100);
 const costOf = (s, id, opt) => credits(s, initById(id).opts[opt].c);
-const routeCost = (s, route) => credits(s, ROUTES[route].c * TUNE.routeScale);
 
 function canFund(s, id, opt) {
   if (s.funded.some((f) => f.id === id)) return false;
@@ -708,17 +559,7 @@ function unfund(s, id) {
   s.funded.splice(i, 1);
 }
 
-// Choose (or clear, with route null) how to source a solution for one of this year's site problems.
-function source(s, pid, route) {
-  const cur = s.sourcing.find((x) => x.pid === pid && x.year === s.year);
-  const refund = cur ? routeCost(s, cur.route) : 0;
-  if (route && routeCost(s, route) > s.budget + refund) return false;
-  if (cur) { s.budget += refund; s.sourcing.splice(s.sourcing.indexOf(cur), 1); }
-  if (route) { s.budget -= routeCost(s, route); s.sourcing.push({ pid, year: s.year, route }); }
-  return true;
-}
-
-// Unearthed vendor check: reveals evidence grades for one initiative, event or challenge's options.
+// Unearthed vendor check: reveals evidence grades for one initiative's options or one event's choices.
 function useCheck(s, key) {
   if (s.checks <= 0 || s.checked.includes(key)) return false;
   s.checks -= 1;
@@ -733,169 +574,36 @@ function grades(items) {
   return imp.map((v) => (v >= max - 1e-9 ? 'A' : v > 0 ? 'B' : 'C'));
 }
 
-const isEventQuarter = (y, q) => EVENT_QUARTERS[y].includes(q);
-
 function currentEvent(s) {
-  if (!isEventQuarter(s.year, s.quarter)) return null;
-  let n = 0;
-  for (let y = 1; y <= s.year; y++) for (const q of EVENT_QUARTERS[y]) { if (y === s.year && q === s.quarter) return eventById(s.deck[n]); n++; }
-  return null;
+  return eventById(s.deck[(s.year - 1) * QUARTERS + (s.quarter - 1)]);
 }
 
-function makeTech(s, pid, a, route, ready) {
-  const tech = { id: `${pid}-${s.techs.length}`, pid, t: a.t, from: a.from, outside: !!a.outside, q: a.q, route, stage: 0, stalls: 0, status: 'active', ready, year: s.year };
-  s.techs.push(tech);
-  return tech;
-}
-
-// Start the year: launch the sourcing chosen in planning.
 function startYear(s) {
   s.quarter = 1;
-  s.news = [];
-  for (const src of s.sourcing.filter((x) => x.year === s.year)) {
-    const pr = problemById(src.pid);
-    if (src.route === 'vendor') makeTech(s, pr.id, { ...pr.vendor, from: 'Your usual supplier', outside: false }, 'vendor', qIndex(s.year, 1));
-    if (src.route === 'inhouse') {
-      makeTech(s, pr.id, { t: `In-house build: ${pr.title.toLowerCase()}`, from: 'Your own engineering team', outside: false, q: 'B' }, 'inhouse', qIndex(s.year, 2));
-      s.nodes.champ = clamp(s.nodes.champ + 3);
-    }
-    if (src.route === 'challenge') s.bonus.eco += TUNE.challengeEco;
-  }
 }
 
-// Chance that a technology passes its next stage, from its evidence grade and the drivers that matter at that stage.
-function odds(s, tech) {
-  const st = STAGES[tech.stage];
-  const d = st.drivers.reduce((a, k) => a + s.nodes[k], 0) / st.drivers.length;
-  let p = st.base + GRADE_ODDS[tech.q] + ((d - 50) / 100) * 0.8 - 0.12 * tech.stalls;
-  if (tech.route === 'inhouse' && st.id === 'scale') p += 0.05;
-  return clamp(p, 0.05, 0.95);
-}
-
-// The player picks one challenge submission; it enters Evaluate next quarter.
-function pickSubmission(s, pid, idx) {
-  const i = s.picks.findIndex((x) => x.pid === pid);
-  if (i < 0) return false;
-  const pick = s.picks[i];
-  const a = problemById(pid).approaches[pick.options[idx]];
-  const t = makeTech(s, pid, a, 'challenge', qIndex(s.year, s.quarter === 0 ? 1 : s.quarter));
-  s.picks.splice(i, 1);
-  return t;
-}
-
-function stepPipeline(s, qi) {
-  const news = [];
-  for (const t of s.techs) {
-    if (t.status !== 'active' || qi < t.ready) continue;
-    const st = STAGES[t.stage];
-    const p = odds(s, t);
-    if (rng() < p) {
-      t.stalls = 0;
-      if (t.stage === STAGES.length - 1) {
-        t.status = 'running';
-        t.scaledAt = qi;
-        const v = problemById(t.pid).v;
-        for (const k in TUNE.scaleBonus) s.bonus[k] += TUNE.scaleBonus[k] * v;
-        news.push({ t, ok: true, text: `${t.t} passed ${st.name} and is now running on site`, p });
-      } else {
-        t.stage += 1;
-        news.push({ t, ok: true, text: `${t.t} passed ${st.name}`, p });
-      }
-    } else if (t.stage === 0) {
-      t.status = 'stopped';
-      news.push({ t, ok: false, text: `${t.t} ${st.fail}`, p });
-    } else {
-      t.stalls += 1;
-      s.bonus.buyin -= 1;
-      if (t.stalls >= 2) { t.status = 'stopped'; s.bonus.buyin -= 1; news.push({ t, ok: false, text: `${t.t} ${st.fail} twice and was abandoned`, p }); }
-      else news.push({ t, ok: false, text: `${t.t} ${st.fail}`, p, stalled: true });
-    }
-  }
-  // Open challenges close at the end of the first quarter: three submissions, always including the strongest.
-  if (s.quarter === 1) {
-    for (const src of s.sourcing.filter((x) => x.year === s.year && x.route === 'challenge')) {
-      const pr = problemById(src.pid);
-      const best = pr.approaches.findIndex((a) => a.q === 'A');
-      const others = shuffle(pr.approaches.map((_, i) => i).filter((i) => i !== best)).slice(0, 2);
-      s.picks.push({ pid: pr.id, year: s.year, options: shuffle([best, ...others]) });
-      news.push({ ok: true, text: `Your open challenge closed. Three submissions are in for: ${pr.title}`, challenge: pr.id });
-    }
-  }
-  return news;
-}
-
-function stepPrice(s, shock) {
-  const prev = s.price[s.price.length - 1];
-  const drift = (100 - prev) * 0.08;
-  let next = prev + drift + (rng() - 0.5) * 16;
-  if (shock) next *= shock;
-  s.price.push(Math.max(40, Math.round(next * 10) / 10));
-}
-
-// Year-end board review: credits topped up or cut by performance and the copper price over the year.
-function boardReview(s) {
-  const m = metrics(s);
-  const a = avg(m);
-  const p0 = s.price[qIndex(s.year, 1) - 1];
-  const p1 = s.price[s.price.length - 1];
-  const priceChange = p1 / p0 - 1;
-  let pct = a >= 72 ? 15 : a >= 62 ? 5 : -10;
-  if (priceChange > 0.08) pct += 5;
-  if (priceChange < -0.08) pct -= 5;
-  const delta = credits(s, pct);
-  s.budget = Math.max(0, s.budget + delta);
-  const review = { year: s.year, avg: a, priceChange, pct, delta, mood: pct >= 15 ? 'delighted' : pct > 0 ? 'satisfied' : pct === 0 ? 'unmoved' : 'unhappy' };
-  s.boards.push(review);
-  return review;
-}
-
-// Resolve the quarter: event (if any), initiatives and company drag, pipeline, copper price, then year-end review.
+// Resolve the quarter's event choice, then let funded initiatives and company drag play out.
 function playQuarter(s, choiceIdx) {
   const ev = currentEvent(s);
-  const ch = ev ? ev.choices[choiceIdx] : null;
+  const ch = ev.choices[choiceIdx];
   const before = s.history[s.history.length - 1];
-  if (ch) {
-    for (const k in ch.e) s.nodes[k] = clamp(s.nodes[k] + ch.e[k]);
-    if (ch.b) s.budget = Math.max(0, s.budget + credits(s, ch.b));
-  }
+  for (const k in ch.e) s.nodes[k] = clamp(s.nodes[k] + ch.e[k]);
+  if (ch.b) s.budget = Math.max(0, s.budget + credits(s, ch.b));
   for (const f of s.funded) {
     const e = initById(f.id).opts[f.opt].e;
-    for (const k in e) s.nodes[k] = clamp(s.nodes[k] + e[k] * TUNE.initScale);
+    for (const k in e) s.nodes[k] = clamp(s.nodes[k] + e[k] * INIT_SCALE);
   }
   const drag = company(s).drag;
   for (const k in drag) s.nodes[k] = clamp(s.nodes[k] + drag[k]);
-  const qi = qIndex(s.year, s.quarter);
-  s.news = stepPipeline(s, qi);
-  stepPrice(s, ev && ev.id === 'crash' ? 0.75 : null);
-  const after = metrics(s);
+  const after = metricsFrom(s.nodes);
   s.history.push(after);
-  if (ev) s.log.push({ year: s.year, quarter: s.quarter, event: ev.id, choice: choiceIdx });
-  let board = null;
+  s.log.push({ year: s.year, quarter: s.quarter, event: ev.id, choice: choiceIdx });
   if (avg(after) < FIRE_BELOW) s.status = 'fired';
   else if (s.quarter === QUARTERS) {
     if (s.year === YEARS) s.status = 'done';
-    else { board = boardReview(s); s.year += 1; s.quarter = 0; }
+    else { s.year += 1; s.quarter = 0; }
   } else s.quarter += 1;
-  return { ev, ch, before, after, news: s.news, board };
-}
-
-// Achievements earned in a finished (or fired) game.
-function achievements(s) {
-  const scaled = s.techs.filter((t) => t.status === 'running');
-  const score = Math.round(avg(metrics(s)));
-  const done = s.status === 'done';
-  const got = new Set();
-  if (scaled.length >= 3) got.add('purgatory');
-  if (scaled.some((t) => t.scaledAt <= QUARTERS)) got.add('quick');
-  if (s.sourcing.filter((x) => x.route === 'challenge').length >= 3) got.add('open');
-  if (scaled.some((t) => t.outside)) got.add('outside');
-  if (s.checks === 0) got.add('verify');
-  if (done && score >= 75 && s.budget >= company(s).budget * 0.25) got.add('frugal');
-  if (s.boards.length === 2 && s.boards.every((b) => b.delta > 0)) got.add('board');
-  if (done && scaled.length && !s.techs.some((t) => t.status === 'active' && t.stalls > 0)) got.add('clean');
-  if (done && score >= 90) got.add('lode');
-  if (done && s.companyId === 'major') got.add('rocks');
-  return ACHIEVEMENTS.filter((a) => got.has(a.id));
+  return { ev, ch, before, after };
 }
 
 // Rough quality of a choice for the debrief: driver changes weighted by how much each driver feeds the metrics.
@@ -913,11 +621,9 @@ function impact(e) {
 }
 
 const ENGINE = {
-  NODES, NODE_TIPS, UNEARTHED, METRICS, COMPANIES, INITIATIVES, EVENTS, PROBLEMS, ROUTES, STAGES, ACHIEVEMENTS, EVENT_QUARTERS,
-  YEARS, QUARTERS, MAX_PER_YEAR, FIRE_BELOW, VENDOR_CHECKS, TUNE,
-  metricsFrom, metrics, avg, tier, newGame, company, initById, eventById, problemById, fundedThisYear, credits, costOf, routeCost,
-  canFund, fund, unfund, source, useCheck, grades, isEventQuarter, currentEvent, startYear, odds, pickSubmission, playQuarter,
-  achievements, impact, shuffle, setRng, qIndex, eventCount,
+  NODES, NODE_TIPS, UNEARTHED, METRICS, COMPANIES, INITIATIVES, EVENTS, YEARS, QUARTERS, MAX_PER_YEAR, FIRE_BELOW, VENDOR_CHECKS,
+  metricsFrom, avg, tier, newGame, company, initById, eventById, fundedThisYear, credits, costOf, canFund, fund, unfund,
+  useCheck, grades, currentEvent, startYear, playQuarter, impact, shuffle,
 };
 
 if (typeof module !== 'undefined') module.exports = ENGINE;
